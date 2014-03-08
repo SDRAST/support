@@ -1,0 +1,12 @@
+# No object or library files
+*.[oa]
+*.so
+
+# No backup copies
+*~
+
+# No .svn files
+.svn
+
+# No compiled Python
+*.pyc
