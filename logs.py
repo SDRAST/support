@@ -5,7 +5,7 @@ import logging
 
 def init_logging(loglevel = logging.WARNING,
                  consolevel = logging.WARNING,
-                 logname = "/tmp/logging.log"):
+                 logname = None):
   """
   Create a logger that displays to the console and writes a log file.
 
@@ -34,11 +34,12 @@ def init_logging(loglevel = logging.WARNING,
   dh.setFormatter(formatter)
 
   # create file handler which logs even debug messages
-  fh = logging.FileHandler(logname)
-  fh.setLevel(loglevel)
-  fh.setFormatter(formatter)
-  # add the handler to the logger
-  logger.addHandler(fh)
+  if logname:
+    fh = logging.FileHandler(logname)
+    fh.setLevel(loglevel)
+    fh.setFormatter(formatter)
+    # add the handler to the logger
+    logger.addHandler(fh)
   return logger
 
 def get_loglevel(level):
