@@ -3,9 +3,9 @@ module with enhancements to the Python logging
 """
 import logging
 
-def init_logging(loglevel = logging.WARNING,
-                 consolevel = logging.WARNING,
-                 logname = None):
+def init_logging(loglevel=logging.WARNING,
+                 consolevel=logging.WARNING,
+                 logname=None):
   """
   Create a logger that displays to the console and writes a log file.
 
