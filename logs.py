@@ -3,9 +3,10 @@ module with enhancements to the Python logging
 """
 import logging
 
-def init_logging(loglevel=logging.WARNING,
-                 consolevel=logging.WARNING,
-                 logname=None):
+def init_logging(logger,
+                 loglevel = logging.WARNING,
+                 consolevel = logging.WARNING,
+                 logname = None):
   """
   Create a logger that displays to the console and writes a log file.
 
@@ -20,9 +21,6 @@ def init_logging(loglevel=logging.WARNING,
 
   @return: logging.Logger instance
   """
-  logging.basicConfig(level=logging.WARNING)
-
-  logger = logging.getLogger()
   logger.setLevel(consolevel)
   # default handler
   dh = logger.handlers[0]
@@ -79,3 +77,28 @@ def set_loglevel(logger, level):
   """
   logger.setLevel(level)
   logger.warning("Logger level is %d", level)
+
+def set_module_loggers(logger_dict):
+  """
+  Set logging level of imported modules
+
+  @param logger_dict : like {"support": "warning", ... }
+  @type  logger_dict : dict
+
+  @param level : logging.Level, like "DEBUG" or "debug"
+  @type  level : str
+
+  @return: dict of loggers
+  """
+  loggers = {}
+  for module in logger_dict.keys():
+    command = "from "+module+" import module_logger as temp"
+    module_logger.debug("%s", command)
+    exec(command)
+    loggers[module] = temp
+    level = logger_dict[module]
+    command = "loggers['"+module+"'].setLevel(logging."+level.upper()+")"
+    module_logger.debug("%s", command)
+    exec(command)
+  return loggers
+    

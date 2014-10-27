@@ -1,3 +1,6 @@
+"""
+Methods to support lists
+"""
 
 def unique(hasDupes):
     """
@@ -21,3 +24,13 @@ def contains(List, value):
     return False
   else:
     return True
+
+def flatten(List):
+  """
+  Make a list of nested lists a simple list
+  """
+  if type(List[0]) == list:
+    newlist = sum(List, [])
+  else:
+    newlist = List
+  return newlist
