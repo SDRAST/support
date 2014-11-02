@@ -473,7 +473,7 @@ def launch_server(serverhost, taskname, task):
   else:
     module_logger.error(
                    "%s is already published.  Is the server already running?",
-                   __name__)
+                   taskname)
     module_logger.error("If not, do 'pyro-nsc remove %s'",taskname)
 
 
