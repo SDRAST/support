@@ -115,7 +115,7 @@ def install_dependencies():
   try:
     fd = open(filename,"r")
   except IOError, details:
-    mylogger.warning(" IOError, "+str(details)
+    mylogger.warning(" IOError, "+str(details))
   deps = fd.readlines()
   fd.close()
   for line in deps:
