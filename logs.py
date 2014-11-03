@@ -2,6 +2,7 @@
 module with enhancements to the Python logging
 """
 import logging
+module_logger = logging.getLogger(__name__)
 
 def init_logging(logger,
                  loglevel = logging.WARNING,
