@@ -13,8 +13,7 @@ The rtc time structure is::
     int tm_year;
     int tm_wday;     /* unused */
     int tm_yday;     /* unused */
-    int tm_isdst;    /* unused */
-};
+    int tm_isdst;    /* unused */};
 
 Compiled C program 'rtc_constants' returns the addresses of the RTC registers
 for the RTC.

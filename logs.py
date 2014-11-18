@@ -85,9 +85,6 @@ def set_module_loggers(logger_dict):
   @param logger_dict : like {"support": "warning", ... }
   @type  logger_dict : dict
 
-  @param level : logging.Level, like "DEBUG" or "debug"
-  @type  level : str
-
   @return: dict of loggers
   """
   loggers = {}

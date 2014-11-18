@@ -19,7 +19,7 @@ def invoke(command):
     In [7]: p = process_tools.invoke("ls")
     In [8]: p.stdout.readlines()
     Out[8]: ['client.log\n', 'manager.log\n', 'manager.py\n',
-              'manager.py~\n', 'MMS.log\n']
+             'manager.py~\n', 'MMS.log\n']
 
   @param command : command to be executed by the OS
   @type  command : list or str
