@@ -99,7 +99,9 @@ def check_permission(group):
   groups = p.stdout.readline().split()
   try:
     groups.index(group)
+    return True
   except ValueError:
     if environ['USER'] != 'root':
-      raise RuntimeError("You must be in group '"+group+"', root or 'sudo'er")
+      module_logger.error("You must be in group '%s', root or 'sudo'er", group)
+      return False
   module_logger.info(" User permissions verified")
