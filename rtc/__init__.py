@@ -29,9 +29,9 @@ import os
 import datetime
 import ctypes
 
-from  fcntl import ioctl
+from fcntl import ioctl
 from ctypes import create_string_buffer
-from time import sleep
+from time import sleep, time
 
 module_logger = logging.getLogger(__name__)
 
@@ -195,23 +195,35 @@ class Signaller(threading.Thread):
   """
   """
   signal = threading.Event()
-  def __init__(self, rtc):
+  def __init__(self, rtc=None, interval=None):
     mylogger = logging.getLogger(module_logger.name+".Signaller")
     threading.Thread.__init__(self)
     self.logger = mylogger
-    self.rtc = rtc
     self.end_flag = False
-    self.logger.debug(" initialized with %s", self.rtc)
+    if rtc:
+      self.rtc = rtc
+      self.logger.debug(" initialized with %s", self.rtc)
+    else:
+      if interval:
+        self.interval = interval
+        self.logger.debug(" initialized without RTC")
+      else:
+        raise RuntimeError, "Signaller object must have RTC or interval value"
    
   def run(self):
     """
     """
     self.logger.debug(" running")
     while not self.end_flag:
+      now = time.time()
       Signaller.signal.clear()
-      # the read will block until the next interrupt.
-      self.logger.debug(" reading %d", self.rtc.fd)
-      os.read(self.rtc.fd, 4)  # 4 = size of double
+      if self.rtc:
+        # the read will block until the next interrupt.
+        self.logger.debug(" reading %d", self.rtc.fd)
+        os.read(self.rtc.fd, 4)  # 4 = size of double
+      else:
+        delay = self.interval - (time.time()-now)
+        sleep(delay)
       Signaller.signal.set()
     self.logger.debug(" finished")
 
