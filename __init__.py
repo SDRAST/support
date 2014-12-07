@@ -79,3 +79,10 @@ def sync_second():
   now = int(time())
   while not bool(int(time())-now):
     pass
+
+def cpu_arch():
+  """
+  """
+  p = invoke('uname -a')
+  text = p.stdout.readline()
+  return text.split()[-2]
