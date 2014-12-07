@@ -14,6 +14,7 @@ examples = """  """
 
 import sys
 import os
+import os.path
 import logging
 import git
 import re
@@ -135,10 +136,24 @@ def get_git_dirs():
   """
   Finds all the sub-directories on the system which are git sandboxes.
 
-  This has a problem finding sub-repos.
-
   @return: list of str
   """
+
+  def make_filename(parts_list):
+    """
+    Assemble items in a list into a full path
+
+    Creates a full path file name from a list of parts such as might
+    have been created by full_path.split('/')
+
+    @param parts_list : list of str
+
+    @return: str
+    """
+    name = ''
+    for part in parts_list:
+      name += '/'+part
+    return name
   response = os.popen('locate \.git | grep -v Trash | grep -v \.svn','r').readlines()
   prev_dir = ''
   first_pass = True
@@ -146,48 +161,38 @@ def get_git_dirs():
   for line in response:
     filename = line.strip()
     file_parts = filename.split('/')
-    # Look for .git in positions 3-10 of the path
-    for git_dir in range(3,11):
-      if git_dir < len(file_parts):
-        if file_parts[git_dir] == '.git':
-          this_dir = make_filename(file_parts[1:git_dir])
+    if file_parts[1] == 'opt':
+      # Ignore third party repos
+      continue
+    # Look for .git in positions 3-10 of the path because we can ignore
+    # '', 'usr', 'local'
+    # '', 'var', 'www'
+    for git_dir_index in range(3,11):
+      if git_dir_index < len(file_parts):
+        if file_parts[git_dir_index] == '.git':
+          # recreate the full path
+          this_dir = make_filename(file_parts[1:git_dir_index])
           if re.match(prev_dir,this_dir):
             # prev_dir is contained in this_dir
             if (len(this_dir) > len(prev_dir)):
-              # but there are extra cahracters
+              # but there are extra characters so it may be a sub-directory
               if (this_dir[len(prev_dir)] == '/'):
-                # this_dir is a directory
+                # the last character is '/' so this_dir is a directory
                 if first_pass:
                   # remember this_dir as the next prev_dir
                   prev_dir = this_dir
                   # and add to the list of git dirs
                   git_dirs.append( this_dir )
                   first_pass = False
-              else:
-                git_dirs.append( this_dir)
-                prev_dir = this_dir
+                else:
+                  git_dirs.append( this_dir)
+                  prev_dir = this_dir
           else:
             git_dirs.append( this_dir)
             prev_dir = this_dir
   return git_dirs
   
 #------------------------ under development ------------------------------------
-
-def make_filename(parts_list):
-  """
-  Assemble items in a list into a full path
-
-  Creates a full path file name from a list of parts such as might
-  have been created by full_path.split('/')
-
-  @param parts_list : list of str
-
-  @return: str
-  """
-  name = ''
-  for part in parts_list:
-    name += '/'+part
-  return name
 
 def add_new_files():
   """
@@ -207,7 +212,7 @@ def add_new_files():
       found = True
   return found
 
-def report_status():
+def report_status(show_all=False):
   """
   Does 'git status' for all the sandboxes.
 
@@ -216,13 +221,29 @@ def report_status():
   @return: None
   """
   git_dirs = get_git_dirs()
+  clean_repos = []
   for git_dir in git_dirs:
     module_logger.debug("Processing %s", git_dir)
-    fd_out = os.popen('git status '+git_dir,'r')
-    status = fd_out.readlines()
+    os.chdir(git_dir)
+    fd_out = os.popen('git status','r')
+    response = fd_out.readlines()
     fd_out.close()
-    if len(status) != 0:
-      print git_dir
-      for f in status:
+    if len(response) != 0:
+      repo = os.path.basename(git_dir)
+      for f in response:
+        line = f.strip()
+        if re.search('On branch',line):
+          branch = line.split()[-1]
+        elif re.search("nothing to commit",line):
+          status = "clean"
+        else:
+          status = "work"
+      if status=="clean":
+        clean_repos.append("%18s  %22s  %8s" % (repo, branch, status))
+    if show_all and status=="work":
+      print repo
+      for f in response:
         print f.strip()
-
+  for repo in clean_repos:
+    print repo
+    

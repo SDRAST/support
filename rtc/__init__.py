@@ -26,6 +26,8 @@ import struct
 import logging
 import threading
 import os
+import datetime
+import ctypes
 
 from  fcntl import ioctl
 from ctypes import create_string_buffer
@@ -71,6 +73,7 @@ class RTC(object):
     self.open()
     self.one_pps = self.One_pps(self)
     self.N_pps = self.many_pps(self)
+    self.alarm = self.Alarm(self)
     self.logger.debug(" initialized")
 
   def open(self):
@@ -94,7 +97,7 @@ class RTC(object):
     buf = create_string_buffer(s.size)
     ioctl(self.fd, RTC_RD_TIME, buf)
     (sc, mn, hr, md, mo, yr, d0, d1,d2) = s.unpack(buf)
-    return (1900+yr, mo, md, hr, mn, sc)
+    return (1900+yr, 1+mo, md, hr, mn, sc)
 
   class One_pps(object):
     """
@@ -124,19 +127,23 @@ class RTC(object):
       """
       self.parent = parent
       self.logger = logging.getLogger(self.parent.logger.name+".many_pps")
+      self.set_rate(1)
 
-    def start(self, N):
+    def set_rate(self, N):
       """
       """
       try:
         assert 0<N<14, "only 2-8192 interrupts/sec (0<N<14)"
       except AssertionError:
-        return False
+        self.logger.error(" rate %n is too high", 2**N)
       else:
-        self.logger.debug(" turned on")
         ioctl(self.parent.fd, RTC_IRQP_SET, 2**N)
-        ioctl(self.parent.fd, RTC_PIE_ON, 0)
-        return True
+
+    def start(self):
+      """
+      """
+      self.logger.debug(" turned on")
+      ioctl(self.parent.fd, RTC_PIE_ON, 0)
 
     def stop(self):
       """
@@ -144,6 +151,46 @@ class RTC(object):
       """
       ioctl(self.parent.fd, RTC_PIE_OFF, 0)
 
+  class Alarm(object):
+    """
+    Class for Real Time Clock alarm function
+    """
+    def __init__(self, parent):
+      """
+      """
+      self.parent = parent
+      self.logger = logging.getLogger(self.parent.logger.name+".alarm")
+
+    def start(self, tm):
+      """
+      @param tm : time specification
+      @type  tm : str or tuple of int
+      """
+      next = datetime.datetime.now()
+      if type(tm) == str:
+        parts = tm.split()
+        tm = list(next.timetuple()[:6])
+        if parts[0].lower() != "next":
+          raise RuntimeError, "first time spec must be 'next'"
+        if parts[1][0].lower() == "s":
+          tm[5] = next.second +1
+        if parts[1][0].lower() == "m":
+          tm[4] = next.minute + 1
+          tm[5] = 0
+        tm = tuple(tm+[0,0,0])
+      self.logger.debug(" alarm at %s", tm)
+      try:
+        assert type(tm) == tuple, "time must be a tuple (Y,M,D,h,m,s)"
+      except AssertionError:
+        self.logger.error(" incorrect time format: %s", tn)
+      else:
+        format= "9i"
+        buf = struct.pack(format,*tm)
+        #buf_struct = ctypes.c_char_p(buf)
+        self.logger.debug(" struct = %s", buf)
+        ioctl(self.parent.fd, RTC_ALM_SET, buf)
+        self.logger.debug(" turned on")
+        
 class Signaller(threading.Thread):
   """
   """

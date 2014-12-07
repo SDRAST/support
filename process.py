@@ -16,7 +16,7 @@ def invoke(command):
   For a shell command line input that requires no additional data.
   Returns an open process whose stdout and stderr can be read::
     In [6]: import process_tools
-    In [7]: p = process_tools.invoke("ls")
+    In [7]: p = support.process.invoke("ls")
     In [8]: p.stdout.readlines()
     Out[8]: ['client.log\n', 'manager.log\n', 'manager.py\n',
              'manager.py~\n', 'MMS.log\n']

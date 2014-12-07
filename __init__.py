@@ -1,57 +1,18 @@
 """
 Package to provide support for various objects and modules
+
+This module contains functions that don't have an obvious home in a
+submodule.
 """
 from numpy import array
 from os import environ
+from time import time
 
 import logging
 module_logger = logging.getLogger(__name__)
 
 from lists import *
 from support.process import invoke
-
-    
-################################ IP support ###################################
-
-def decode_IP(IP_address):
-  """
-  Returns a long int for an IPv4 or IPv6 address.
-
-  @param IP_address :  like "192.168.1.101"
-  @type  IP_address : str of decimal separated ints
-
-  @return: int
-  """
-  parts = IP_address.split('.')
-  if len(parts) == 4 or len(parts) == 6:
-    ipvalue = 0
-    for i in range(len(parts)):
-      shift = 8*(len(parts)-1-i)
-      ipvalue += int(parts[i]) << shift
-    return ipvalue
-  else:
-    raise RuntimeError("Invalid IP address: %s" % IP_address)
-
-def decode_MAC(MAC_address):
-  """
-  Returns a long int for a MAC address
-
-  @param MAC_address : like "00:12:34:56:78:9a"
-  @type  MAC_address : str of colon separated hexadecimal ints
-
-  @return: long int
-  """
-  parts = MAC_address.split(':')
-  if len(parts) == 6:
-    value = 0
-    for i in range(6):
-      shift = 8*(5-i)
-      value += int(parts[i],16) << shift
-    return value
-  else:
-    raise RuntimeError("Invalid MAC address: %s" % MAC_address)
-
-################################## Miscellaneous ################################3
 
 def nearest_index(np_array,value):
   """
@@ -105,3 +66,16 @@ def check_permission(group):
       module_logger.error("You must be in group '%s', root or 'sudo'er", group)
       return False
   module_logger.info(" User permissions verified")
+
+def sync_second():
+  """
+  Wait until the second changes
+
+  This returns roughly 6.2 ms after the second changes. I can't seem to get the
+  delay below this.
+
+  There are various ways to do this but this seems to give the least spread.
+  """
+  now = int(time())
+  while not bool(int(time())-now):
+    pass
