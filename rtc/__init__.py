@@ -200,8 +200,8 @@ class Signaller(threading.Thread):
     threading.Thread.__init__(self)
     self.logger = mylogger
     self.end_flag = False
-    if rtc:
-      self.rtc = rtc
+    self.rtc = rtc
+    if self.rtc:
       self.logger.debug(" initialized with %s", self.rtc)
     else:
       if interval:
@@ -215,16 +215,17 @@ class Signaller(threading.Thread):
     """
     self.logger.debug(" running")
     while not self.end_flag:
-      now = time.time()
+      now = time()
       Signaller.signal.clear()
       if self.rtc:
         # the read will block until the next interrupt.
         self.logger.debug(" reading %d", self.rtc.fd)
         os.read(self.rtc.fd, 4)  # 4 = size of double
       else:
-        delay = self.interval - (time.time()-now)
+        delay = self.interval - (time()-now)
         sleep(delay)
       Signaller.signal.set()
+    Signaller.signal.clear()
     self.logger.debug(" finished")
 
   def terminate(self):
