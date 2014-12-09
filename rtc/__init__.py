@@ -186,7 +186,6 @@ class RTC(object):
       else:
         format= "9i"
         buf = struct.pack(format,*tm)
-        #buf_struct = ctypes.c_char_p(buf)
         self.logger.debug(" struct = %s", buf)
         ioctl(self.parent.fd, RTC_ALM_SET, buf)
         self.logger.debug(" turned on")
@@ -196,6 +195,8 @@ class Signaller(threading.Thread):
   """
   signal = threading.Event()
   def __init__(self, rtc=None, interval=None):
+    """
+    """
     mylogger = logging.getLogger(module_logger.name+".Signaller")
     threading.Thread.__init__(self)
     self.logger = mylogger
@@ -209,6 +210,8 @@ class Signaller(threading.Thread):
         self.logger.debug(" initialized without RTC")
       else:
         raise RuntimeError, "Signaller object must have RTC or interval value"
+    # for debugging
+    self.delta = []
    
   def run(self):
     """
@@ -216,14 +219,16 @@ class Signaller(threading.Thread):
     self.logger.debug(" running")
     while not self.end_flag:
       now = time()
+      next = now + self.interval
       Signaller.signal.clear()
       if self.rtc:
         # the read will block until the next interrupt.
         self.logger.debug(" reading %d", self.rtc.fd)
         os.read(self.rtc.fd, 4)  # 4 = size of double
       else:
-        delay = self.interval - (time()-now)
+        delay = next - time()
         sleep(delay)
+        self.delta.append(delay)
       Signaller.signal.set()
     Signaller.signal.clear()
     self.logger.debug(" finished")

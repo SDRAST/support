@@ -36,7 +36,7 @@ if __name__ == "__main__":
   else:
     sample_rate = 100
     npps = Signaller(interval=1./sample_rate)
-    max_samples = 600
+    max_samples = 400
     sample_count = 0
     times = []
     sync_second()
@@ -51,7 +51,7 @@ if __name__ == "__main__":
 
   times_array = array(times)
   indices = arange(len(times))
-  coefs = polyfit(indices,times_array,2)
+  coefs = polyfit(indices,times_array,1)
   fit = poly1d(coefs)
   dif = array(times-fit(indices))*1000
   stdev = dif.std()
