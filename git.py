@@ -221,7 +221,11 @@ def report_status(show_all=False):
   @return: None
   """
   git_dirs = get_git_dirs()
-  clean_repos = []
+  state = {}
+  state['clean'] = []
+  state['work'] = []
+  state['untracked'] = []
+  state['unknown'] = []
   for git_dir in git_dirs:
     module_logger.debug("Processing %s", git_dir)
     os.chdir(git_dir)
@@ -230,20 +234,24 @@ def report_status(show_all=False):
     fd_out.close()
     if len(response) != 0:
       repo = os.path.basename(git_dir)
+      status = "unknown"
       for f in response:
         line = f.strip()
+        #module_logger.debug("%s: %s", repo, line)
         if re.search('On branch',line):
           branch = line.split()[-1]
         elif re.search("nothing to commit",line):
           status = "clean"
-        else:
+        elif re.search("Changes",line):
           status = "work"
-      if status=="clean":
-        clean_repos.append("%18s  %22s  %8s" % (repo, branch, status))
-    if show_all and status=="work":
+        elif re.search("Untracked", line):
+          status = "untracked"
+      state[status].append("%18s  (%8s)  %8s" % (repo, branch, status))
+    if show_all and (status=="work" or status == "unknown"):
       print repo
       for f in response:
         print f.strip()
-  for repo in clean_repos:
-    print repo
+  for status in state.keys():
+    for report in state[status]:
+      print ("%9s: %31s" % (status,report[:30]))
     

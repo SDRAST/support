@@ -28,10 +28,12 @@ import threading
 import os
 import datetime
 import ctypes
+import signal
 
 from fcntl import ioctl
 from ctypes import create_string_buffer
 from time import sleep, time
+from support import sync_second
 
 module_logger = logging.getLogger(__name__)
 
@@ -63,7 +65,7 @@ class RTC(object):
   This creates a persistent RTC object, i.e., it can be created and kept for
   the duration of the program.
   """
-  def __init__(self):
+  def __init__(self, signalHandler=None):
     """
     Initialize the RTC object.
 
@@ -143,6 +145,7 @@ class RTC(object):
       """
       """
       self.logger.debug(" turned on")
+      sync_second()
       ioctl(self.parent.fd, RTC_PIE_ON, 0)
 
     def stop(self):
@@ -194,41 +197,51 @@ class Signaller(threading.Thread):
   """
   """
   signal = threading.Event()
-  def __init__(self, rtc=None, interval=None):
+  def __init__(self, rtc=None, signalHandler=None, interval=None):
     """
     """
     mylogger = logging.getLogger(module_logger.name+".Signaller")
     threading.Thread.__init__(self)
     self.logger = mylogger
-    self.end_flag = False
     self.rtc = rtc
     if self.rtc:
       self.logger.debug(" initialized with %s", self.rtc)
     else:
-      if interval:
+      if interval and signalHandler:
         self.interval = interval
         self.logger.debug(" initialized without RTC")
+        signal.signal(signal.SIGALRM, signalHandler)
+        sync_second()
       else:
         raise RuntimeError, "Signaller object must have RTC or interval value"
     # for debugging
-    self.delta = []
-   
+
+  def start(self):
+    """
+    """
+    signal.setitimer(signal.ITIMER_REAL, self.interval, self.interval)
+    self.logger.debug(" timer started")
+    self.end_flag = False
+    threading.Thread.start(self)
+    self.logger.debug(" Signaller started")
+
   def run(self):
     """
     """
     self.logger.debug(" running")
     while not self.end_flag:
-      now = time()
-      next = now + self.interval
       Signaller.signal.clear()
       if self.rtc:
         # the read will block until the next interrupt.
-        self.logger.debug(" reading %d", self.rtc.fd)
         os.read(self.rtc.fd, 4)  # 4 = size of double
       else:
-        delay = next - time()
-        sleep(delay)
-        self.delta.append(delay)
+        #now = time()
+        #next = now + self.interval
+        #delay = next - time()
+        #sleep(delay)
+        self.logger.debug(" waiting")
+        signal.pause()
+        self.logger.debug(" continuing")
       Signaller.signal.set()
     Signaller.signal.clear()
     self.logger.debug(" finished")
@@ -238,6 +251,7 @@ class Signaller(threading.Thread):
     Thread termination routine
     """
     self.logger.info(" %s ends", self.name)
+    signal.setitimer(signal.ITIMER_REAL, 0)
     self.end_flag = True
 
     

@@ -4,6 +4,7 @@ Package to provide support for various objects and modules
 This module contains functions that don't have an obvious home in a
 submodule.
 """
+import datetime
 from numpy import array
 from os import environ
 from time import time
