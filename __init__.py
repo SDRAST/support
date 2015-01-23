@@ -91,4 +91,4 @@ def cpu_arch():
   p = invoke('uname -a')
   text = p.stdout.readline()
   return text.split()[-2]
->>>>>>> d873c65c399a589c325eeb030853135edc76f59c
+
