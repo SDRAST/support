@@ -739,6 +739,8 @@ def at_jpl():
   network = gateway.split('.')[:3]
   if network == ['137', '79', '89']:
     return True
+  elif network == ['137', '78', '97']:
+    return True
   elif network == ['128', '149', '22']:
     return True
   else:

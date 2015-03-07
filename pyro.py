@@ -234,7 +234,10 @@ class NameserverResource:
         """
         if T.at_jpl():
           # no proxy port
-          pyro_ns_host = ns_shortname+".jpl.nasa.gov"
+          if ns_shortname == "localhost":
+            pyro_ns_host = ns_shortname
+          else:
+            pyro_ns_host = ns_shortname+".jpl.nasa.gov"
           ns_proxy_port = pyro_ns_port
         else:
           # we need a tunnel to the Pyro nameserver
@@ -335,7 +338,10 @@ def pyro_server_details(ns_shortname,pyro_ns_port):
   global tunnels
   if T.at_jpl():
     # no proxy port
-    pyro_ns_host = ns_shortname+".jpl.nasa.gov"
+    if ns_shortname == "localhost":
+      pyro_ns_host = ns_shortname
+    else:
+      pyro_ns_host = ns_shortname+".jpl.nasa.gov"
     ns_proxy_port = pyro_ns_port
   else:
     # we need a tunnel to the Pyro nameserver
@@ -395,8 +401,10 @@ def get_nameserver(pyro_ns = "dto", pyro_port = 9090):
   @return: Pyro nameserver object
   """
   # if necessary, create a tunnel to the nameserver
+  module_logger.debug("get_nameserver: ns is %s:%d", pyro_ns, pyro_port)
   pyro_ns_host, ns_proxy_port = pyro_server_details(pyro_ns, pyro_port)
-
+  module_logger.debug("get_nameserver: host %s:%d", pyro_ns_host,
+                         ns_proxy_port)
   # Find a nameserver:
   # 1. get a non-persistent name server locator
   locator = Pyro.naming.NameServerLocator()
@@ -433,9 +441,10 @@ def get_device_server(servername, pyro_ns = "dto", pyro_port = 9090):
   ns = get_nameserver(pyro_ns, pyro_port)
   # Find the device server
   server = ns.resolve(servername)
+  module_logger.debug("get_device_server: server %s:%d", server.address,
+                                                         server.port)
   server_host,server_port = pyro_server_details(pyro_server[server.address],
-                                                server.port)
-
+                                                            server.port)
   try:
     device_request = "PYROLOC://" + server_host + ":" + str(server_port) + \
                      "/"+servername
@@ -479,7 +488,9 @@ def launch_server(serverhost, taskname, task):
 
 # Generally, JPL/DSN hosts cannot be resolved by DNS
 GATEWAY, IP, PORT = T.make_port_dict()
-pyro_server = {'128.149.22.108': 'dto',
+pyro_server = {'127.0.0.1':      'localhost',
+               '128.149.22.108': 'dto',
+               '137.78.97.24':   'wbdc',
                '128.149.22.95':  'roachnest'}
 
 # Remember any tunnels that may be opened
