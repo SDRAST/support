@@ -467,7 +467,11 @@ class Tunnel:
       self.logger.debug(" tunnel exists")
       self.port = int(response)
       self.host = host
-      self.user = "unknown"
+      if host == "mmfranco-0571605":
+        # This is also REALLY UGLY
+        self.user = 'pi'
+      else:
+        self.user = "unknown"
     self.pid = self._get_child()
     if self.user == "unknown":
       self.get_user()
@@ -512,6 +516,9 @@ class Tunnel:
     tunnels = check_for_tunnels()
     if tunnels.has_key(host):
       return int(tunnels[host])
+    elif tunnels.has_key('wbdc') and host == "mmfranco-0571605":
+      # This is REALLY UGLY
+      return int(tunnels['wbdc'])
     else:
       return 0
   
@@ -651,10 +658,14 @@ def makePortProxy(endpoint,
   @type  user : str
   """
   tunnel_port = PORT[endpoint]
+  module_logger.debug('makePortProxy: called for port %d', tunnel_port)
+  if tunnel_port == 50099:
+    # more REALLY UGLY
+    user = 'pi'
   command_list = ["ssh", "-N", "-p", str(tunnel_port),
                   "-L",str(localport)+":"+remotehost+":"+str(remoteport),
                   user+"@127.0.0.1", "&"]
-  module_logger.debug("makeProxyPort: command is\n%s",str(command_list))
+  module_logger.debug("makePortProxy: command is\n%s",str(command_list))
   p = invoke(command_list)
   return p
 
@@ -748,6 +759,8 @@ def at_jpl():
   elif network == ['137', '78', '97']:
     return True
   elif network == ['128', '149', '22']:
+    return True
+  elif network == ['137', '79', '192']:
     return True
   else:
     return False

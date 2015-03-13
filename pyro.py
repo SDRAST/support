@@ -462,22 +462,26 @@ def get_device_server(servername, pyro_ns = "dto", pyro_port = 9090):
   @return:
   """
   ns = get_nameserver(pyro_ns, pyro_port)
+  module_logger.debug("get_device_server: nameserver is %s", ns)
   # Find the device server
   server = ns.resolve(servername)
   module_logger.debug("get_device_server: try for device server at %s:%d",
                       server.address, server.port)
-  server_host,server_port = pyro_server_details(pyro_server[server.address],
+  server_host, server_port = pyro_server_details(pyro_server[server.address],
                                                             server.port)
   try:
     device_request = "PYROLOC://" + server_host + ":" + str(server_port) + \
                      "/"+servername
-    module_logger.debug("Proxy request: %s",device_request)
+    module_logger.debug("get_device_server: proxy request: %s",device_request)
     device = Pyro.core.DynamicProxy(device_request)
+    module_logger.debug("get_device_server: returns %s", device)
   except Pyro.errors.NamingError, details:
-    module_logger.error("Pyro name error: %s: %s",details[0],details[1])
-    return [None, "Pyro name error", str(details)]
+    module_logger.error("get_device_server: Pyro name error: %s: %s",
+                        details[0],details[1])
+    return [None, "get_device_server: Pyro name error", str(details)]
   except Exception,details:
-    module_logger.error("Request for server connection failed\n%s", details)
+    module_logger.error("get_device_server: Request for server connection failed\n%s",
+                        details)
     return [None,"Request for server connection failed",str(details)]
   else:
     return device
@@ -513,7 +517,7 @@ def launch_server(serverhost, taskname, task):
 GATEWAY, IP, PORT = T.make_port_dict()
 pyro_server = {'127.0.0.1':      'localhost',
                '128.149.22.108': 'dto',
-               '137.78.97.24':   'wbdc',
+               '137.78.97.24':   'mmfranco-0571605',
                '128.149.22.95':  'roachnest'}
 
 # Remember any tunnels that may be opened
