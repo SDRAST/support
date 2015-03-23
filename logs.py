@@ -29,7 +29,7 @@ def init_logging(logger,
 
   # create formatter and add it to the handler
   formatter = logging.Formatter(
-    '%(asctime)s - %(name)s - %(levelname)s:\n  %(message)s')
+    '%(asctime)s - %(name)s - %(levelname)s:  %(message)s')
   dh.setFormatter(formatter)
 
   # create file handler which logs even debug messages
