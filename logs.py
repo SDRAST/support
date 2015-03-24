@@ -29,7 +29,7 @@ def init_logging(logger,
 
   # create formatter and add it to the handler
   formatter = logging.Formatter(
-    '%(asctime)s - %(name)s - %(levelname)s:\n%(message)s')
+    '%(asctime)s - %(name)s - %(levelname)s:  %(message)s')
   dh.setFormatter(formatter)
 
   # create file handler which logs even debug messages
@@ -83,7 +83,7 @@ def set_module_loggers(logger_dict):
   Set logging level of imported modules
 
   @param logger_dict : like {"support": "warning", ... }
-  @type  logger_dict : dict
+  @type  logger_dict : dict of str
 
   @return: dict of loggers
   """

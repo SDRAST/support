@@ -143,11 +143,11 @@ class RemoteDir:
 
     @return: RemoteDir() instance
     """
+    self.logger = logging.getLogger(module_logger.name+".Tunnel")
     self.read_mountroot_cfg ()
     if not os.path.exists (self.mountroot):
       os.mkdir (self.mountroot)
-      module_logger.debug(
-        "RemoteDir instance: Creating mountroot in %s",self.mountroot)
+      self.logger.debug(" Creating mountroot in %s",self.mountroot)
     self.host = endpoint
     self.uid = os.getuid()
     self.mountpoint=None
@@ -159,8 +159,7 @@ class RemoteDir:
     except Exception, details:
       raise Exception, details
     existing_tunnels = check_for_tunnels()
-    module_logger.debug(
-      "RemoteDir instance: existing tunnels: %s",str(existing_tunnels))
+    self.logger.debug(" existing tunnels: %s",str(existing_tunnels))
     # get or create the appropriate tunnel instance
     self.tunnel = Tunnel(endpoint)
     success = self.do_mount (self.tunnel, remoteMP=remoteMP)
@@ -303,15 +302,15 @@ class RemoteDir:
     self.path = remoteMP
     self.mp = self._get_possible_mountpoint()
     if not os.path.exists (self.mp):
-      module_logger.debug(
-        "RemoteDir instance: Creating mountpoint *s",str(self.mp))
+      self.logger.debug(
+        "do_mount: Creating mountpoint *s",str(self.mp))
       os.mkdir (self.mp)
     sshfs = "%s@localhost:%s" % (self.user, self.path)
     # already mounted?
     response = search_response(['mount'],['grep',sshfs])
     if response:
-      module_logger.debug(
-        "Already mounted:\n%s",str(response))
+      self.logger.debug(
+        "do_mount: already mounted:\n%s",str(response))
       self.mp = response[0].strip().split()[2]
       self.mountpoint = os.path.basename(self.mp)
       self.mountroot = os.path.dirname(self.mp)
@@ -321,20 +320,20 @@ class RemoteDir:
                                                                  self.uid,
                                                                  sshfs,
                                                                  self.mp)
-      module_logger.debug(" RemoteDir instance login: %s",sshfs)
-      module_logger.debug(" RemoteDir instance mount command:\n%s",command)
+      self.logger.debug("do_mount: login: %s",sshfs)
+      self.logger.debug("do_mount: mount command:\n%s",command)
       status = os.system (command)
     if status == 0:
-      module_logger.debug("%s: %s mounted as %s in %s",
+      self.logger.debug("do_mount: %s: %s mounted as %s in %s",
                            self.host, self.path, self.mountpoint,
                            self.mountroot)
       return True
     else:
-      module_logger.warning("RemoteDir instance: Mount failed")
+      self.logger.warning("do_mount: Mount failed")
       try:
         os.rmdir(self.mp)
       except OSError, details:
-        module_logger.error("Could not remove",self.mp,exc_info=True)
+        self.logger.error("do_mount: could not remove",self.mp,exc_info=True)
       return False
 
   def do_umount_all(self):
@@ -358,7 +357,7 @@ class RemoteDir:
     if os.path.exists (self.mountroot + os.path.sep + mountpoint):
       os.system ("fusermount -u " + self.mountroot + os.path.sep + mountpoint)
       os.rmdir (self.mountroot + os.path.sep + mountpoint)
-      module_logger.info("%s unmounted", str(mountpoint))
+      self.logger.info("do_umount: %s unmounted", str(mountpoint))
 
   def main_loop(self):
     """
@@ -431,14 +430,17 @@ class Tunnel:
 
     @return: Tunnel() instance
     """
+    self.logger = logging.getLogger(module_logger.name+".Tunnel")
+    self.logger.debug(" checking for tunnel to %s", host)
     response = self.check_for_tunnel(host)
     if response == 0:
+      self.logger.debug(" no tunnel found; create a new one")
       # make a tunnel
       command = '/usr/local/scripts/ssh-tunnel "%s"' % (host)
-      module_logger.debug("Tunnel() doing: %s",command)
+      self.logger.debug(" doing: %s",command)
       self.p = invoke(command)
       response = self.p.stdout.readline()
-      module_logger.debug("Tunnel() got: %s",response)
+      self.logger.debug(" got: %s",response)
       parts = response.split()
       if parts[-2] == "recognized":
         # not recognized
@@ -457,17 +459,24 @@ class Tunnel:
         if time_left <= 0.:
           # timed out
           self.port = 0
-          raise TunnelingException("Tunnel() timed out")
+          raise TunnelingException(" timed out")
         else:
-          module_logger.debug("Tunnel() opened tunnel to %s",self.host)
+          self.logger.debug(" opened tunnel to %s",self.host)
     else:
       # a tunnel exists
+      self.logger.debug(" tunnel exists")
       self.port = int(response)
       self.host = host
-      self.user = "unknown"
+      if host == "mmfranco-0571605":
+        # This is also REALLY UGLY
+        self.user = 'pi'
+      else:
+        self.user = "unknown"
     self.pid = self._get_child()
     if self.user == "unknown":
       self.get_user()
+    self.logger.debug(" tunnel has PID %d at %d for %s",
+                      self.pid, self.port, self.user)
     
   def get_user(self):
     """
@@ -507,6 +516,9 @@ class Tunnel:
     tunnels = check_for_tunnels()
     if tunnels.has_key(host):
       return int(tunnels[host])
+    elif tunnels.has_key('wbdc') and host == "mmfranco-0571605":
+      # This is REALLY UGLY
+      return int(tunnels['wbdc'])
     else:
       return 0
   
@@ -646,10 +658,14 @@ def makePortProxy(endpoint,
   @type  user : str
   """
   tunnel_port = PORT[endpoint]
+  module_logger.debug('makePortProxy: called for port %d', tunnel_port)
+  if tunnel_port == 50099:
+    # more REALLY UGLY
+    user = 'pi'
   command_list = ["ssh", "-N", "-p", str(tunnel_port),
                   "-L",str(localport)+":"+remotehost+":"+str(remoteport),
                   user+"@127.0.0.1", "&"]
-  module_logger.debug("makeProxyPort command:\n%s",str(command_list))
+  module_logger.debug("makePortProxy: command is\n%s",str(command_list))
   p = invoke(command_list)
   return p
 
@@ -709,7 +725,7 @@ def check_for_tunnels():
     if err.isspace() == False:
       module_logger.info("check_for_tunnels: %s",err)
   response = p.stdout.read().split("\n")
-  module_logger.debug("netstat -vat response:\n%s",response)
+  #module_logger.debug("netstat -vat response:\n%s",response)
   tunnels = {}
   name_data = get_remote_names()
   for line in response:
@@ -727,7 +743,7 @@ def check_for_tunnels():
             break
           else:
             tunnels[remote_host] = int(port)
-  module_logger.debug("Tunnels: %s",str(tunnels))
+  module_logger.debug("check_for_tunnels: we have %s",str(tunnels))
   return tunnels
 
 def at_jpl():
@@ -737,9 +753,14 @@ def at_jpl():
   output = search_response(['ip', 'route', 'show'],['grep', 'default'])
   gateway = output[0].strip().split()[2]
   network = gateway.split('.')[:3]
+  module_logger.debug("at_jpl: network is %s", network)
   if network == ['137', '79', '89']:
     return True
+  elif network == ['137', '78', '97']:
+    return True
   elif network == ['128', '149', '22']:
+    return True
+  elif network == ['137', '79', '192']:
     return True
   else:
     return False

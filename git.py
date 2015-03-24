@@ -75,6 +75,7 @@ def check_repo(path):
 
 def make_subdep_entry(path, subdirs, fileobj=None):
   """
+  Add submodule (separate repo in this directory) to subdep.txt
   """
   global top_repos
   if fileobj:
@@ -97,6 +98,9 @@ def make_subdep_entry(path, subdirs, fileobj=None):
   return fileobj
 
 def make_superdeps(top_repos):
+  """
+  Create list of repos in the directory tree above this repo
+  """
   for repo in top_repos:
     fd = open(repo+"/subdep.txt","r")
     deps = fd.readlines()
@@ -113,6 +117,9 @@ def make_superdeps(top_repos):
 
 def install_dependencies():
   """
+  Clones the repos needed by this repo.
+
+  Dry-run only, so far.
   """
   for direction in ["sub","super"]:
     filename = direction+"dep.txt"
@@ -191,6 +198,49 @@ def get_git_dirs():
             git_dirs.append( this_dir)
             prev_dir = this_dir
   return git_dirs
+
+def report_status(show_all=False):
+  """
+  Does 'git status' for all the sandboxes.
+
+  Prints the status report, if there is any, for each sandbox,
+
+  @return: None
+  """
+  git_dirs = get_git_dirs()
+  state = {}
+  state['clean'] = []
+  state['work'] = []
+  state['untracked'] = []
+  state['unknown'] = []
+  for git_dir in git_dirs:
+    module_logger.debug("Processing %s", git_dir)
+    os.chdir(git_dir)
+    fd_out = os.popen('git status','r')
+    response = fd_out.readlines()
+    fd_out.close()
+    if len(response) != 0:
+      repo = os.path.basename(git_dir)
+      status = "unknown"
+      for f in response:
+        line = f.strip()
+        #module_logger.debug("%s: %s", repo, line)
+        if re.search('On branch',line):
+          branch = line.split()[-1]
+        elif re.search("nothing to commit",line):
+          status = "clean"
+        elif re.search("Changes",line):
+          status = "work"
+        elif re.search("Untracked", line):
+          status = "untracked"
+      state[status].append("%18s  (%8s)  %8s" % (repo, branch, status))
+    if show_all and (status=="work" or status == "unknown"):
+      print repo
+      for f in response:
+        print f.strip()
+  for status in state.keys():
+    for report in state[status]:
+      print ("%9s: %31s" % (status,report[:30]))
   
 #------------------------ under development ------------------------------------
 
@@ -212,38 +262,55 @@ def add_new_files():
       found = True
   return found
 
-def report_status(show_all=False):
+def compare_to_remote(remote):
   """
-  Does 'git status' for all the sandboxes.
+  Compares status of local and remote repo
+  """
+  fd = os.popen('git remote show '+remote,'r')
+  response = fd.readlines()
+  fd.close()
+  working = None
+  tracked = []
+  branch_status = []
+  for line in response:
+    parts = line.strip().split()
+    if parts[0] == 'Fetch':
+      pullURL = parts[2]
+    elif parts[0] == 'Push':
+      pushURL = parts[2]
+    elif parts[1] == 'tracked':
+      tracked.append(parts[0])
+    if tracked:
+      for branch in tracked:
+        if parts[0] == branch and parts[1] == 'pushes':
+          parts[3] = remote+'/'+parts[3]
+          parts[4] = ' '.join(parts[4:])[1:-1]
+          branch_status.append(parts[:5])
+  return branch_status
 
-  Prints the status report, if there is any, for each sandbox,
-
-  @return: None
+def compare_to_remotes(remote):
+  """
+  Compares status of all local and remote repos
   """
   git_dirs = get_git_dirs()
-  clean_repos = []
   for git_dir in git_dirs:
     module_logger.debug("Processing %s", git_dir)
     os.chdir(git_dir)
-    fd_out = os.popen('git status','r')
-    response = fd_out.readlines()
-    fd_out.close()
-    if len(response) != 0:
-      repo = os.path.basename(git_dir)
-      for f in response:
-        line = f.strip()
-        if re.search('On branch',line):
-          branch = line.split()[-1]
-        elif re.search("nothing to commit",line):
-          status = "clean"
-        else:
-          status = "work"
-      if status=="clean":
-        clean_repos.append("%18s  %22s  %8s" % (repo, branch, status))
-    if show_all and status=="work":
-      print repo
-      for f in response:
-        print f.strip()
-  for repo in clean_repos:
-    print repo
+    dirname = os.path.basename(git_dir)
+    fd = os.popen('git remote','r')
+    response = fd.readlines()
+    fd.close()
+    status = None
+    for line in response:
+      if line.strip() == remote:
+        status = compare_to_remote(remote)
+        for report in status:
+          if report[-1] == 'up to date':
+            pass
+          else:
+            print os.path.basename(git_dir), report
+    if status:
+      pass
+    else:
+      print "Ignoring",git_dir
     

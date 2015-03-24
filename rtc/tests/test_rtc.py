@@ -6,12 +6,22 @@ Must be superuser or use 'sudo' to get access to RTC.
 import os
 import datetime
 import logging
+import signal
 from time import time
 
 from support import check_permission
 from support.rtc import RTC, Signaller
 from support import cpu_arch, sync_second
-    
+
+def signal_handler(*args):
+  """
+
+  """
+  global sample_count
+  print datetime.datetime.now(),args
+  sample_count += 1
+
+  
 if __name__ == "__main__":
 
   mylogger = logging.getLogger()
@@ -55,18 +65,19 @@ if __name__ == "__main__":
     rtc.N_pps.stop()
     rtc.close()
   else:
-    sample_rate = 100
-    npps = Signaller(interval=1./sample_rate)
+    sample_rate = 3
+    interval=1./sample_rate
+    npps = Signaller(signalHandler = signal_handler, interval=interval)
     max_samples = 200
     sample_count = 0
     times = []
     sync_second()
-    mylogger.debug("synched")
+    mylogger.debug(" synched")
     npps.start()
     while sample_count < max_samples:
       npps.signal.wait()
       times.append(time())
-      sample_count += 1
+      mylogger.debug('sampled')
     mylogger.debug("%d samples completed", sample_count)
     npps.terminate()
     npps.join()
