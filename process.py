@@ -29,9 +29,9 @@ def invoke(command):
   module_logger.debug("invoke: argument %s is %s",command,type(command))
   if type(command) == str:
     args = shlex.split(command)
-    module_logger.debug("Argument list is %s",str(args))
   else:
     args = command
+  module_logger.debug("invoke: argument list is %s",str(args))
   try:
     p = Popen(args, shell=False, stdout=PIPE, stderr=PIPE)
   except OSError, details:

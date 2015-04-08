@@ -27,7 +27,7 @@ if not os.path.exists("/usr/local/logs/PYRO/"):
 
 module_logger = logging.getLogger(__name__)
 
-class PyroTaskServer():
+class PyroTaskServer(object):
   """
   Class to create Pyro daemons which can be linked to Pyro servers
   
@@ -45,13 +45,14 @@ class PyroTaskServer():
     @type  taskName : str
     """
     self.taskName = taskName
-    module_logger.debug(" Initiating PyroTaskServer()")
+    self.logger = logging.getLogger(module_logger.name+".PyroTaskServer")
+    self.logger.debug(" Initiating PyroTaskServer()")
     Pyro.config.PYRO_LOGFILE = '/usr/local/logs/PYRO/'+taskName+'.log'
     SLog.msg(self.taskName,"pyro_support module imported")
     SLog.msg(self.taskName,"server started")
-    module_logger.debug(" %s creating daemon", self.taskName)
+    self.logger.debug(" %s creating daemon", self.taskName)
     self._create_daemon(pyroHostName)
-    module_logger.debug(" %s initialized", self.taskName)
+    self.logger.debug(" %s initialized", self.taskName)
 
   def _create_daemon(self, hostName):
     """
@@ -60,8 +61,9 @@ class PyroTaskServer():
     @param hostName : the host wehere the nameserver resides
     @type  hostName : str
     """
+    self.logger.debug("_create_daemon: entered")
     self._connect_to_pyro_nameserver(hostName)
-    module_logger.debug(' %s using host %s and port %d',
+    self.logger.debug('_create_daemon: %s using host %s and port %d',
                   self.taskName, self.pyro_host, self.pyro_port)
     # Find a nameserver:
     #   1. get the name server locator
@@ -72,7 +74,8 @@ class PyroTaskServer():
     self.daemon = Pyro.core.Daemon(port=T.free_socket())
     # Get the daemon socket; is this necessary?
     host, port = self.daemon.sock.getsockname()
-    module_logger.debug(' The pyro deamon is running on port %d',port)
+    self.logger.debug('_create_daemon: The pyro deamon is running on port %d',
+                      port)
     self.daemon.useNameServer(self.ns)
 
   def start(self, server, pyroServerName):
@@ -87,22 +90,22 @@ class PyroTaskServer():
     try:
       uri=self.daemon.connect(server,pyroServerName)
     except Pyro.errors.NamingError, details:
-      module_logger.error(
+      self.logger.error(
         " Could not connect server object to Pyro daemon. %s already exists",
         str(details[1]), exc_info=True)
       raise Exception("Cannot connect server to daemon.")
     else:
       # Servers advertised
-      module_logger.debug(" Nameserver database: %s",self.ns.flatlist())
+      self.logger.debug(" Nameserver database: %s",self.ns.flatlist())
       try:
         self.daemon.requestLoop(condition=server.running)
       except KeyboardInterrupt:
-        module_logger.warning(" Keyboard interrupt")
+        self.logger.warning(" Keyboard interrupt")
         #self.ULog.warn(self.taskName,"Keyboard interrupt")
       finally:
-        module_logger.info(" Request loop exited")
+        self.logger.info(" Request loop exited")
         self.daemon.shutdown(True)
-      module_logger.info(" Daemon done")
+      self.logger.info(" Daemon done")
       #self.ULog.warn(self.taskName,'session ended')
 
   def halt(self):
@@ -123,16 +126,18 @@ class PyroTaskServer():
 
     @return: pyro_host (str), pyro_port (int)
     """
-    if T.at_jpl():
-      # no tunnel is needed
+    self.logger.debug("_connect_to_pyro_nameserver: invoked")
+    if T.need_tunnel(full_name[server]) == False:
+      self.logger.debug("_connect_to_pyro_nameserver: no tunnel is needed")
       self.pyro_host = server
       self.pyro_port = 9090
     else:
       # create a tunnel to the nameserver
       troach = T.Tunnel(server)
-      module_logger.info("We have a tunnel")
+      self.logger.info("_connect_to_pyro_nameserver: We have a tunnel")
       self.pyro_port = T.free_socket() %d
-      module_logger.info("We have proxy port at",pyro_port)
+      self.logger.info("_connect_to_pyro_nameserver: We have proxy port at",
+                       pyro_port)
       p = T.makePortProxy(server,pyro_port,server,9090)
       self.pyro_host = 'localhost'
     return self.pyro_host, self.pyro_port
@@ -167,7 +172,7 @@ class PyroTaskClient(Pyro.core.DynamicProxy):
       module_logger.debug(" Nameserver object is %s",str(nsr.ns))
       server = nsr.ns.resolve(servername)
       server_host, server_port = pyro_server_details(
-        pyro_server[server.address], server.port)
+        pyro_server_name[server.address], server.port)
       device_request = \
         "PYROLOC://" + server_host + ":" + str(server_port) + \
         "/" + servername
@@ -232,7 +237,7 @@ class NameserverResource:
 
         @return: (apparent_host [str], apparent port [int])
         """
-        if T.at_jpl():
+        if T.need_tunnel(full_name[ns_shortname]) == False:
           # no proxy port
           if ns_shortname == "localhost":
             pyro_ns_host = ns_shortname
@@ -336,7 +341,7 @@ def pyro_server_details(ns_shortname,pyro_ns_port):
   @return: (apparent_host [str], apparent port [int])
   """
   global tunnels
-  if T.at_jpl():
+  if T.need_tunnel(full_name[ns_shortname]) == False:
     # no proxy port
     if ns_shortname == "localhost":
       pyro_ns_host = ns_shortname
@@ -443,7 +448,7 @@ def get_device_server(servername, pyro_ns = "dto", pyro_port = 9090):
   server = ns.resolve(servername)
   module_logger.debug("get_device_server: server %s:%d", server.address,
                                                          server.port)
-  server_host,server_port = pyro_server_details(pyro_server[server.address],
+  server_host,server_port = pyro_server_details(pyro_server_name[server.address],
                                                             server.port)
   try:
     device_request = "PYROLOC://" + server_host + ":" + str(server_port) + \
@@ -488,10 +493,15 @@ def launch_server(serverhost, taskname, task):
 
 # Generally, JPL/DSN hosts cannot be resolved by DNS
 GATEWAY, IP, PORT = T.make_port_dict()
-pyro_server = {'127.0.0.1':      'localhost',
+pyro_server_name = {'127.0.0.1':      'localhost',
                '128.149.22.108': 'dto',
-               '137.78.97.24':   'wbdc',
+               '137.228.246.31': 'wbdc',
+               '137.228.246.57': 'crux',
                '128.149.22.95':  'roachnest'}
+full_name = {'dto':       'dto.jpl.nasa.gov',
+             'wbdc':      'dss43wbdc2.cdscc.fltops.jpl.nasa.gov',
+             'crux':      'crux.cdscc.fltops.jpl.nasa.gov',
+             'roachnest': 'roachnest.jpl.nasa.gov'}
 
 # Remember any tunnels that may be opened
 tunnels = []

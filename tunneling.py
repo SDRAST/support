@@ -89,6 +89,14 @@ import logging
 module_logger = logging.getLogger(__name__)
 DEFAULTMOUNTROOT= os.environ.get ("HOME") + os.sep + "mnt"
 
+networks = {"fltops": ["137.228.202",
+                       "137.228.203",
+                       "137.228.207",
+                       "137.228.236",
+                       "137.228.246",
+                       "137.228.247"],
+           "jpl": ["128.149.22", "137.79.89"]}
+
 # --------------------------- module classes ------------------------------
 
 class TunnelingException(Exception):
@@ -431,14 +439,15 @@ class Tunnel:
 
     @return: Tunnel() instance
     """
+    self.logger = logging.getLogger(module_logger.name+".Tunnel")
     response = self.check_for_tunnel(host)
     if response == 0:
       # make a tunnel
       command = '/usr/local/scripts/ssh-tunnel "%s"' % (host)
-      module_logger.debug("Tunnel() doing: %s",command)
+      self.logger.debug(" doing: %s",command)
       self.p = invoke(command)
       response = self.p.stdout.readline()
-      module_logger.debug("Tunnel() got: %s",response)
+      self.logger.debug("Tunnel() got: %s",response)
       parts = response.split()
       if parts[-2] == "recognized":
         # not recognized
@@ -459,7 +468,7 @@ class Tunnel:
           self.port = 0
           raise TunnelingException("Tunnel() timed out")
         else:
-          module_logger.debug("Tunnel() opened tunnel to %s",self.host)
+          self.logger.debug("Tunnel() opened tunnel to %s",self.host)
     else:
       # a tunnel exists
       self.port = int(response)
@@ -504,6 +513,7 @@ class Tunnel:
 
     @return: port number, or 0 if there is no tunnel
     """
+    self.logger.debug("check_for_tunnel: invoked")
     tunnels = check_for_tunnels()
     if tunnels.has_key(host):
       return int(tunnels[host])
@@ -704,12 +714,14 @@ def check_for_tunnels():
   try:
     err = p.stderr.read()
   except IOError:
-    module_logger.debug("Could not read stderr",exc_info=True)
+    module_logger.debug("check_for_tunnels: Could not read stderr",
+                        exc_info=True)
   else:
     if err.isspace() == False:
       module_logger.info("check_for_tunnels: %s",err)
   response = p.stdout.read().split("\n")
-  module_logger.debug("netstat -vat response:\n%s",response)
+  module_logger.debug("check_for_tunnels: netstat -vat response:\n%s",
+                      response)
   tunnels = {}
   name_data = get_remote_names()
   for line in response:
@@ -727,24 +739,54 @@ def check_for_tunnels():
             break
           else:
             tunnels[remote_host] = int(port)
-  module_logger.debug("Tunnels: %s",str(tunnels))
+  module_logger.debug("check_for_tunnels: found %s",str(tunnels))
   return tunnels
 
-def at_jpl():
+def get_domain(netIP):
   """
-  Report if the system is on the JPL network
+  Returns the networks key whose list contains netIP
+  """
+  domain = ""
+  for key in networks.keys():
+    for IP in networks[key]:
+      if IP == netIP:
+        domain = key
+        break
+  if domain == "":
+    domain = "other"
+  return domain
+
+def need_tunnel(server):
+  """
+  Reports whether a tunnel is needed to connect to the server.
+
+  This needs to be able to handle fully qualified host names and IP addresses
+
+  @param server : fully qualified server name or IP address
   """
   output = search_response(['ip', 'route', 'show'],['grep', 'default'])
   gateway = output[0].strip().split()[2]
-  network = gateway.split('.')[:3]
-  if network == ['137', '79', '89']:
-    return True
-  elif network == ['137', '78', '97']:
-    return True
-  elif network == ['128', '149', '22']:
-    return True
+  # This will fail if the gateway is ever not a single digit.
+  local_domain = get_domain(gateway[:-2])
+
+  parts = server.split('.')
+  if parts[-1].isalpha():
+    if re.search("fltops", server):
+      remote_domain = "fltops"
+    elif re.search("jpl", server):
+      remote_domain = "jpl"
+    else:
+      remote_domain = "other"
+  elif parts[0].isdigit():
+    remote_domain = get_domain('.'.join(parts[:-1]))
+
+  if remote_domain == "fltops" and local_domain != "fltops":
+    need = True
+  elif remote_domain == "jpl" and local_domain == "other":
+    need = True
   else:
-    return False
+    need = False
+  return need
 
 def do_list():
   """
