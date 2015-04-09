@@ -242,7 +242,7 @@ class NameserverResource:
           if ns_shortname == "localhost":
             pyro_ns_host = ns_shortname
           else:
-            pyro_ns_host = ns_shortname+".jpl.nasa.gov"
+            pyro_ns_host = full_name[ns_shortname]
           ns_proxy_port = pyro_ns_port
         else:
           # we need a tunnel to the Pyro nameserver
@@ -346,7 +346,7 @@ def pyro_server_details(ns_shortname,pyro_ns_port):
     if ns_shortname == "localhost":
       pyro_ns_host = ns_shortname
     else:
-      pyro_ns_host = ns_shortname+".jpl.nasa.gov"
+      pyro_ns_host = full_name[ns_shortname]
     ns_proxy_port = pyro_ns_port
   else:
     # we need a tunnel to the Pyro nameserver
