@@ -26,7 +26,6 @@ def invoke(command):
 
   @return: Popen() instance
   """
-  module_logger.debug("invoke: argument %s is %s",command,type(command))
   if type(command) == str:
     args = shlex.split(command)
   else:

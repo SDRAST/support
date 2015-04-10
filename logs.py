@@ -22,22 +22,23 @@ def init_logging(logger,
 
   @return: logging.Logger instance
   """
-  logger.setLevel(consolevel)
+  #logger.setLevel(consolevel)
   # default handler
   dh = logger.handlers[0]
   dh.setLevel(consolevel)
 
   # create formatter and add it to the handler
   formatter = logging.Formatter(
-    '%(asctime)s - %(name)s - %(levelname)s:\n  %(message)s')
+    '%(asctime)s - %(name)s - %(levelname)s:  %(message)s')
   dh.setFormatter(formatter)
 
   # create file handler which logs even debug messages
   fh = logging.FileHandler(logname)
-  fh.setLevel(loglevel)
-  fh.setFormatter(formatter)
   # add the handler to the logger
   logger.addHandler(fh)
+  fh.setLevel(loglevel)
+  fh.setFormatter(formatter)
+  logger.setLevel(min(dh.level, fh.level))
   return logger
 
 def get_loglevel(level):
