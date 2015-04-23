@@ -522,6 +522,7 @@ pyro_server_name = {'127.0.0.1':      'localhost',
                '137.228.246.57': 'crux',
                '128.149.22.95':  'roachnest'}
 full_name = {'dto':       'dto.jpl.nasa.gov',
+             'localhost':    'localhost', 
              'wbdc':      'dss43wbdc2.cdscc.fltops.jpl.nasa.gov',
              'crux':      'crux.cdscc.fltops.jpl.nasa.gov',
              'roachnest': 'roachnest.jpl.nasa.gov'}
