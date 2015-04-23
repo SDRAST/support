@@ -169,7 +169,8 @@ class PyroTaskClient(Pyro.core.DynamicProxy):
     @type  pyro_port : int
     """
     self.logger = logging.getLogger(module_logger.name+".PyroTaskClient")
-    with NameserverResource() as nsr:
+    nsr =  NameserverResource()
+    if nsr:
       self.logger.debug(" nameserver object is %s",str(nsr.ns))
       server = nsr.ns.resolve(servername)
       server_host, server_port = pyro_server_details(
