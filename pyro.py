@@ -528,7 +528,7 @@ full_name = {'dto':       'dto.jpl.nasa.gov',
              'wbdc':      'dss43wbdc2.cdscc.fltops.jpl.nasa.gov',
              'crux':      'crux.cdscc.fltops.jpl.nasa.gov',
              'roachnest': 'roachnest.jpl.nasa.gov',
-             'krx43':     'K2R43.cdscc.fltops.jpl.nasa.gov.cdscc.fltops.jpl.nasa.gov'}
+             'krx43':     'K2R43.cdscc.fltops.jpl.nasa.gov'}
 
 # Remember any tunnels that may be opened
 tunnels = []
