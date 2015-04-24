@@ -521,12 +521,14 @@ pyro_server_name = {'127.0.0.1':      'localhost',
                '128.149.22.108': 'dto',
                '137.228.246.31': 'wbdc',
                '137.228.246.57': 'crux',
-               '128.149.22.95':  'roachnest'}
+               '128.149.22.95':  'roachnest',
+               '137.228.246.105':'krx43'}
 full_name = {'dto':       'dto.jpl.nasa.gov',
              'localhost':    'localhost', 
              'wbdc':      'dss43wbdc2.cdscc.fltops.jpl.nasa.gov',
              'crux':      'crux.cdscc.fltops.jpl.nasa.gov',
-             'roachnest': 'roachnest.jpl.nasa.gov'}
+             'roachnest': 'roachnest.jpl.nasa.gov',
+             'krx43':     'krx43.cdscc.fltops.jpl.nasa.gov'}
 
 # Remember any tunnels that may be opened
 tunnels = []
