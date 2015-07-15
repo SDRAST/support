@@ -517,14 +517,16 @@ def launch_server(serverhost, taskname, task):
 # Generally, JPL/DSN hosts cannot be resolved by DNS
 GATEWAY, IP, PORT = T.make_port_dict()
 pyro_server_name = {'127.0.0.1':      'localhost',
+               '128.149.22.95':  'roachnest',
                '128.149.22.108': 'dto',
                '137.228.246.31': 'wbdc',
                '137.228.246.57': 'crux',
-               '128.149.22.95':  'roachnest'}
-full_name = {'dto':       'dto.jpl.nasa.gov',
-             'wbdc':      'dss43wbdc2.cdscc.fltops.jpl.nasa.gov',
-             'crux':      'crux.cdscc.fltops.jpl.nasa.gov',
-             'roachnest': 'roachnest.jpl.nasa.gov'}
+               '137.228.246.105': 'K2'}
+full_name = {'crux':      'crux.cdscc.fltops.jpl.nasa.gov',
+             'dto':       'dto.jpl.nasa.gov',
+             'K2':        'K2R43.cdscc.fltops.jpl.nasa.gov',
+             'roachnest': 'roachnest.jpl.nasa.gov',
+             'wbdc':      'dss43wbdc2.cdscc.fltops.jpl.nasa.gov'}
 
 # Remember any tunnels that may be opened
 tunnels = []
