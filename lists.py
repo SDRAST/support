@@ -49,3 +49,16 @@ def remove_item(thislist, item):
   except ValueError:
     pass
   return thislist
+
+
+def list_dictionary(dictionary):
+   """
+   List a dictionary, one line for each item, with the keys sorted
+   """
+   report = ""
+   dck = dictionary.keys()
+   dck.sort()
+   report += str(len(dictionary))+' items\n'
+   for key in dck:
+      report += str(key)+"\t"+str(dictionary[key])+'\n'
+   return report

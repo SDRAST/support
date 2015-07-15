@@ -169,7 +169,8 @@ class PyroTaskClient(Pyro.core.DynamicProxy):
     @type  pyro_port : int
     """
     self.logger = logging.getLogger(module_logger.name+".PyroTaskClient")
-    with NameserverResource() as nsr:
+    nsr =  NameserverResource()
+    if nsr:
       self.logger.debug(" nameserver object is %s",str(nsr.ns))
       server = nsr.ns.resolve(servername)
       server_host, server_port = pyro_server_details(
@@ -517,16 +518,17 @@ def launch_server(serverhost, taskname, task):
 # Generally, JPL/DSN hosts cannot be resolved by DNS
 GATEWAY, IP, PORT = T.make_port_dict()
 pyro_server_name = {'127.0.0.1':      'localhost',
-               '128.149.22.95':  'roachnest',
-               '128.149.22.108': 'dto',
-               '137.228.246.31': 'wbdc',
-               '137.228.246.57': 'crux',
-               '137.228.246.105': 'K2'}
-full_name = {'crux':      'crux.cdscc.fltops.jpl.nasa.gov',
-             'dto':       'dto.jpl.nasa.gov',
-             'K2':        'K2R43.cdscc.fltops.jpl.nasa.gov',
+                    '128.149.22.95':  'roachnest',
+                    '128.149.22.108': 'dto',
+                    '137.228.246.31': 'wbdc',
+                    '137.228.246.57': 'crux',
+                    '137.228.246.105':'krx43'}
+full_name = {'dto':       'dto.jpl.nasa.gov',
+             'localhost': 'localhost', 
+             'wbdc':      'dss43wbdc2.cdscc.fltops.jpl.nasa.gov',
+             'crux':      'crux.cdscc.fltops.jpl.nasa.gov',
              'roachnest': 'roachnest.jpl.nasa.gov',
-             'wbdc':      'dss43wbdc2.cdscc.fltops.jpl.nasa.gov'}
+             'krx43':     'K2R43.cdscc.fltops.jpl.nasa.gov'}
 
 # Remember any tunnels that may be opened
 tunnels = []
