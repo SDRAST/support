@@ -1,8 +1,11 @@
 """
 Support for openpyxl
 
-Use of module function is not elegant.  I should try to subclass
+Use of module functions is not elegant.  I should try to subclass
 openpyxl.workbook.Workbook
+
+This works for open-pyxl 1.x.  Starting with 2.0, the row and column indexing
+starts with 1 instead of 0.
 """
 import logging
 from openpyxl import workbook
@@ -88,12 +91,15 @@ def get_column(ws, column_name):
   @return: list of data
   """
   column_id = get_column_id(ws,column_name)
-  column = ws.columns[column_id]
-  column_data = []
-  # The first cell always has the label
-  for cell in column[1:]:
-    column_data.append(cell.value)
-  return column_data
+  if column_id:
+    column = ws.columns[column_id]
+    column_data = []
+    # The first cell always has the label
+    for cell in column[1:]:
+      column_data.append(cell.value)
+    return column_data
+  else:
+    return None
 
 def insert_empty_row_after(ws,prior_row):
   """
