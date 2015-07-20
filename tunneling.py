@@ -793,7 +793,9 @@ def need_tunnel(server):
       remote_domain = "other"
   elif parts[0].isdigit():
     remote_domain = get_domain('.'.join(parts[:-1]))
-
+    
+  module_logger.debug("need_tunnel: local domain is %s, remote domain is %s",
+                      local_domain, remote_domain)
   if remote_domain == "fltops" and local_domain != "fltops":
     need = True
   elif remote_domain == "jpl" and local_domain == "other":
