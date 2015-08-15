@@ -510,10 +510,11 @@ def launch_server(serverhost, taskname, task):
     server_launcher.start(task,taskname)
   else:
     module_logger.error(
-                   "%s is already published.  Is the server already running?",
-                   taskname)
-    module_logger.error("If not, do 'pyro-nsc remove %s'",taskname)
-
+      "launch_server: %s is already published.  Is the server already running?",
+      taskname)
+    module_logger.error(
+                      "               If not, do 'pyro-nsc remove %s'",taskname)
+    raise RuntimeError("Task is already registered")
 
 # Generally, JPL/DSN hosts cannot be resolved by DNS
 GATEWAY, IP, PORT = T.make_port_dict()
