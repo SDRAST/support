@@ -702,10 +702,15 @@ def make_port_dict():
   GATEWAY = {}
   IP = {}
   PORT = {}
+  module_logger.debug("make_port_dict: opening tunnel_ports")
   fd = open("/usr/local/scripts/tunnel_ports","r")
+  module_logger.debug("make_port_dict: opened tunnel_ports")
   text = fd.readlines()
   fd.close()
-  for line in text[8:]:
+  for line in text:
+    if line[:7] == "declare":
+      continue
+    module_logger.debug("make_port_dict: processing: %s", line)
     if len(line.strip()):
       exec(line.strip())
   return GATEWAY, IP, PORT
