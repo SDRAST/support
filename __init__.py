@@ -4,16 +4,20 @@ Package to provide support for various objects and modules
 This module contains functions that don't have an obvious home in a
 submodule.
 """
+import sys
 import datetime
 from numpy import array
 from os import environ
 from time import time
 
+#from lists import *
+from support.process import invoke
+
 import logging
 module_logger = logging.getLogger(__name__)
 
-from lists import *
-from support.process import invoke
+def python_version():
+  return sys.version.split()[0]
 
 def nearest_index(np_array,value):
   """
@@ -42,7 +46,10 @@ def nearest_index(np_array,value):
   else:
     index = abs(np_array-value).argmin()
   # discard points beyond the ends of the array
-  if value < np_array[0] or value > np_array[-1]:
+  if (((np_array[0] < np_array[-1]) and 
+       (value < np_array[0] or value > np_array[-1])) or
+      ((np_array[0] > np_array[-1]) and
+       (value > np_array[0] or value < np_array[-1]))):
     return -1
   else:
     return index
@@ -87,3 +94,4 @@ def cpu_arch():
   p = invoke('uname -a')
   text = p.stdout.readline()
   return text.split()[-2]
+

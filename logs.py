@@ -22,10 +22,6 @@ def init_logging(logger,
 
   @return: logging.Logger instance
   """
-  logger.debug("init_logging: entered")
-  logger.debug("init_logging: logger is %s", logger)
-  logger.debug("init_logging: console logging level is %s",consolevel)
-  logger.setLevel(consolevel)
   # default handler
   module_logger.debug("init_logging: handlers: %s", logger.handlers)
   dh = logger.handlers[0]
@@ -34,15 +30,16 @@ def init_logging(logger,
 
   # create formatter and add it to the handler
   formatter = logging.Formatter(
-    '%(asctime)s - %(name)s - %(levelname)s:\n%(message)s')
+    '%(asctime)s - %(name)s - %(levelname)s:  %(message)s')
   dh.setFormatter(formatter)
 
   # create file handler which logs even debug messages
   fh = logging.FileHandler(logname)
-  fh.setLevel(loglevel)
-  fh.setFormatter(formatter)
   # add the handler to the logger
   logger.addHandler(fh)
+  fh.setLevel(loglevel)
+  fh.setFormatter(formatter)
+  logger.setLevel(min(dh.level, fh.level))
   return logger
 
 def get_loglevel(level):
@@ -88,7 +85,7 @@ def set_module_loggers(logger_dict):
   Set logging level of imported modules
 
   @param logger_dict : like {"support": "warning", ... }
-  @type  logger_dict : dict
+  @type  logger_dict : dict of str
 
   @return: dict of loggers
   """

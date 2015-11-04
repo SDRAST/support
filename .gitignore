@@ -10,3 +10,6 @@
 
 # No compiled Python
 *.pyc
+
+# No logs
+Pyro_log
