@@ -22,9 +22,14 @@ def init_logging(logger,
 
   @return: logging.Logger instance
   """
+  logger.debug("init_logging: entered")
+  logger.debug("init_logging: logger is %s", logger)
+  logger.debug("init_logging: console logging level is %s",consolevel)
   logger.setLevel(consolevel)
   # default handler
+  module_logger.debug("init_logging: handlers: %s", logger.handlers)
   dh = logger.handlers[0]
+  module_logger.debug("init_logging: default handler is %s", dh)
   dh.setLevel(consolevel)
 
   # create formatter and add it to the handler
