@@ -66,6 +66,13 @@ def find_sub_repos(path = os.getcwd(), fileobj = None):
 def check_repo(path):
   """
   Convenience so this test hast to be done only once
+  
+  The directory is a git repo if it has a .git sub-directory.
+  
+  @param path : the path to the directory to be checked
+  @type  path : str
+  
+  @return: bool
   """
   module_logger.debug("check_repo: path = %s", path)
   if os.path.exists(path+"/.git"):
@@ -73,17 +80,28 @@ def check_repo(path):
   else:
     return False
 
-def make_subdep_entry(path, subdirs, fileobj=None):
+def make_subdep_entry(path, fileobj=None):
   """
   Add submodule (separate repo in this directory) to subdep.txt
+  
+  subdep.txt is a file listing all the sub-repos, that is, repos which are
+  under this directory
+  
+  @param path : path to the directory to be processed
+  @type  path : str
+  
+  @param fileobj : file object for file subdep.txt
+  @type  fileobj : instance of a file class
+  
+  @return: file object
   """
   global top_repos
   if fileobj:
-    module_logger.debug("make_subdep_entry: path=%s, subdirs=%s, file=%s",
-                   path, subdirs, fileobj.name)
+    module_logger.debug("make_subdep_entry: path=%s, file=%s",
+                   path, fileobj.name)
   else:
-    module_logger.debug("make_subdep_entry: path=%s, subdirs=%s",
-                   path, subdirs)
+    module_logger.debug("make_subdep_entry: path=%s",
+                   path)
   if fileobj == None:
     fileobj = open(path+"/subdep.txt","w")
     top_repos.append(path)
@@ -100,6 +118,11 @@ def make_subdep_entry(path, subdirs, fileobj=None):
 def make_superdeps(top_repos):
   """
   Create list of repos in the directory tree above this repo
+  
+  This is kept in the file superdep.txt
+  
+  @param top_repos : a list of top-level repos to be examined
+  @type  top_repos : list of str
   """
   for repo in top_repos:
     fd = open(repo+"/subdep.txt","r")
@@ -203,7 +226,13 @@ def report_status(show_all=False):
   """
   Does 'git status' for all the sandboxes.
 
-  Prints the status report, if there is any, for each sandbox,
+  Prints the status report, if there is any, for each sandbox.
+  There is a priority to what is reported, according to the severity of the
+  status::
+    work      - changes need to be committed
+    untracked - there are untracked files which might need to be added
+    behind    - a pull is required to bring the repo up to date
+    ahead     - a push is required to update the remote
 
   @return: None
   """
@@ -213,6 +242,8 @@ def report_status(show_all=False):
   state['work'] = []
   state['untracked'] = []
   state['unknown'] = []
+  state['behind'] = []
+  state['ahead'] = []
   for git_dir in git_dirs:
     module_logger.debug("Processing %s", git_dir)
     os.chdir(git_dir)
@@ -224,17 +255,24 @@ def report_status(show_all=False):
       status = "unknown"
       for f in response:
         line = f.strip()
-        #module_logger.debug("%s: %s", repo, line)
         if re.search('On branch',line):
           branch = line.split()[-1]
-        elif re.search("nothing to commit",line):
-          status = "clean"
         elif re.search("Changes",line):
           status = "work"
+          break
         elif re.search("Untracked", line):
           status = "untracked"
+          break
+        elif re.search("is behind", line):
+          status = "behind"
+          break
+        elif re.search("is ahead", line):
+          status = "ahead"
+          break
+        elif re.search("nothing to commit",line):
+          status = "clean"
       state[status].append("%18s  (%8s)  %8s" % (repo, branch, status))
-    if show_all and (status=="work" or status == "unknown"):
+    if show_all and (status != "clean"):
       print repo
       for f in response:
         print f.strip()

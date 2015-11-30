@@ -89,13 +89,16 @@ import logging
 module_logger = logging.getLogger(__name__)
 DEFAULTMOUNTROOT= os.environ.get ("HOME") + os.sep + "mnt"
 
+# I need to get a definitive list for each domain
 networks = {"fltops": ["137.228.202",
                        "137.228.203",
                        "137.228.207",
                        "137.228.236",
                        "137.228.246",
                        "137.228.247"],
-           "jpl": ["128.149.22", "137.79.89"]}
+           "jpl": ["128.149.22",
+                   "128.149.252",
+                   "137.79.89"]}
 
 # --------------------------- module classes ------------------------------
 

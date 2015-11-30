@@ -92,7 +92,6 @@ def set_module_loggers(logger_dict):
   loggers = {}
   for module in logger_dict.keys():
     command = "from "+module+" import module_logger as temp"
-    module_logger.debug("%s", command)
     exec(command)
     loggers[module] = temp
     level = logger_dict[module]
