@@ -89,13 +89,16 @@ import logging
 module_logger = logging.getLogger(__name__)
 DEFAULTMOUNTROOT= os.environ.get ("HOME") + os.sep + "mnt"
 
+# I need to get a definitive list for each domain
 networks = {"fltops": ["137.228.202",
                        "137.228.203",
                        "137.228.207",
                        "137.228.236",
                        "137.228.246",
                        "137.228.247"],
-           "jpl": ["128.149.22", "137.79.89"]}
+           "jpl": ["128.149.22",
+                   "128.149.252",
+                   "137.79.89"]}
 
 # --------------------------- module classes ------------------------------
 
@@ -702,10 +705,15 @@ def make_port_dict():
   GATEWAY = {}
   IP = {}
   PORT = {}
+  module_logger.debug("make_port_dict: opening tunnel_ports")
   fd = open("/usr/local/scripts/tunnel_ports","r")
+  module_logger.debug("make_port_dict: opened tunnel_ports")
   text = fd.readlines()
   fd.close()
-  for line in text[8:]:
+  for line in text:
+    if line[:7] == "declare":
+      continue
+    module_logger.debug("make_port_dict: processing: %s", line)
     if len(line.strip()):
       exec(line.strip())
   return GATEWAY, IP, PORT

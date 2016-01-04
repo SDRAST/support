@@ -10,7 +10,7 @@ from numpy import array
 from os import environ
 from time import time
 
-from lists import *
+#from lists import *
 from support.process import invoke
 
 import logging
@@ -46,7 +46,10 @@ def nearest_index(np_array,value):
   else:
     index = abs(np_array-value).argmin()
   # discard points beyond the ends of the array
-  if value < np_array[0] or value > np_array[-1]:
+  if (((np_array[0] < np_array[-1]) and 
+       (value < np_array[0] or value > np_array[-1])) or
+      ((np_array[0] > np_array[-1]) and
+       (value > np_array[0] or value < np_array[-1]))):
     return -1
   else:
     return index

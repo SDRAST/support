@@ -13,6 +13,7 @@ import time
 import logging
 import os, os.path
 import atexit
+import socket
 
 # Set up Pyro system logging
 NONE = 0
@@ -357,7 +358,7 @@ def pyro_server_details(ns_shortname,pyro_ns_port):
     # no proxy port
     ns_proxy_port = pyro_ns_port
     if ns_shortname == "localhost":
-      module_logger.debug("pyro_server_details: ns is at localhost port")
+      module_logger.debug("pyro_server_details: ns is at a localhost port")
       pyro_ns_host = ns_shortname
     else:
       pyro_ns_host = full_name[ns_shortname]
@@ -437,6 +438,7 @@ def get_nameserver(pyro_ns = "dto", pyro_port = 9090):
   ns  = pyro_server_request(locator.getNS,
                             host=pyro_ns_host,
                             port=ns_proxy_port)
+  module_logger.debug("get_nameserver: ns is %s", ns)
   if ns == None:
     module_logger.error("get_nameserver: no nameserver connection")
     raise RuntimeError("No nameserver connection")
@@ -467,8 +469,11 @@ def get_device_server(servername, pyro_ns = "dto", pyro_port = 9090):
   module_logger.debug("get_device_server: nameserver is %s", ns)
   # Find the device server
   server = ns.resolve(servername)
-  module_logger.debug("get_device_server: server %s:%d", server.address,
+  module_logger.debug("get_device_server: device server is at %s:%d", server.address,
                                                          server.port)
+  # Is this the localhost?
+  if server.address == socket.gethostbyname(socket.gethostname()):
+    server.address = socket.gethostbyname('localhost')
   server_host,server_port = pyro_server_details(pyro_server_name[server.address],
                                                             server.port)
   try:
@@ -510,25 +515,28 @@ def launch_server(serverhost, taskname, task):
     server_launcher.start(task,taskname)
   else:
     module_logger.error(
-                   "%s is already published.  Is the server already running?",
-                   taskname)
-    module_logger.error("If not, do 'pyro-nsc remove %s'",taskname)
-
+      "launch_server: %s is already published.  Is the server already running?",
+      taskname)
+    module_logger.error(
+                      "               If not, do 'pyro-nsc remove %s'",taskname)
+    raise RuntimeError("Task is already registered")
 
 # Generally, JPL/DSN hosts cannot be resolved by DNS
 GATEWAY, IP, PORT = T.make_port_dict()
 pyro_server_name = {'127.0.0.1':      'localhost',
                     '128.149.22.95':  'roachnest',
                     '128.149.22.108': 'dto',
+                    '137.228.236.70': 'rac13b',
                     '137.228.246.31': 'wbdc',
                     '137.228.246.57': 'crux',
                     '137.228.246.105':'krx43'}
-full_name = {'dto':       'dto.jpl.nasa.gov',
-             'localhost': 'localhost', 
+full_name = {'crux':      'crux.cdscc.fltops.jpl.nasa.gov',
+             'dto':       'dto.jpl.nasa.gov',
+             'krx43':     'K2R43.cdscc.fltops.jpl.nasa.gov',
+             'localhost': 'localhost',
+             'rac13b':    'venus-rac3.gdscc.fltops.jpl.nasa.gov',
              'wbdc':      'dss43wbdc2.cdscc.fltops.jpl.nasa.gov',
-             'crux':      'crux.cdscc.fltops.jpl.nasa.gov',
-             'roachnest': 'roachnest.jpl.nasa.gov',
-             'krx43':     'K2R43.cdscc.fltops.jpl.nasa.gov'}
+             'roachnest': 'roachnest.jpl.nasa.gov'}
 
 # Remember any tunnels that may be opened
 tunnels = []
