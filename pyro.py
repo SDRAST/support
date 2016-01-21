@@ -5,6 +5,7 @@ Functions to set up Pyro using tunnels if necessary.
 The module keeps track of the tunnels it creates.  A call to
 'cleanup_tunnels()' should be made before ending the program.
 """
+import Pyro
 import Pyro.core
 import Pyro.naming
 import Pyro.errors
@@ -14,6 +15,13 @@ import logging
 import os, os.path
 import atexit
 import socket
+import optparse
+import sys
+
+from support import NamedClass
+from support.logs import set_module_loggers
+from support.logs import init_logging, get_loglevel, set_loglevel
+from support.network import get_domain, get_local_network
 
 # Set up Pyro system logging
 NONE = 0
@@ -28,7 +36,96 @@ if not os.path.exists("/usr/local/logs/PYRO/"):
 
 module_logger = logging.getLogger(__name__)
 
-class PyroTaskServer(object):
+class PyroServer(Pyro.core.ObjBase):
+  def __init__(self):
+    Pyro.core.ObjBase.__init__(self)
+    self.logger = logging.getLogger(module_logger.name+".MCserver")
+    self.logger.debug("__init__: logger is %s",self.logger.name)
+    self.run = True
+
+  def sanitize(self, list_or_dict):
+    """
+    Pyro cannot return objects whose class is not known by the client.
+
+    Any standard types of objects are returned as is.  A list or a dict,
+    however, needs to be examined item by item to see if they are
+    standard types.  Those that aren't need to be replaced with a string
+    representation.
+    """
+    if type(list_or_dict) == str or \
+       type(list_or_dict) == int or \
+       type(list_or_dict) == float or \
+       type(list_or_dict) == bool:
+      return list_or_dict
+    elif type(list_or_dict) == list:
+      newlist = []
+      for item in list_or_dict:
+        newlist.append(self.sanitize(item))
+      return newlist
+    elif type(list_or_dict) == dict:
+      newdict = {}
+      for key in list_or_dict.keys():
+        newdict[key] = self.sanitize(list_or_dict[key])
+      return newdict
+    else:
+      return str(list_or_dict)
+
+  def request(self,request):
+    """
+    Evaluate a statement in the local context
+
+    Note that this only returns strings or standard types, not the user
+    defined objects on the server side which they may represent.
+
+    Examples (from the client side):
+    >>> ks.request("self.spec[0].LO.get_p('frequency')")
+    1300.0
+    >>> ks.request("self.IFsw[3].state")
+    8
+
+    @param request : command to be evaluated
+    @type  request : str
+
+    @return: response
+    """
+    self.logger.debug("request: processing: %s", request)
+    response = eval(request)
+    self.logger.debug("request: response was: %s",response)
+    if type(response) == str or \
+       type(response) == int or \
+       type(response) == float or \
+       type(response) == bool or \
+       type(response) == numpy.ndarray :
+      self.logger.debug("request: returns native object")
+      return response
+    elif type(response) == list or type(response) == dict:
+      Pyro_OK = self.sanitize(response)
+      self.logger.debug("request: sanitized list or dict %s",Pyro_OK)
+      return Pyro_OK
+    else:
+      self.logger.debug("request: returns str")
+      return str(response)
+
+  # ==================== Methods for managing the server ====================
+
+  def running(self):
+    """
+    Report if the manager is running.  A return value of False should
+    not be possible.
+    """
+    if self.run:
+      return True
+    else:
+      return False
+
+  def halt(self):
+    """
+    Command to halt the manager
+    """
+    self.logger.info("halt: Halting")
+    self.run = False
+
+class PyroServerLauncher(object):
   """
   Class to create Pyro daemons which can be linked to Pyro servers
   
@@ -37,7 +134,7 @@ class PyroTaskServer(object):
   """
   def __init__(self, pyroHostName, taskName):
     """
-    Create a PyroTaskServer() object.
+    Create a PyroServerLauncher() object.
 
     @param pyroHostName : host where the Pyro nameserver resides
     @type  pyroHostName : str
@@ -46,8 +143,8 @@ class PyroTaskServer(object):
     @type  taskName : str
     """
     self.taskName = taskName
-    self.logger = logging.getLogger(module_logger.name+".PyroTaskServer")
-    self.logger.debug(" Initiating PyroTaskServer()")
+    self.logger = logging.getLogger(module_logger.name+".PyroServerLauncher")
+    self.logger.debug(" Initiating PyroServerLauncher()")
     Pyro.config.PYRO_LOGFILE = '/usr/local/logs/PYRO/'+taskName+'.log'
     SLog.msg(self.taskName,"pyro_support module imported")
     SLog.msg(self.taskName,"server started")
@@ -500,7 +597,7 @@ def launch_server(serverhost, taskname, task):
   # create the server launcher
   module_logger.debug(" Launching Pyro task server %s on %s",
                       taskname, serverhost)
-  server_launcher = PyroTaskServer(serverhost, taskname)
+  server_launcher = PyroServerLauncher(serverhost, taskname)
 
   # check to see if the server is running already.
   response = server_launcher.ns.flatlist()
@@ -520,6 +617,80 @@ def launch_server(serverhost, taskname, task):
     module_logger.error(
                       "               If not, do 'pyro-nsc remove %s'",taskname)
     raise RuntimeError("Task is already registered")
+  
+def initiate_server(serverclass, name,
+                    nameserver_host=None, logpath='/usr/local/logs/',
+                    consoleloglevel=logging.INFO,
+                    fileloglevel=logging.INFO,
+                    modloglevels={}):
+  """
+  Generic server initiation
+  """
+  __name__ = name
+  
+  if nameserver_host == None:
+    if get_domain(get_local_network()) == 'fltops':
+      nameserver_host = 'crux'
+    else:
+      raise RuntimeError("domain %s has no Pyro nameserver")
+      
+  logging.basicConfig(level=logging.INFO)
+  mylogger = logging.getLogger()
+
+  logging.basicConfig(level=logging.WARNING)
+  mylogger = logging.getLogger()
+  mylogger = init_logging(mylogger,
+               loglevel = fileloglevel,
+               consolevel = consoleloglevel,
+               logname = logpath+__name__+".log")
+  mylogger.debug(" Handlers: %s", mylogger.handlers)
+  loggers = set_module_loggers(modloglevels)
+  
+  p = optparse.OptionParser()
+  p.set_usage(__name__+' [options]')
+  p.set_description(__doc__)
+
+  p.add_option('-l', '--log_level',
+               dest = 'loglevel',
+               type = 'str',
+               default = 'info',
+               help = 'Logging level for main program and modules')
+  opts, args = p.parse_args(sys.argv[1:])
+
+  set_loglevel(mylogger, get_loglevel(opts.loglevel))
+
+  # Set the module logger levels no lower than my level.
+  for lgr in loggers.keys():
+    if loggers[lgr].level < mylogger.level:
+      loggers[lgr].setLevel(mylogger.level)
+    mylogger.info("%s logger level is %s", lgr, loggers[lgr].level)
+
+  # overrides pyro_support trace level
+  Pyro.config.PYRO_TRACELEVEL = 3
+
+  locator = Pyro.naming.NameServerLocator()
+  mylogger.debug("Using locator %s", locator)
+  mylogger.info("initiating task %s, please wait", __name__)
+  
+  # Here is the hardware configuration
+  m = serverclass(name)
+  mylogger.info("%s starting", __name__)
+
+  mylogger.info("%s starting", __name__)
+  launch_server(nameserver_host, __name__, m)
+  mylogger.info("%s ending", __name__)
+  try:
+    ns = locator.getNS(host=nameserver_host)
+  except Pyro.errors.NamingError:
+    mylogger.error(
+      """Pyro nameserver task notfound. Is the terminal at least 85 chars wide?
+      If pyro-ns is not running. Do 'pyro-ns &'""")
+    raise RuntimeError("No Pyro nameserver")
+  try:
+    ns.unregister(__name__)
+  except Pyro.errors.NamingError:
+    mylogger.debug("%s was already unregistered", __name__)
+  mylogger.info("%s finished", __name__)
 
 # Generally, JPL/DSN hosts cannot be resolved by DNS
 GATEWAY, IP, PORT = T.make_port_dict()
@@ -542,3 +713,28 @@ full_name = {'crux':      'crux.cdscc.fltops.jpl.nasa.gov',
 tunnels = []
 
 atexit.register(cleanup_tunnels)
+
+
+if __name__ == "__main__":
+
+  class ServerTask(NamedClass):
+    """
+    """
+    def __init__(self):
+      pass
+    
+  class TestServerClass(PyroServer, ServerTask):
+    """
+    """
+    def __init__(self, name):
+      """
+      """
+      self.logger = logging.getLogger(module_logger.name+".TestServerClass")
+      super(TestServerClass,self).__init__()
+      self.logger.debug(" superclass initialized")
+      ServerTask.__init__(self)
+      self.logger.debug(" hardware interface instantiated")
+      self.run = True
+
+  initiate_server(TestServerClass,"ServerTest",logpath='/tmp/')
+

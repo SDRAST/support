@@ -76,7 +76,6 @@ import os
 import posix
 import getpass
 from   subprocess import PIPE, Popen
-from   support.process import invoke, search_response
 import sys
 import shlex
 import signal
@@ -85,20 +84,11 @@ import time
 import random
 import select
 import logging
+from   support.process import invoke, search_response
+from   support.network import get_domain
 
 module_logger = logging.getLogger(__name__)
 DEFAULTMOUNTROOT= os.environ.get ("HOME") + os.sep + "mnt"
-
-# I need to get a definitive list for each domain
-networks = {"fltops": ["137.228.202",
-                       "137.228.203",
-                       "137.228.207",
-                       "137.228.236",
-                       "137.228.246",
-                       "137.228.247"],
-           "jpl": ["128.149.22",
-                   "128.149.252",
-                   "137.79.89"]}
 
 # --------------------------- module classes ------------------------------
 
@@ -763,20 +753,6 @@ def check_for_tunnels():
             tunnels[remote_host] = int(port)
   module_logger.debug("check_for_tunnels: found %s",str(tunnels))
   return tunnels
-
-def get_domain(netIP):
-  """
-  Returns the networks key whose list contains netIP
-  """
-  domain = ""
-  for key in networks.keys():
-    for IP in networks[key]:
-      if IP == netIP:
-        domain = key
-        break
-  if domain == "":
-    domain = "other"
-  return domain
 
 def need_tunnel(server):
   """

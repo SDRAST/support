@@ -16,6 +16,44 @@ from support.process import invoke
 import logging
 module_logger = logging.getLogger(__name__)
 
+class NamedClass(object):
+  """
+  A base class enhanced with methods for reporting self.
+  """
+  def __str__(self):
+    return self.base()+' "'+str(self.name)+'"'
+
+  def __repr__(self):
+    return self.base()+' "'+str(self.name)+'"'
+
+  def base(self):
+    """
+    String representing the class instance type
+    """
+    return str(type(self)).split()[-1].strip('>').strip("'").split('.')[-1]
+
+class PropertiedClass(NamedClass):
+  """
+  A subclass of MCobject enhanced with with properties.
+  """
+  def __init__(self):
+    self.data = {}
+
+  def __setitem__(self, key, item):
+    self.data[key] = item
+
+  def __getitem__(self, key):
+    return self.data[key]
+
+  def keys(self):
+    return self.data.keys()
+
+  def has_key(self,key):
+    if self.data.has_key(key):
+      return True
+    else:
+      return False
+
 def python_version():
   return sys.version.split()[0]
 

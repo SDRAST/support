@@ -5,6 +5,17 @@ from support.process import invoke
 
 module_logger = logging.getLogger(__name__)
 
+# I need to get a definitive list for each domain
+networks = {"fltops": ["137.228.202",
+                       "137.228.203",
+                       "137.228.207",
+                       "137.228.236",
+                       "137.228.246",
+                       "137.228.247"],
+           "jpl": ["128.149.22",
+                   "128.149.252",
+                   "137.79.89"]}
+
 def LAN_hosts_status():
   """
   This is too crude; very senstive to format changes
@@ -40,6 +51,28 @@ def LAN_hosts_status():
   down.sort()
   ROACHlist.sort()
   return up, down, IP, MAC, ROACHlist
+
+def get_local_network():
+  """
+  Returns the IP address of the local network
+  """
+  IP = socket.gethostbyname(socket.gethostname())
+  return '.'.join(IP.split('.')[:-1])
+
+def get_domain(netIP):
+  """
+  Returns the networks key whose list contains netIP
+  """
+  domain = ""
+  for key in networks.keys():
+    for IP in networks[key]:
+      if IP == netIP:
+        domain = key
+        break
+  if domain == "":
+    domain = "other"
+  return domain
+
 ################################ IP support ###################################
 
 def decode_IP(IP_address):
