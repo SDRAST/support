@@ -2,6 +2,8 @@
 module with enhancements to the Python logging
 """
 import logging
+import optparse
+
 module_logger = logging.getLogger(__name__)
 
 def init_logging(logger,
@@ -22,10 +24,10 @@ def init_logging(logger,
 
   @return: logging.Logger instance
   """
-  # default handler
-  module_logger.debug("init_logging: handlers: %s", logger.handlers)
+  # default handler is the logger to sys.stderr
+  logger.debug("init_logging: handlers: %s", logger.handlers)
   dh = logger.handlers[0]
-  module_logger.debug("init_logging: default handler is %s", dh)
+  logger.debug("init_logging: default handler is %s", dh)
   dh.setLevel(consolevel)
 
   # create formatter and add it to the handler
@@ -99,4 +101,40 @@ def set_module_loggers(logger_dict):
     module_logger.debug("%s", command)
     exec(command)
   return loggers
+
+def initiate_option_parser(description):
+  """
+  Initiate an option parser with default logging options
+  
+  This creates a command line option parser with predefined options for using
+  the Python logging module.  The defaults are::
+    stderr handler logging level (WARNING)
+    file handler logging level (WARNING)
+    path to the log file (/usr/local/logs/)
+    modified module logger levels ({}), that is, None
+  """
+  p = optparse.OptionParser()
+  p.set_usage(__name__+' [options]')
+  p.set_description(description)
+  p.add_option('--stderr_loglevel',
+               dest = 'stderr_loglevel',
+               type = 'str',
+               default = 'warning',
+               help = 'console Logging level')
+  p.add_option('--file_loglevel',
+               dest = 'file_loglevel',
+               type = 'str',
+               default = 'warning',
+               help = 'file Logging level')
+  p.add_option('-l', '--logfilepath',
+               dest = 'logpath',
+               type = 'str',
+               default = '/usr/local/logs/',
+               help = 'directory path for log file')
+  p.add_option('--module_loglevels',
+               dest = 'modloglevels',
+               type = 'str',
+               default = '{}',
+               help = 'dict of module loglevels')
+  return p
     
