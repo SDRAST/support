@@ -124,7 +124,7 @@ def initiate_option_parser(description):
   p.add_option('--file_loglevel',
                dest = 'file_loglevel',
                type = 'str',
-               default = 'warning',
+               default = 'info',
                help = 'file Logging level')
   p.add_option('-l', '--logfilepath',
                dest = 'logpath',

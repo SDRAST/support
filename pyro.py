@@ -39,6 +39,11 @@ module_logger = logging.getLogger(__name__)
 
 class PyroServer(Pyro.core.ObjBase):
   """
+  Superclass for Pyro servers
+  
+  Public Attributes::
+    logger - logging.Logger object
+    run    - True if server is running
   """
   def __init__(self):
     """
@@ -115,13 +120,15 @@ class PyroServer(Pyro.core.ObjBase):
 
   def running(self):
     """
-    Report if the manager is running.  A return value of False should
-    not be possible.
+    Report if the manager is running.
+    
+    Attribute run may be set to False by a sub-class
     """
-    if self.run:
-      return True
-    else:
-      return False
+    return self.run
+    #if self.run:
+    #  return True
+    #else:
+    #  return False
 
   def halt(self):
     """
@@ -165,8 +172,6 @@ class PyroServerLauncher(object):
     self.logger.debug(" %s creating daemon", self.name)
     self._create_daemon(nameserver_host)
     # our nameserver is now self.ns.
-    
-    
     self.logger.debug(" %s initialized", self.name)
     
   def _start_Pyro_log(self):
@@ -255,19 +260,19 @@ class PyroServerLauncher(object):
       # Servers advertised
       self.logger.debug("start: nameserver database: %s",self.ns.flatlist())
       try:
-        self.daemon.requestLoop(condition=server.running)
+        self.daemon.requestLoop(condition=self.server.running)
       except KeyboardInterrupt:
         self.logger.warning("start: keyboard interrupt")
       finally:
         self.logger.info("start: request loop exited")
         self.daemon.shutdown(True)
-      module_logger.info("start: daemon done")
+      self.logger.info("start: daemon done")
 
   def halt(self):
     """
     """
     self.daemon.shutdown(True)
-    SLog.msg(self.name,"server started")
+    SLog.msg(self.name,"server stopped")
 
   def finish(self):
     """
