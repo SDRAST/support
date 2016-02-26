@@ -20,6 +20,8 @@ class NamedClass(object):
   """
   A base class enhanced with methods for reporting self.
   """
+  def __init__(self, name):
+    self.name = name
   def __str__(self):
     return self.base()+' "'+str(self.name)+'"'
 
