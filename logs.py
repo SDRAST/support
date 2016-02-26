@@ -4,10 +4,16 @@ module with enhancements to the Python logging
 import logging
 import optparse
 
+loglevel = {'debug':    logging.DEBUG,
+            'info':     logging.INFO,
+            'warning':  logging.WARNING,
+            'error':    logging.ERROR,
+            'critical': logging.CRITICAL}
+
 module_logger = logging.getLogger(__name__)
 
 def init_logging(logger,
-                 loglevel = logging.WARNING,
+                 loglevel = logging.INFO,
                  consolevel = logging.WARNING,
                  logname = "/tmp/logging.log"):
   """
