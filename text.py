@@ -70,7 +70,7 @@ def user_input(prompt,default):
     response = default
   return response
 
-def select_files(pattern,text="Select file(s) by number"
+def select_files(pattern, text="Select file(s) by number"
                               " separated with spaces: ",
                          single=False):
   """
@@ -85,7 +85,7 @@ def select_files(pattern,text="Select file(s) by number"
   files.sort()
   num_files = len(files)
   if num_files == 1:
-    return files
+    return files[0]
   elif num_files > 1:
     for index in range(num_files):
       print index,'>',basename(files[index])
@@ -95,7 +95,9 @@ def select_files(pattern,text="Select file(s) by number"
       selected = []
       for index in indices:
         selected.append(files[int(index)])
+      print selected, "has", len(selected), "item(s)"
       if len(selected) == 1:
+        print "Only one"
         return selected[0]
       else:
         if single:
