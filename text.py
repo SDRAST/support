@@ -4,6 +4,7 @@ text - functions for text processing
 """
 
 from glob import glob
+import logging
 from os.path import basename
 import re
 
@@ -26,6 +27,8 @@ SI  = "\0f"
 DLE = "\10"
 ESC = "\1b"
 
+logging.basicConfig(level=logging.WARNING)
+logger = logging.getLogger(__name__)
 
 def distance(a,b):
     """
@@ -70,7 +73,7 @@ def user_input(prompt,default):
     response = default
   return response
 
-def select_files(pattern,text="Select file(s) by number"
+def select_files(pattern, text="Select file(s) by number"
                               " separated with spaces: ",
                          single=False):
   """
@@ -94,7 +97,13 @@ def select_files(pattern,text="Select file(s) by number"
       indices = selections.split()
       selected = []
       for index in indices:
-        selected.append(files[int(index)])
+        try:
+          selected.append(files[int(index)])
+        except IndexError,details:
+          logger.error("select_files: %s is not a valid index", index)
+          raise IndexError
+      logger.debug("select_files: %s has %d items(s)", selected,
+                   len(selected))
       if len(selected) == 1:
         return selected[0]
       else:
