@@ -85,7 +85,7 @@ def select_files(pattern,text="Select file(s) by number"
   files.sort()
   num_files = len(files)
   if num_files == 1:
-    return files
+    return files[0]
   elif num_files > 1:
     for index in range(num_files):
       print index,'>',basename(files[index])
