@@ -148,3 +148,10 @@ def longest_text(textlist):
   for text in textlist:
     maxlen = max(maxlen,len(text))
   return maxlen
+
+def clean_TeX(string):
+  """
+  Remove or replace math mode symbols like underscore
+  """
+  return string.replace("_"," ")
+

@@ -12,9 +12,33 @@ loglevel = {'debug':    logging.DEBUG,
 
 module_logger = logging.getLogger(__name__)
 
+class OptParser(optparse.OptionParser):
+  """
+  Subclass of OptionParser which does not mess up examples formatting
+  """
+  def format_epilog(self, formatter):
+    """
+    Don't use textwrap; just return the string.
+    """
+    return self.epilog
+    
+class PlainHelpFormatter(optparse.IndentedHelpFormatter): 
+  """
+  Formatter which does not remove newline codes
+  """
+  def format_description(self, description):
+    """
+    Don't remove \n
+    """
+    if description:
+      return description + "\n"
+    else:
+      return ""
+      
+
 def init_logging(logger,
                  loglevel = logging.INFO,
-                 consolevel = logging.WARNING,
+                 consolevel = logging.INFO,
                  logname = "/tmp/logging.log"):
   """
   Create a logger that displays to the console and writes a log file.
@@ -108,7 +132,7 @@ def set_module_loggers(logger_dict):
     exec(command)
   return loggers
 
-def initiate_option_parser(description):
+def initiate_option_parser(description, examples):
   """
   Initiate an option parser with default logging options
   
@@ -119,9 +143,10 @@ def initiate_option_parser(description):
     path to the log file (/usr/local/logs/)
     modified module logger levels ({}), that is, None
   """
-  p = optparse.OptionParser()
+  p = OptParser(epilog=examples,
+                formatter=PlainHelpFormatter(),
+                description=description)
   p.set_usage(__name__+' [options]')
-  p.set_description(description)
   p.add_option('--stderr_loglevel',
                dest = 'stderr_loglevel',
                type = 'str',
