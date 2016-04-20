@@ -165,10 +165,13 @@ class PyroServerLauncher(object):
     self._start_Pyro_log()
   
     if nameserver_host == None:
-      if get_domain(get_local_network()) == 'fltops':
+      domain = get_domain(get_local_network())
+      if domain == 'fltops':
         nameserver_host = 'crux'
+      elif domain == 'jpl':
+        nameserver_host = 'dto'
       else:
-        raise RuntimeError("domain %s has no Pyro nameserver")
+        raise RuntimeError("domain %s has no Pyro nameserver", domain)
     self.logger.debug(" %s creating daemon", self.name)
     self._create_daemon(nameserver_host)
     # our nameserver is now self.ns.

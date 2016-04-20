@@ -65,7 +65,7 @@ def get_column_id(sh,col_name):
     if col_names[col_id] == col_name:
       return col_id
   # not found
-  module_logger.error("get_column_id: %s not found", col_name)
+  #module_logger.error("get_column_id: %s not found", col_name)
   return None
 
 def find_column(sh,name):
@@ -74,7 +74,7 @@ def find_column(sh,name):
   """
   col = get_column_id(sh,name)
   if col == None:
-    module_logger.error("Column %s not found",name,exc_info=True)
+    #module_logger.error("Column %s not found",name,exc_info=True)
     col = sh.get_highest_column()
     sh.cell(column= col, row=0).value = name
   return col
@@ -91,14 +91,18 @@ def get_column(ws, column_name):
   @return: list of data
   """
   column_id = get_column_id(ws,column_name)
-  if column_id:
+  module_logger.debug("get_column: column ID for %s is %s",
+                      column_name, column_id)
+  if column_id != None:
     column = ws.columns[column_id]
+    #module_logger.debug("get_column: column label is %s", column[0])
     column_data = []
     # The first cell always has the label
     for cell in column[1:]:
       column_data.append(cell.value)
     return column_data
   else:
+    #module_logger.debug("get_column: failed")
     return None
 
 def insert_empty_row_after(ws,prior_row):

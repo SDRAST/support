@@ -8,9 +8,8 @@ import sys
 import datetime
 from numpy import array
 from os import environ
-from time import time
+from time import sleep, time
 
-#from lists import *
 from support.process import invoke
 
 import logging
@@ -122,11 +121,11 @@ def sync_second():
   This returns roughly 6.2 ms after the second changes. I can't seem to get the
   delay below this.
 
-  There are various ways to do this but this seems to give the least spread.
+  Using 'sleep' rather than 'pass' requires less CPU cycles.
   """
   now = int(time())
   while not bool(int(time())-now):
-    pass
+    sleep(0.0001)
 
 def cpu_arch():
   """
