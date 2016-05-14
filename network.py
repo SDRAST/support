@@ -21,7 +21,8 @@ def LAN_hosts_status():
   This is too crude; very senstive to format changes
   """
   print "If asked for a password, remember this host is",socket.gethostname()
-  response = invoke("sudo nmap -sP -PS22 192.168.100.*").stdout.readlines()
+  domain = get_local_network()
+  response = invoke("sudo nmap -sP -PS22 "+domain+".*").stdout.readlines()
   up = []
   down = []
   IP = {}

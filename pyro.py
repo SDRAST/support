@@ -165,10 +165,13 @@ class PyroServerLauncher(object):
     self._start_Pyro_log()
   
     if nameserver_host == None:
-      if get_domain(get_local_network()) == 'fltops':
+      domain = get_domain(get_local_network())
+      if domain == 'fltops':
         nameserver_host = 'crux'
+      elif domain == 'jpl':
+        nameserver_host = 'dto'
       else:
-        raise RuntimeError("domain %s has no Pyro nameserver")
+        raise RuntimeError("domain %s has no Pyro nameserver", domain)
     self.logger.debug(" %s creating daemon", self.name)
     self._create_daemon(nameserver_host)
     # our nameserver is now self.ns.
@@ -677,6 +680,7 @@ pyro_server_name = {'127.0.0.1':      'localhost',
                     '128.149.22.108': 'dto',
                     '137.228.236.70': 'rac13b',
                     '137.228.246.31': 'wbdc',
+                    '137.228.246.38': 'tpr',
                     '137.228.246.57': 'crux',
                     '137.228.246.105':'krx43'}
 full_name = {'crux':      'crux.cdscc.fltops.jpl.nasa.gov',
@@ -684,6 +688,7 @@ full_name = {'crux':      'crux.cdscc.fltops.jpl.nasa.gov',
              'krx43':     'K2R43.cdscc.fltops.jpl.nasa.gov',
              'localhost': 'localhost',
              'rac13b':    'venus-rac3.gdscc.fltops.jpl.nasa.gov',
+             'tpr':       'dss43tpr1.cdscc.fltops.jpl.nasa.gov',
              'wbdc':      'dss43wbdc2.cdscc.fltops.jpl.nasa.gov',
              'roachnest': 'roachnest.jpl.nasa.gov'}
 
