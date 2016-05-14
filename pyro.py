@@ -160,7 +160,7 @@ class PyroServerLauncher(object):
     """
     self.name = name
     self.logger = logging.getLogger(module_logger.name+".PyroServerLauncher")
-    self.logger.debug(" Initiating PyroServerLauncher()")
+    self.logger.debug(" Initiating PyroServerLauncher for %s", nameserver_host)
     
     self._start_Pyro_log()
   
@@ -641,33 +641,33 @@ def get_device_server(servername, pyro_ns = "dto", pyro_port = 9090):
   else:
     return device
 
-#def launch_server(serverhost, taskname, task):
-#  """
-#  Combines a device controller class with a Pyro class
-#  """
-#  # create the server launcher
-#  module_logger.debug(" Launching Pyro task server %s on %s",
-#                      taskname, serverhost)
-#  server_launcher = PyroServerLauncher(serverhost, taskname)
-#
-#  # check to see if the server is running already.
-#  response = server_launcher.ns.flatlist()
-#  no_conflict = True
-#  for item in response:
-#    if item[0].split('.')[1] == taskname:
-#      no_conflict = False
-#      break
-#  if no_conflict:
-#    # launch and publish the task server.  This starts the event loop.
-#    module_logger.info(" Starting the server...")
-#    server_launcher.start(task,taskname)
-#  else:
-#    module_logger.error(
-#      "launch_server: %s is already published.  Is the server already running?",
-#      taskname)
-#    module_logger.error(
-#                      "               If not, do 'pyro-nsc remove %s'",taskname)
-#    raise RuntimeError("Task is already registered")
+def launch_server(serverhost, taskname, task):
+  """
+  Combines a device controller class with a Pyro class
+  """
+  # create the server launcher
+  module_logger.debug(" Launching Pyro task server %s on %s",
+                      taskname, serverhost)
+  server_launcher = PyroServerLauncher(taskname, serverhost) #, taskname)
+
+  # check to see if the server is running already.
+  response = server_launcher.ns.flatlist()
+  no_conflict = True
+  for item in response:
+    if item[0].split('.')[1] == taskname:
+      no_conflict = False
+      break
+  if no_conflict:
+    # launch and publish the task server.  This starts the event loop.
+    module_logger.info(" Starting the server...")
+    server_launcher.start(task) # ,taskname)
+  else:
+    module_logger.error(
+      "launch_server: %s is already published.  Is the server already running?",
+      taskname)
+    module_logger.error(
+                      "               If not, do 'pyro-nsc remove %s'",taskname)
+    raise RuntimeError("Task is already registered")
     
 
 # Generally, JPL/DSN hosts cannot be resolved by DNS

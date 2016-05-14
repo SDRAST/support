@@ -90,16 +90,17 @@ def get_column(ws, column_name):
 
   @return: list of data
   """
-  column_id = get_column_id(ws,column_name)
-  if column_id:
-    column = ws.columns[column_id]
-    column_data = []
-    # The first cell always has the label
-    for cell in column[1:]:
-      column_data.append(cell.value)
-    return column_data
-  else:
+  try:
+    column_id = get_column_id(ws,column_name)
+  except Exception, details:
+    module_logger.error("get_column: failed because %s", str(details))
     return None
+  column = ws.columns[column_id]
+  column_data = []
+  # The first cell always has the label
+  for cell in column[1:]:
+    column_data.append(cell.value)
+  return column_data
 
 def insert_empty_row_after(ws,prior_row):
   """
