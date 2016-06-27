@@ -37,6 +37,8 @@ if not os.path.exists("/usr/local/logs/PYRO/"):
 logging.basicConfig(level=logging.WARNING)
 module_logger = logging.getLogger(__name__)
 
+nameserver = None
+
 class PyroServer(Pyro.core.ObjBase):
   """
   Superclass for Pyro servers
@@ -487,7 +489,7 @@ def pyro_server_request(task,*args,**kwargs):
       timeout = 0.
   return result
 
-def pyro_server_details(ns_shortname,pyro_ns_port):
+def pyro_server_details(ns_shortname, pyro_ns_port):
   """
   Provides the hostname and port where the Pyro server appears.
 
@@ -576,6 +578,7 @@ def get_nameserver(pyro_ns = "dto", pyro_port = 9090):
 
   @return: Pyro nameserver object
   """
+  global nameserver
   # if necessary, create a tunnel to the nameserver
   module_logger.debug("get_nameserver: try at %s:%d", pyro_ns, pyro_port)
   pyro_ns_host, ns_proxy_port = pyro_server_details(pyro_ns, pyro_port)
@@ -594,6 +597,7 @@ def get_nameserver(pyro_ns = "dto", pyro_port = 9090):
     module_logger.error("get_nameserver: no nameserver connection")
     raise RuntimeError("No nameserver connection")
   else:
+    nameserver = ns
     return ns
 
 def get_device_server(servername, pyro_ns = "dto", pyro_port = 9090):
@@ -616,7 +620,11 @@ def get_device_server(servername, pyro_ns = "dto", pyro_port = 9090):
 
   @return:
   """
-  ns = get_nameserver(pyro_ns, pyro_port)
+  global namserver
+  if nameserver:
+    ns = nameserver
+  else:
+    ns = get_nameserver(pyro_ns, pyro_port)
   module_logger.debug("get_device_server: nameserver is %s", ns)
   # Find the device server
   server = ns.resolve(servername)
