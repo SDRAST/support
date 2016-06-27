@@ -104,6 +104,12 @@ def get_column(ws, column_name):
   else:
     #module_logger.debug("get_column: failed")
     return None
+  column = ws.columns[column_id]
+  column_data = []
+  # The first cell always has the label
+  for cell in column[1:]:
+    column_data.append(cell.value)
+  return column_data
 
 def insert_empty_row_after(ws,prior_row):
   """
