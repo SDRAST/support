@@ -37,6 +37,8 @@ if not os.path.exists("/usr/local/logs/PYRO/"):
 logging.basicConfig(level=logging.WARNING)
 module_logger = logging.getLogger(__name__)
 
+nameserver = None
+
 class PyroServer(Pyro.core.ObjBase):
   """
   Superclass for Pyro servers
@@ -160,15 +162,18 @@ class PyroServerLauncher(object):
     """
     self.name = name
     self.logger = logging.getLogger(module_logger.name+".PyroServerLauncher")
-    self.logger.debug(" Initiating PyroServerLauncher()")
+    self.logger.debug(" Initiating PyroServerLauncher for %s", nameserver_host)
     
     self._start_Pyro_log()
   
     if nameserver_host == None:
-      if get_domain(get_local_network()) == 'fltops':
+      domain = get_domain(get_local_network())
+      if domain == 'fltops':
         nameserver_host = 'crux'
+      elif domain == 'jpl':
+        nameserver_host = 'dto'
       else:
-        raise RuntimeError("domain %s has no Pyro nameserver")
+        raise RuntimeError("domain %s has no Pyro nameserver", domain)
     self.logger.debug(" %s creating daemon", self.name)
     self._create_daemon(nameserver_host)
     # our nameserver is now self.ns.
@@ -484,7 +489,7 @@ def pyro_server_request(task,*args,**kwargs):
       timeout = 0.
   return result
 
-def pyro_server_details(ns_shortname,pyro_ns_port):
+def pyro_server_details(ns_shortname, pyro_ns_port):
   """
   Provides the hostname and port where the Pyro server appears.
 
@@ -573,6 +578,7 @@ def get_nameserver(pyro_ns = "dto", pyro_port = 9090):
 
   @return: Pyro nameserver object
   """
+  global nameserver
   # if necessary, create a tunnel to the nameserver
   module_logger.debug("get_nameserver: try at %s:%d", pyro_ns, pyro_port)
   pyro_ns_host, ns_proxy_port = pyro_server_details(pyro_ns, pyro_port)
@@ -591,6 +597,7 @@ def get_nameserver(pyro_ns = "dto", pyro_port = 9090):
     module_logger.error("get_nameserver: no nameserver connection")
     raise RuntimeError("No nameserver connection")
   else:
+    nameserver = ns
     return ns
 
 def get_device_server(servername, pyro_ns = "dto", pyro_port = 9090):
@@ -613,7 +620,11 @@ def get_device_server(servername, pyro_ns = "dto", pyro_port = 9090):
 
   @return:
   """
-  ns = get_nameserver(pyro_ns, pyro_port)
+  global namserver
+  if nameserver:
+    ns = nameserver
+  else:
+    ns = get_nameserver(pyro_ns, pyro_port)
   module_logger.debug("get_device_server: nameserver is %s", ns)
   # Find the device server
   server = ns.resolve(servername)
@@ -641,33 +652,33 @@ def get_device_server(servername, pyro_ns = "dto", pyro_port = 9090):
   else:
     return device
 
-#def launch_server(serverhost, taskname, task):
-#  """
-#  Combines a device controller class with a Pyro class
-#  """
-#  # create the server launcher
-#  module_logger.debug(" Launching Pyro task server %s on %s",
-#                      taskname, serverhost)
-#  server_launcher = PyroServerLauncher(serverhost, taskname)
-#
-#  # check to see if the server is running already.
-#  response = server_launcher.ns.flatlist()
-#  no_conflict = True
-#  for item in response:
-#    if item[0].split('.')[1] == taskname:
-#      no_conflict = False
-#      break
-#  if no_conflict:
-#    # launch and publish the task server.  This starts the event loop.
-#    module_logger.info(" Starting the server...")
-#    server_launcher.start(task,taskname)
-#  else:
-#    module_logger.error(
-#      "launch_server: %s is already published.  Is the server already running?",
-#      taskname)
-#    module_logger.error(
-#                      "               If not, do 'pyro-nsc remove %s'",taskname)
-#    raise RuntimeError("Task is already registered")
+def launch_server(serverhost, taskname, task):
+  """
+  Combines a device controller class with a Pyro class
+  """
+  # create the server launcher
+  module_logger.debug(" Launching Pyro task server %s on %s",
+                      taskname, serverhost)
+  server_launcher = PyroServerLauncher(taskname, serverhost) #, taskname)
+
+  # check to see if the server is running already.
+  response = server_launcher.ns.flatlist()
+  no_conflict = True
+  for item in response:
+    if item[0].split('.')[1] == taskname:
+      no_conflict = False
+      break
+  if no_conflict:
+    # launch and publish the task server.  This starts the event loop.
+    module_logger.info(" Starting the server...")
+    server_launcher.start(task) # ,taskname)
+  else:
+    module_logger.error(
+      "launch_server: %s is already published.  Is the server already running?",
+      taskname)
+    module_logger.error(
+                      "               If not, do 'pyro-nsc remove %s'",taskname)
+    raise RuntimeError("Task is already registered")
     
 
 # Generally, JPL/DSN hosts cannot be resolved by DNS
@@ -677,6 +688,7 @@ pyro_server_name = {'127.0.0.1':      'localhost',
                     '128.149.22.108': 'dto',
                     '137.228.236.70': 'rac13b',
                     '137.228.246.31': 'wbdc',
+                    '137.228.246.38': 'tpr',
                     '137.228.246.57': 'crux',
                     '137.228.246.105':'krx43'}
 full_name = {'crux':      'crux.cdscc.fltops.jpl.nasa.gov',
@@ -684,6 +696,7 @@ full_name = {'crux':      'crux.cdscc.fltops.jpl.nasa.gov',
              'krx43':     'K2R43.cdscc.fltops.jpl.nasa.gov',
              'localhost': 'localhost',
              'rac13b':    'venus-rac3.gdscc.fltops.jpl.nasa.gov',
+             'tpr':       'dss43tpr1.cdscc.fltops.jpl.nasa.gov',
              'wbdc':      'dss43wbdc2.cdscc.fltops.jpl.nasa.gov',
              'roachnest': 'roachnest.jpl.nasa.gov'}
 

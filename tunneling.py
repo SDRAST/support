@@ -633,7 +633,7 @@ def makePortProxy(endpoint,
                   localport,
                   remotehost,
                   remoteport,
-                  user=os.environ['LOGNAME']):
+                  user=os.environ['USER']):
   """
   Connect a local port to a port on a remote host through a tunnel
 
