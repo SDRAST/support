@@ -84,6 +84,8 @@ import time
 import random
 import select
 import logging
+
+import support
 from   support.process import invoke, search_response
 from   support.network import get_domain
 
@@ -633,7 +635,7 @@ def makePortProxy(endpoint,
                   localport,
                   remotehost,
                   remoteport,
-                  user=os.environ['USER']):
+                  user=support.get_user()):
   """
   Connect a local port to a port on a remote host through a tunnel
 
