@@ -3,6 +3,7 @@
 text - functions for handling text
 """
 import logging
+import os
 import re
 import smtplib
 
@@ -135,6 +136,7 @@ def get_version(fileroot, filetype):
     version += 1
   else:
     version = 0
+  return version
 
 def remove_html_tags(data):
   """
@@ -157,7 +159,6 @@ def remove_extra_spaces(data):
   """
   p = re.compile(r'\s+')
   return p.sub(' ', data)
-
 
 def longest_text(textlist):
   """
