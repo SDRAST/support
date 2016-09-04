@@ -53,12 +53,15 @@ def LAN_hosts_status():
   ROACHlist.sort()
   return up, down, IP, MAC, ROACHlist
 
-def get_local_network():
+def get_local_network(internal=True):
   """
   Returns the IP address of the local network
   """
-  IP = socket.gethostbyname(socket.gethostname())
-  return '.'.join(IP.split('.')[:-1])
+  if internal:
+    return "192.168.100"
+  else:
+    IP = socket.gethostbyname(socket.gethostname())
+    return '.'.join(IP.split('.')[:-1])
 
 def get_domain(netIP):
   """
