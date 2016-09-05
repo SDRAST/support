@@ -21,7 +21,8 @@ def LAN_hosts_status():
   This is too crude; very senstive to format changes
   """
   print "If asked for a password, remember this host is",socket.gethostname()
-  response = invoke("sudo nmap -sP -PS22 192.168.100.*").stdout.readlines()
+  domain = get_local_network()
+  response = invoke("sudo nmap -sP -PS22 "+domain+".*").stdout.readlines()
   up = []
   down = []
   IP = {}
@@ -52,12 +53,15 @@ def LAN_hosts_status():
   ROACHlist.sort()
   return up, down, IP, MAC, ROACHlist
 
-def get_local_network():
+def get_local_network(internal=True):
   """
   Returns the IP address of the local network
   """
-  IP = socket.gethostbyname(socket.gethostname())
-  return '.'.join(IP.split('.')[:-1])
+  if internal:
+    return "192.168.100"
+  else:
+    IP = socket.gethostbyname(socket.gethostname())
+    return '.'.join(IP.split('.')[:-1])
 
 def get_domain(netIP):
   """
