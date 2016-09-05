@@ -4,8 +4,10 @@ Package to provide support for various objects and modules
 This module contains functions that don't have an obvious home in a
 submodule.
 """
-import sys
 import datetime
+import os
+import sys
+
 from numpy import array
 from os import environ
 from time import time
@@ -93,6 +95,27 @@ def nearest_index(np_array,value):
     return -1
   else:
     return index
+
+def get_user():
+  """
+  Returns the user running this session
+  
+  This will return the username of the logged-in user.  If the user is logged
+  in as 'root' (or by doing 'su'), then there is no way to find out who the
+  actual user is.
+  """
+  try:
+    os.environ['USER'] == "root"
+    try:
+      # maybe the user was using 'sudo'
+      user = os.environ['SUDO_USER']
+    except KeyError:
+      # no, this is really by 'root'
+      user = "root"
+  except KeyError:
+    # probably was run by a cron job
+    user = os.environ['LOGNAME']
+  return user
 
 def check_permission(group):
   """
