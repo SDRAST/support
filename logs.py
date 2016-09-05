@@ -5,12 +5,6 @@ import logging
 
 from support.options import initiate_option_parser
 
-loglevel = {'debug':    logging.DEBUG,
-            'info':     logging.INFO,
-            'warning':  logging.WARNING,
-            'error':    logging.ERROR,
-            'critical': logging.CRITICAL}
-
 module_logger = logging.getLogger(__name__)
       
 def init_logging(logger,

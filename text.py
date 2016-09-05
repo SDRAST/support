@@ -3,6 +3,7 @@
 text - functions for handling text
 """
 import logging
+import os
 import re
 import smtplib
 
@@ -118,6 +119,24 @@ def select_files(pattern, text="Select file(s) by number"
   else:
     return []
 
+def get_version(fileroot, filetype):
+  """
+  Append an updated version number to a file
+  
+  Gets the version number from a filename of the form FILEROOTVO1.EXT
+  
+  @param fileroot : glob-style first part of file name
+  @param filetype : filename extent
+  """
+  files = glob(fileroot+"*"+filetype)
+  logger.debug("arrange_track: files found: %s", files)
+  if files:
+    files.sort()
+    version = int(os.path.splitext(files[-1])[0][-2:])
+    version += 1
+  else:
+    version = 0
+  return version
 
 def remove_html_tags(data):
   """
@@ -140,7 +159,6 @@ def remove_extra_spaces(data):
   """
   p = re.compile(r'\s+')
   return p.sub(' ', data)
-
 
 def longest_text(textlist):
   """
