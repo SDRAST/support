@@ -18,6 +18,15 @@ networks = {"fltops": ["137.228.202",
 
 def LAN_hosts_status():
   """
+  Get information about and status of hosts on the local newtwork
+  
+  Returns a list with::
+    - hosts up
+    - hosts down
+    - IP addresses
+    - MAC addresses
+    - list of ROACHes
+  
   This is too crude; very senstive to format changes
   """
   print "If asked for a password, remember this host is",socket.gethostname()
