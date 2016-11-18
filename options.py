@@ -54,7 +54,7 @@ def initiate_option_parser(description, examples):
                help = 'file Logging level (default "info"')
   p.add_option('-l', '--logfilepath',
                dest = 'logpath',
-               type = 'str',/usr/local/logs/
+               type = 'str',
                default = '/usr/local/logs/',
                help = 'path for log file (default /usr/local/logs/")')
   p.add_option('--module_loglevels',
