@@ -7,7 +7,7 @@ import re
 import smtplib
 
 from email.mime.text import MIMEText
-from os.path import basename
+from os.path import basename, splitext
 from glob import glob
 
 NUL = "\x00"
@@ -131,10 +131,11 @@ def get_version(fileroot, filetype):
   logger.debug("arrange_track: files found: %s", files)
   if files:
     files.sort()
-    version = int(os.path.splitext(files[-1])[0][-2:])
+    version = int(splitext(files[-1])[0][-2:])
     version += 1
   else:
     version = 0
+  return version
 
 def remove_html_tags(data):
   """
