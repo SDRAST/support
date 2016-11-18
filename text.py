@@ -3,6 +3,7 @@
 text - functions for handling text
 """
 import logging
+import os
 import re
 import smtplib
 
@@ -158,7 +159,6 @@ def remove_extra_spaces(data):
   """
   p = re.compile(r'\s+')
   return p.sub(' ', data)
-
 
 def longest_text(textlist):
   """

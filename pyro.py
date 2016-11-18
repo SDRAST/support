@@ -146,7 +146,7 @@ class PyroServerLauncher(object):
   Pyro servers are sub-classes of Pyro.core.ObjBase.  They are linked to
   Pyro daemons and then published by a Pyro namserver.
   """
-  def __init__(self, name, nameserver_host=None):
+  def __init__(self, name, nameserver_host='dto'):
     """
     Create a PyroServerLauncher() object.
     
@@ -655,6 +655,8 @@ def get_device_server(servername, pyro_ns = "dto", pyro_port = 9090):
 def launch_server(serverhost, taskname, task):
   """
   Combines a device controller class with a Pyro class
+  
+  This seems not to be in use anymore.  Use the PyroServerLauncher class
   """
   # create the server launcher
   module_logger.debug(" Launching Pyro task server %s on %s",
@@ -706,6 +708,22 @@ atexit.register(cleanup_tunnels)
 
 if __name__ == "__main__":
 
+  examples = """This command::
+  
+    In [1]: run pyro.py
+    
+  will launch a very simple server::
+  
+    kuiper@dto:~$ pyro-nsc list
+    Locator: searching Pyro Name Server...
+    NS is at 128.149.22.108 (dto.jpl.nasa.gov) port 9090
+    :Default --> ( TestServer )
+    
+  which can be checked this way.  To check for name conflict before launching
+  a server us::
+  
+  """
+  
   class ServerTask(NamedClass):
     """
     """
@@ -732,7 +750,8 @@ if __name__ == "__main__":
     """
     """
     p = initiate_option_parser(
-     """Generic Pyro server which servers as a template for actual servers.""")
+     """Generic Pyro server which servers as a template for actual servers.""",
+     examples)
     # Add other options here
   
     opts, args = p.parse_args(sys.argv[1:])
@@ -745,7 +764,7 @@ if __name__ == "__main__":
     mylogger.debug(" Handlers: %s", mylogger.handlers)
     loggers = set_module_loggers(eval(opts.modloglevels))
 
-    psl = PyroServerLauncher("TestServer")
+    psl = PyroServerLauncher("TestServer", nameserver_host='dto')
     m = TestServerClass()
     psl.start(m)
   
