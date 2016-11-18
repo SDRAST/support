@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-text - functions for text processing
+text - functions for handling text
 """
-
-from glob import glob
 import logging
-from os.path import basename
+import os
 import re
+import smtplib
+
+from email.mime.text import MIMEText
+from os.path import basename, splitext
+from glob import glob
 
 NUL = "\x00"
 SOH = "\x01"
@@ -116,6 +119,24 @@ def select_files(pattern, text="Select file(s) by number"
   else:
     return []
 
+def get_version(fileroot, filetype):
+  """
+  Append an updated version number to a file
+  
+  Gets the version number from a filename of the form FILEROOTVO1.EXT
+  
+  @param fileroot : glob-style first part of file name
+  @param filetype : filename extent
+  """
+  files = glob(fileroot+"*"+filetype)
+  logger.debug("arrange_track: files found: %s", files)
+  if files:
+    files.sort()
+    version = int(splitext(files[-1])[0][-2:])
+    version += 1
+  else:
+    version = 0
+  return version
 
 def remove_html_tags(data):
   """
@@ -139,7 +160,6 @@ def remove_extra_spaces(data):
   p = re.compile(r'\s+')
   return p.sub(' ', data)
 
-
 def longest_text(textlist):
   """
   Find the length of the longest string in a list
@@ -155,3 +175,37 @@ def clean_TeX(string):
   """
   return string.replace("_"," ")
 
+def send_email(msg_text, to, Subject="no subject",
+               From="anonymous", Bc=[], Cc=[], mimetype='html'):
+  """
+  Send an e-mail message
+  
+  Because Microsoft does not handle MIME=text well (if at all), messages
+  should generally be in HTML
+  """
+  if mimetype == 'text':
+    msg = MIMEText(msg_text, 'text')
+  else:
+    msg = MIMEText(msg_text, 'html')
+  msg['Subject'] = Subject
+  msg['From'] = From
+  # message header addresses must be comma separated text
+  # but the second argument to 'sendmail' must be a list
+  if type(to) == str:
+    to = [to]
+  msg['To'] = ",".join(to)
+  if type(Cc) == str:
+    cc = [Cc]
+  else:
+    cc = Cc
+  msg['Cc'] = ",".join(cc)
+  if type(Bc) == str:
+    bc = [Bc]
+  else:
+    bc = Bc
+  msg['Bc'] = ",".join(bc)
+  s = smtplib.SMTP('smtp.jpl.nasa.gov')
+  addressees = to+bc+cc
+  logger.debug("send_email: sending to %s", addressees)
+  s.sendmail(From, addressees, msg.as_string())
+  s.quit()

@@ -37,6 +37,8 @@ if not os.path.exists("/usr/local/logs/PYRO/"):
 logging.basicConfig(level=logging.WARNING)
 module_logger = logging.getLogger(__name__)
 
+nameserver = None
+
 class PyroServer(Pyro.core.ObjBase):
   """
   Superclass for Pyro servers
@@ -144,7 +146,7 @@ class PyroServerLauncher(object):
   Pyro servers are sub-classes of Pyro.core.ObjBase.  They are linked to
   Pyro daemons and then published by a Pyro namserver.
   """
-  def __init__(self, name, nameserver_host=None):
+  def __init__(self, name, nameserver_host='dto'):
     """
     Create a PyroServerLauncher() object.
     
@@ -487,7 +489,7 @@ def pyro_server_request(task,*args,**kwargs):
       timeout = 0.
   return result
 
-def pyro_server_details(ns_shortname,pyro_ns_port):
+def pyro_server_details(ns_shortname, pyro_ns_port):
   """
   Provides the hostname and port where the Pyro server appears.
 
@@ -576,6 +578,7 @@ def get_nameserver(pyro_ns = "dto", pyro_port = 9090):
 
   @return: Pyro nameserver object
   """
+  global nameserver
   # if necessary, create a tunnel to the nameserver
   module_logger.debug("get_nameserver: try at %s:%d", pyro_ns, pyro_port)
   pyro_ns_host, ns_proxy_port = pyro_server_details(pyro_ns, pyro_port)
@@ -594,6 +597,7 @@ def get_nameserver(pyro_ns = "dto", pyro_port = 9090):
     module_logger.error("get_nameserver: no nameserver connection")
     raise RuntimeError("No nameserver connection")
   else:
+    nameserver = ns
     return ns
 
 def get_device_server(servername, pyro_ns = "dto", pyro_port = 9090):
@@ -616,7 +620,11 @@ def get_device_server(servername, pyro_ns = "dto", pyro_port = 9090):
 
   @return:
   """
-  ns = get_nameserver(pyro_ns, pyro_port)
+  global namserver
+  if nameserver:
+    ns = nameserver
+  else:
+    ns = get_nameserver(pyro_ns, pyro_port)
   module_logger.debug("get_device_server: nameserver is %s", ns)
   # Find the device server
   server = ns.resolve(servername)
@@ -647,6 +655,8 @@ def get_device_server(servername, pyro_ns = "dto", pyro_port = 9090):
 def launch_server(serverhost, taskname, task):
   """
   Combines a device controller class with a Pyro class
+  
+  This seems not to be in use anymore.  Use the PyroServerLauncher class
   """
   # create the server launcher
   module_logger.debug(" Launching Pyro task server %s on %s",
@@ -698,6 +708,22 @@ atexit.register(cleanup_tunnels)
 
 if __name__ == "__main__":
 
+  examples = """This command::
+  
+    In [1]: run pyro.py
+    
+  will launch a very simple server::
+  
+    kuiper@dto:~$ pyro-nsc list
+    Locator: searching Pyro Name Server...
+    NS is at 128.149.22.108 (dto.jpl.nasa.gov) port 9090
+    :Default --> ( TestServer )
+    
+  which can be checked this way.  To check for name conflict before launching
+  a server us::
+  
+  """
+  
   class ServerTask(NamedClass):
     """
     """
@@ -724,7 +750,8 @@ if __name__ == "__main__":
     """
     """
     p = initiate_option_parser(
-     """Generic Pyro server which servers as a template for actual servers.""")
+     """Generic Pyro server which servers as a template for actual servers.""",
+     examples)
     # Add other options here
   
     opts, args = p.parse_args(sys.argv[1:])
@@ -737,7 +764,7 @@ if __name__ == "__main__":
     mylogger.debug(" Handlers: %s", mylogger.handlers)
     loggers = set_module_loggers(eval(opts.modloglevels))
 
-    psl = PyroServerLauncher("TestServer")
+    psl = PyroServerLauncher("TestServer", nameserver_host='dto')
     m = TestServerClass()
     psl.start(m)
   

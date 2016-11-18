@@ -18,6 +18,15 @@ networks = {"fltops": ["137.228.202",
 
 def LAN_hosts_status():
   """
+  Get information about and status of hosts on the local newtwork
+  
+  Returns a list with::
+    - hosts up
+    - hosts down
+    - IP addresses
+    - MAC addresses
+    - list of ROACHes
+  
   This is too crude; very senstive to format changes
   """
   print "If asked for a password, remember this host is",socket.gethostname()
@@ -53,12 +62,15 @@ def LAN_hosts_status():
   ROACHlist.sort()
   return up, down, IP, MAC, ROACHlist
 
-def get_local_network():
+def get_local_network(internal=True):
   """
   Returns the IP address of the local network
   """
-  IP = socket.gethostbyname(socket.gethostname())
-  return '.'.join(IP.split('.')[:-1])
+  if internal:
+    return "192.168.100"
+  else:
+    IP = socket.gethostbyname(socket.gethostname())
+    return '.'.join(IP.split('.')[:-1])
 
 def get_domain(netIP):
   """

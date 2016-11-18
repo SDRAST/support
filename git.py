@@ -21,7 +21,7 @@ import re
 
 from support.logs import init_logging, get_loglevel
 
-module_logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 def find_sub_repos(path = os.getcwd(), fileobj = None):
   """
@@ -36,13 +36,13 @@ def find_sub_repos(path = os.getcwd(), fileobj = None):
   thisdir = os.getcwd()
   if fileobj:
     file_creator = False
-    module_logger.debug("\nfind_sub_repos: path=%s, file=%s", path, fileobj.name)
+    logger.debug("\nfind_sub_repos: path=%s, file=%s", path, fileobj.name)
   else:
-    module_logger.debug("\nfind_sub_repos: path=%s", path)
+    logger.debug("\nfind_sub_repos: path=%s", path)
   is_repo = check_repo(os.path.abspath(path))
   subdirs = os.walk(path).next()[1]
   if is_repo:
-    module_logger.info("find_sub_repos: %s is a repo", path)
+    logger.info("find_sub_repos: %s is a repo", path)
     if fileobj == None:
       file_creator = True
     fileobj = make_subdep_entry(os.path.abspath(path), subdirs, fileobj=fileobj)
@@ -51,15 +51,15 @@ def find_sub_repos(path = os.getcwd(), fileobj = None):
     if subdir[0] != ".":
       fileobj = find_sub_repos(fullpath, fileobj)
   if is_repo:
-    module_logger.debug("find_sub_repos: %s completed", path)
+    logger.debug("find_sub_repos: %s completed", path)
     try:
-      module_logger.debug("find_sub_repos: file creator is %s", file_creator)
+      logger.debug("find_sub_repos: file creator is %s", file_creator)
       if file_creator:
-        module_logger.info("find_sub_repos: finished with %s", fileobj.name)
+        logger.info("find_sub_repos: finished with %s", fileobj.name)
         fileobj.close()
         fileobj = None
     except:
-      module_logger.debug("find_sub_repos: %s has no file creator defined.",path)
+      logger.debug("find_sub_repos: %s has no file creator defined.",path)
   os.chdir(thisdir)
   return fileobj
 
@@ -74,7 +74,7 @@ def check_repo(path):
   
   @return: bool
   """
-  module_logger.debug("check_repo: path = %s", path)
+  logger.debug("check_repo: path = %s", path)
   if os.path.exists(path+"/.git"):
     return True
   else:
@@ -97,22 +97,22 @@ def make_subdep_entry(path, fileobj=None):
   """
   global top_repos
   if fileobj:
-    module_logger.debug("make_subdep_entry: path=%s, file=%s",
+    logger.debug("make_subdep_entry: path=%s, file=%s",
                    path, fileobj.name)
   else:
-    module_logger.debug("make_subdep_entry: path=%s",
+    logger.debug("make_subdep_entry: path=%s",
                    path)
   if fileobj == None:
     fileobj = open(path+"/subdep.txt","w")
     top_repos.append(path)
-    module_logger.info("make_subdep_entry: created %s", fileobj.name)
+    logger.info("make_subdep_entry: created %s", fileobj.name)
   else:
     #make text entry in subdep.txt
     remotes = git.Repo(path).remotes
     name = remotes[0].name
     url = remotes[0].url
     fileobj.write(os.path.realpath(path)+" "+name+" "+url+'\n')
-    module_logger.info("make_subdep_entry: wrote remote %s", name)
+    logger.info("make_subdep_entry: wrote remote %s", name)
   return fileobj
 
 def make_superdeps(top_repos):
@@ -136,7 +136,7 @@ def make_superdeps(top_repos):
       fd = open(subdir+"/superdep.txt","w")
       fd.write(repo+" "+name+" "+url+'\n')
       fd.close()
-      module_logger.info("Wrote %s/superdep.txt", subdir)
+      logger.info("Wrote %s/superdep.txt", subdir)
 
 def install_dependencies():
   """
@@ -149,7 +149,7 @@ def install_dependencies():
   try:
     fd = open(filename,"r")
   except IOError, details:
-    module_logger.warning(" IOError, "+str(details))
+    logger.warning(" IOError, "+str(details))
   deps = fd.readlines()
   fd.close()
   for line in deps:
@@ -234,8 +234,24 @@ def report_status(show_all=False):
     behind    - a pull is required to bring the repo up to date
     ahead     - a push is required to update the remote
 
+  @param show_all : show full report for each non-clean repo
+  @type  show_all : bool
+  
   @return: None
   """
+  def status_path(path):
+    """
+    """
+    parts = path.split('/')
+    try:
+      base = parts.index("DSN-Sci-packages")+1
+    except ValueError:
+      try:
+        base = parts.index("projects")
+      except ValueError:
+        base = 0
+    return '/'.join(parts[base:])
+    
   git_dirs = get_git_dirs()
   state = {}
   state['clean'] = []
@@ -245,13 +261,13 @@ def report_status(show_all=False):
   state['behind'] = []
   state['ahead'] = []
   for git_dir in git_dirs:
-    module_logger.debug("Processing %s", git_dir)
+    logger.debug("Processing %s", git_dir)
     os.chdir(git_dir)
     fd_out = os.popen('git status','r')
     response = fd_out.readlines()
     fd_out.close()
+    repo = status_path(git_dir) # os.path.basename(git_dir)
     if len(response) != 0:
-      repo = os.path.basename(git_dir)
       status = "unknown"
       for f in response:
         line = f.strip()
@@ -271,14 +287,14 @@ def report_status(show_all=False):
           break
         elif re.search("nothing to commit",line):
           status = "clean"
-      state[status].append("%18s  (%8s)  %8s" % (repo, branch, status))
+      state[status].append("%40s  (%8s)  %8s" % (repo, branch, status))
     if show_all and (status != "clean"):
-      print repo
+      print "\n"+repo+40*"_"
       for f in response:
         print f.strip()
   for status in state.keys():
     for report in state[status]:
-      print ("%9s: %31s" % (status,report[:30]))
+      print ("%9s: %57s" % (status,report[:52]))
   
 #------------------------ under development ------------------------------------
 
@@ -332,7 +348,7 @@ def compare_to_remotes(remote):
   """
   git_dirs = get_git_dirs()
   for git_dir in git_dirs:
-    module_logger.debug("Processing %s", git_dir)
+    logger.debug("Processing %s", git_dir)
     os.chdir(git_dir)
     dirname = os.path.basename(git_dir)
     fd = os.popen('git remote','r')
