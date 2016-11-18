@@ -86,7 +86,8 @@ def nearest_index(np_array,value):
     index = abs(data_array-ref_value).argmin()
   else:
     index = abs(np_array-value).argmin()
-  # discard points beyond the ends of the array
+  # value is beyond the ends of the array
+  # this test assumes the data are monotonic, then result is unknown
   if (((np_array[0] < np_array[-1]) and 
        (value < np_array[0] or value > np_array[-1])) or
       ((np_array[0] > np_array[-1]) and
