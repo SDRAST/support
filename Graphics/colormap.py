@@ -3,16 +3,33 @@ a colour tuple (red, green, blue). Light blue is cold (low magnitude)
 and yellow is hot (high magnitude).
 From http://code.activestate.com/recipes/52273/"""
 
+import logging
 import math
 import pylab as py
+
 from pylab import matplotlib
+
+logger = logging.getLogger(__name__)
+
+def indexed_color(index):
+  """
+  """
+  colors = {0: 'b',  # blue
+            1: 'g',  # green
+            2: 'r',  # red
+            3: 'c',  # cyan
+            4: 'm',  # magenta
+            5: 'y',  # yellow
+            6: 'k',  # black
+            7: 'w'   # white
+           }
+  return colors[index]
 
 def floatRgb(mag, cmin, cmax):
        """
        Return a tuple of floats between 0 and 1 for the red, green and
        blue amplitudes.
        """
-
        try:
               # normalize to [0,1]
               x = float(mag-cmin)/float(cmax-cmin)
@@ -62,7 +79,9 @@ def htmlRgb(mag, cmin, cmax):
        return "#%02x%02x%02x"%rgb(mag, cmin, cmax)
  
 def colorbar(cmin,cmax):
-  """Create a color bar using the RGB mapping of this module"""
+  """
+  Create a color bar using the RGB mapping of this module
+  """
   E_level_axes = py.gca()
   cbar_axes,cbar_kw = matplotlib.colorbar.make_axes(E_level_axes)
   cbar_axes.set_ylim(cmin,cmax)
@@ -77,7 +96,7 @@ def colorbar(cmin,cmax):
     colorwedge.append(colorline)
   wedge_image = py.array(colorwedge,float)
   A = 30./(cmax-cmin)
-  print "aspect=",A
+  logger.debug("colorbar: aspect=%f", A)
   py.imshow(wedge_image, origin='lower', extent=(-1.,1.,cmin,cmax),aspect=A)
   cbar_axes.xaxis.set_major_locator(py.NullLocator())
   cbar_axes.yaxis.tick_right()
