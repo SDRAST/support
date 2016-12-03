@@ -129,7 +129,7 @@ def get_version(fileroot, filetype):
   @param filetype : filename extent
   """
   files = glob(fileroot+"*"+filetype)
-  logger.debug("arrange_track: files found: %s", files)
+  logger.debug("get_version: files found: %s", files)
   if files:
     files.sort()
     version = int(splitext(files[-1])[0][-2:])
