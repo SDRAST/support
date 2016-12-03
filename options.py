@@ -46,21 +46,21 @@ def initiate_option_parser(description, examples):
                dest = 'stderr_loglevel',
                type = 'str',
                default = 'warning',
-               help = 'console Logging level')
+               help = 'console Logging level (default "warning"')
   p.add_option('--file_loglevel',
                dest = 'file_loglevel',
                type = 'str',
                default = 'info',
-               help = 'file Logging level')
+               help = 'file Logging level (default "info"')
   p.add_option('-l', '--logfilepath',
                dest = 'logpath',
                type = 'str',
                default = '/usr/local/logs/',
-               help = 'directory path for log file')
+               help = 'path for log file (default /usr/local/logs/")')
   p.add_option('--module_loglevels',
                dest = 'modloglevels',
                type = 'str',
                default = '{}',
-               help = 'dict of module loglevels')
+               help = 'dict of module loglevels (default {})')
   return p
 
