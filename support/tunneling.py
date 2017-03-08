@@ -18,7 +18,7 @@ It uses the script 'ssh-tunnel2' which will use the local username or, for
 some hosts, known alternates like 'ops'.
 
 Remote Mounting
-===============
+============
 Once a tunnel is established, remote file systems can be mounted through it
 like this:
 
@@ -417,7 +417,7 @@ class Tunnel(object):
     pid    - process ID of the tunnel session
     """
 
-    def __init__(self, host):
+    def __init__(self, host, username=None):
         """
         Create a Tunnel() instance.
 
@@ -437,6 +437,9 @@ class Tunnel(object):
         @param host : host nickname as defined in ssh-tunnel script
         @type  host : str
 
+        @param username: The username to use for the ssh-tunnel script
+        @type  username: str
+
         @return: Tunnel() instance
         """
         self.logger = logging.getLogger(module_logger.name + ".Tunnel")
@@ -445,7 +448,10 @@ class Tunnel(object):
         if response == 0:
             self.logger.debug(" no tunnel found; create a new one")
             # make a tunnel
-            command = '/usr/local/scripts/ssh-tunnel "%s"' % (host)
+            if username:
+                command = '/usr/local/scripts/ssh-tunnel {} {}'.format(host, username)
+            else:
+                command = '/usr/local/scripts/ssh-tunnel {}'.format(host)
             self.logger.debug(" doing: %s", command)
             self.p = invoke(command)
             response = self.p.stdout.readline()

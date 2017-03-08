@@ -483,8 +483,7 @@ def pyro_server_request(task, *args, **kwargs):
 
     @return: result of the requested task
     """
-    if kwargs.has_key('timeout') == False:
-        timeout = 10.
+    timeout = kwargs.get('timeout', 10.)
     result = None
     while timeout > 0:
         try:
