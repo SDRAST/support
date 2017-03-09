@@ -9,17 +9,17 @@ import Pyro
 import Pyro.core
 import Pyro.naming
 import Pyro.errors
-import tunneling as T
+import support.tunneling as T
 import time
 import logging
-import os, os.path
+import os.path
 import atexit
 import socket
 import sys
 
 from support import NamedClass
-from support.logs import set_module_loggers, initiate_option_parser
-from support.logs import init_logging, get_loglevel, set_loglevel
+from support.logs import set_module_loggers, init_logging, get_loglevel
+from support.options import initiate_option_parser
 from support.network import get_domain, get_local_network
 
 # Set up Pyro system logging
@@ -723,7 +723,7 @@ atexit.register(cleanup_tunnels)
 if __name__ == "__main__":
     examples = """This command::
   
-    In [1]: run pyro.py
+    In [1]: run pyro3_util.py
     
   will launch a very simple server::
   
