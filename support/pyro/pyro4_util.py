@@ -16,8 +16,9 @@ from support.logs import logging_config
 from pyro3_util import full_name
 
 module_logger = logging.getLogger(__name__)
+logging_config(logger=module_logger, loglevel=logging.DEBUG)
 
-class Pyro4Discoverer(object):
+class Pyro4ObjectDiscoverer(object):
     """
     An class used to represent a set of ssh tunnels to a Pyro4 object located remotely.
     This is meant to be a replacement for Tom's support.pyro.get_device_server function.
@@ -263,14 +264,15 @@ def arbitrary_tunnel(remote_ip, relay_ip,
     command_relay = "{0}:{1}:{2} {3}".format(local_port, relay_ip, remote_port, remote_ip)
     module_logger.debug(command_relay)
     ssh_proc = search_response(['ps', 'x'], ['grep', 'ssh'])
-    re_pid = re.compile("\d+")
-    re_name = re.compile("ssh.*")
+    # re_pid = re.compile("\d+")
+    # re_name = re.compile("ssh.*")
     for proc in ssh_proc:
         if command_relay in proc:
             module_logger.debug("Found matching process: {}".format(proc))
-            proc_id = int(re_pid.findall(proc)[0])
-            proc_name = re_name.findall(proc)[0]
-            return BasicProcess(name=proc_name, pid=proc_id)
+            # proc_id = int(re_pid.findall(proc)[0])
+            # proc_name = re_name.findall(proc)[0]
+            return BasicProcess(ps_line=proc, command_name='ssh')
+            # return BasicProcess(name=proc_name, pid=proc_id)
 
     module_logger.debug("Invoking command {}".format(command))
     p = invoke(command)

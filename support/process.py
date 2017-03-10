@@ -5,10 +5,11 @@ process - support for executing shell commands
 import logging
 import re
 import shlex
+import signal
+import os
 from subprocess import PIPE, Popen
 
 module_logger = logging.getLogger(__name__)
-
 
 class BasicProcess(object):
     """
@@ -22,18 +23,33 @@ class BasicProcess(object):
         kill: kill the process
     """
 
-    def __init__(self, name="", pid=0):
+    def __init__(self, name="", pid=0, ps_line=None, command_name='ssh'):
         """
         Create Process instance.
         Keyword Args:
             name (str): The name of the process
             pid (int): the process id
         """
+
         self.name = name
         try:
             self.pid = int(pid)
         except ValueError:
             module_logger.error("Provided PID is not valid. Won't be able to call kill")
+        if ps_line:
+            self.name, self.pid = self.process_ps_line(ps_line, command_name)
+
+    def process_ps_line(self, ps_line, command_name):
+        """
+        Given a line from the output of `ps x`, get the name and pid of the process.
+        Returns:
+
+        """
+        re_pid = re.compile("\d+")
+        re_name = re.compile("{}.*".format(command_name))
+        id = int(re_pid.findall(ps_line)[0])
+        name = re_name.findall(ps_line)[0]
+        return name, id
 
     def kill(self):
 

@@ -2,6 +2,8 @@
 module with enhancements to the Python logging
 """
 import logging
+import time
+import sys
 
 module_logger = logging.getLogger(__name__)
 
