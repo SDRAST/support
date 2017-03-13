@@ -1,8 +1,23 @@
 """
 Support for Python argparse module
+
+How to use this:
+
+    p = initiate_option_parser(description,examples)
+    p.usage = usage
+    # Add other options here
+  
+    opts, args = p.parse_args(sys.argv[1:])
+  
+    # This cannot be delegated to another module or class
+    mylogger = init_logging(logging.getLogger(),
+                            loglevel   = get_loglevel(opts.file_loglevel),
+                            consolevel = get_loglevel(opts.stderr_loglevel),
+                            logname    = opts.logpath+__name__+".log")
+    loggers = set_module_loggers(eval(opts.modloglevels))
+
 """
 import argparse
-
 
 class OptParser(argparse.ArgumentParser):
   """
@@ -28,11 +43,14 @@ def initiate_option_parser(description, examples):
   Initiate an option parser with default logging options
   
   This creates a command line option parser with predefined options for using
-  the Python logging module.  The defaults are::
-    stderr handler logging level (WARNING)
-    file handler logging level (WARNING)
-    path to the log file (/usr/local/logs/)
-    modified module logger levels ({}), that is, None
+  the Python logging module::
+    --console_loglevel: stdout/stderr handler logging level (default: WARNING)
+    --file_loglevel:    file handler logging level (default: WARNING)
+    --logfilepath:      path to the log file (default: /usr/local/logs/)
+    --module_loglevels: modified module logger levels, a dict of logging levels
+                        keyed on module, e.g.,
+                        "support.arguments": logging.WARNING
+                        (default: {}, i.e. None)
   """
   p = OptParser(epilog=examples,
                 formatter_class=PlainHelpFormatter,
