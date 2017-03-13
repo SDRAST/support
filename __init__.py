@@ -158,4 +158,13 @@ def cpu_arch():
   text = p.stdout.readline()
   return text.split()[-2]
 
+          
+def make_if_needed(self, path):
+  """
+  """  
+  if exists(path) == False:
+    self.logger.warning(" Creating %s", path)
+    makedirs(path, 0775)
+
+
 
