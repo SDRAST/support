@@ -9,13 +9,14 @@ import os
 import sys
 
 from numpy import array
-from os import environ
+from os import environ, makedirs
+from os.path import exists
 from time import sleep, time
 
 from support.process import invoke
 
 import logging
-module_logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 class NamedClass(object):
   """
@@ -134,9 +135,9 @@ def check_permission(group):
     return True
   except ValueError:
     if environ['USER'] != 'root':
-      module_logger.error("You must be in group '%s', root or 'sudo'er", group)
+      logger.error("You must be in group '%s', root or 'sudo'er", group)
       return False
-  module_logger.info(" User permissions verified")
+  logger.info(" User permissions verified")
 
 def sync_second():
   """
@@ -159,11 +160,11 @@ def cpu_arch():
   return text.split()[-2]
 
           
-def make_if_needed(self, path):
+def mkdir_if_needed(path):
   """
   """  
   if exists(path) == False:
-    self.logger.warning(" Creating %s", path)
+    logger.warning(" Creating %s", path)
     makedirs(path, 0775)
 
 
