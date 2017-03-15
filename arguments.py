@@ -77,3 +77,17 @@ def initiate_option_parser(description, examples):
                  help = 'dict of module loglevels')
   return p
 
+def simple_parse_args(init_description):
+    """
+    Grab arguments relevant to the Pyro nameserver that have APC and Spectrometer servers
+    registered.
+    """
+    parser = argparse.ArgumentParser(description=init_description)
+
+    parser.add_argument("--ns_host", "-nsn", dest='ns_host', action='store',default='localhost',
+                        help="Specify a host name for the Pyro name server. Default is localhost")
+
+    parser.add_argument("--ns_port", "-nsp", dest='ns_port', action='store',default=9090,type=int,
+                        help="Specify a port number for the Pyro name server. Default is 9090.")
+
+    return parser.parse_args()
