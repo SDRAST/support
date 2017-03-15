@@ -29,17 +29,30 @@ class Pyro4ObjectDiscoverer(object):
     If we want to get the URI of the APC Pyro object on crux, we would do the following:
 
     ```
-    crux_tunnel = Pyro4Discoverer("crux", remote_ns_host='localhost', remote_ns_port=50000)
-    apc_uri = crux_tunnel.get_pyro_object_uri('APC')
+    crux_tunnel = Pyro4ObjectDiscoverer("crux", remote_ns_host='localhost', remote_ns_port=50000,
+                                        tunnel_username='ops', username='ops')
+    apc = crux_tunnel.get_pyro_object('APC')
     ```
 
     To create the APC client, we would have to send the URI to TAMS_BackEnd.clients.APCClient:
 
     ```
-    apc_client = TAMS_BackEnd.clients.APCClient(uri=apc_uri)
+    apc_client = TAMS_BackEnd.clients.APCClient(proxy=apc)
     # now we can call APC methods.
     apc_client.get_azel()
     ```
+
+    Let's say I wanted to find an object on a remote server, but that remote server wasn't on
+    the JPL network. I might do the following:
+
+    ```
+    remote_discoverer = Pyro4ObjectDiscoverer('192.168.0.2', remote_ns_host='localhost', remote_ns_port=2224,
+                                                username='user', port=2222)
+    basic_server = remote_discoverer.get_pyro_object('BasicServer')
+    print(basic_server.name)
+    >> u'BasicServer'
+    ```
+
 
     Public Attributes:
         remote_server_name (str): The name or ip address of the remote server

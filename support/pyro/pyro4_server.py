@@ -43,6 +43,8 @@ def non_blocking(fn):
 
     return wrapper
 
+class Pyro4ServerError(Pyro4.errors.CommunicationError):
+    pass
 
 class Pyro4Server(object):
     """
