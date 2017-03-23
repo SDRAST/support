@@ -3,6 +3,31 @@ import time
 
 from support.logs import logging_config
 
+def iterativeRun(run_fn):
+    """
+    A decorator for running functions repeatedly inside a PausableThread.
+    Allows one to pause and stop the thread while its repeatedly calling
+    the overriden run function.
+    Args:
+        run_fn: the overridden run function from PausableThread
+
+    Returns:
+
+    """
+    def wrapper(self):
+
+        while True:
+            if self.stopped():
+                break
+            if self.paused():
+                time.sleep(0.001)
+                continue
+            else:
+                self._running.set()
+                run_fn(self)
+                self._running.clear()
+    return wrapper
+
 class Pause(object):
     """
 	A context manager for pausing threads.

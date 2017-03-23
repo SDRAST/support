@@ -62,7 +62,7 @@ class Pyro4Server(object):
             - **kwargs: TAMS_BackEnd.util.logging_config kwargs
         """
         self.serverlog = logging_config(**kwargs)
-        self._lock = threading.Lock()
+        self.lock = threading.Lock()
         self._name = name
         self._running = False
         self._tunnel = None
