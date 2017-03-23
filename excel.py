@@ -11,7 +11,10 @@ import logging
 from openpyxl import workbook
 from openpyxl import load_workbook
 import sys
-from openpyxl.cell import get_column_letter
+try:
+  from openpyxl.cell import get_column_letter
+except:
+  from openpyxl.util import get_column_letter
 #from openpyxl.worksheet import cells_from_range
 
 module_logger = logging.getLogger(__name__)
