@@ -12,6 +12,7 @@ import Pyro.errors
 import tunneling as T
 import time
 import logging
+import numpy
 import os, os.path
 import atexit
 import socket
@@ -127,10 +128,6 @@ class PyroServer(Pyro.core.ObjBase):
     Attribute run may be set to False by a sub-class
     """
     return self.run
-    #if self.run:
-    #  return True
-    #else:
-    #  return False
 
   def halt(self):
     """
@@ -687,14 +684,14 @@ def launch_server(serverhost, taskname, task):
 GATEWAY, IP, PORT = T.make_port_dict()
 pyro_server_name = {'127.0.0.1':      'localhost',
                     '128.149.22.95':  'roachnest',
-                    '128.149.22.108': 'dto',
+                    '137.228.236.103': 'dto',
                     '137.228.236.70': 'rac13b',
                     '137.228.246.31': 'wbdc',
                     '137.228.246.38': 'tpr',
                     '137.228.246.57': 'crux',
                     '137.228.246.105':'krx43'}
 full_name = {'crux':      'crux.cdscc.fltops.jpl.nasa.gov',
-             'dto':       'dto.jpl.nasa.gov',
+             'dto':       'dto1.gdscc.fltops.jpl.nasa.gov',
              'krx43':     'K2R43.cdscc.fltops.jpl.nasa.gov',
              'localhost': 'localhost',
              'rac13b':    'venus-rac3.gdscc.fltops.jpl.nasa.gov',
