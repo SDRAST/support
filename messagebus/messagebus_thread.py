@@ -2,10 +2,9 @@ import threading
 
 import Pyro4
 
-from TAMS_BackEnd.messagebus import PYRO_MSGBUS_NAME
-from TAMS_BackEnd.messagebus.messagebus import make_messagebus, MessageBus
-from TAMS_BackEnd.util.logging_util import logging_config
-
+from support.messagebus import PYRO_MSGBUS_NAME
+from support.messagebus.messagebus import make_messagebus, MessageBus
+from support.logs import logging_config
 
 class MessageBusThread(threading.Thread):
 
@@ -45,4 +44,33 @@ class MessageBusThread(threading.Thread):
         ns.register(PYRO_MSGBUS_NAME, uri)
         self.logger.info("Message bus registered on nameserver.")
         daemon.requestLoop()
+
+if __name__ == '__main__':
+    from support.arguments import simple_parse_args
+
+    parsed = simple_parse_args("Start the messagebus server.")
+
+
+    print("Starting the MessageBus server")
+    make_messagebus.storagetype = 'memory'
+    daemon = Pyro4.Daemon(host=parsed.ns_host, port=0, unixsocket=None)
+    uri = daemon.register(MessageBus)
+    print("MessageBus URI: {}".format(uri))
+    ns = Pyro4.locateNS(host=parsed.ns_host, port=parsed.ns_port)
+    ns.register(PYRO_MSGBUS_NAME, uri)
+    daemon.requestLoop()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -6,5 +6,5 @@ Pyro - Python Remote Objects.  Copyright by Irmen de Jong (irmen@razorvine.net).
 """
 
 PYRO_MSGBUS_NAME = "Pyro.MessageBus"
-from messagebus import make_messagebus, MessageBus, Subscriber
+from messagebus import make_messagebus, MessageBus, Subscriber, Message
 from messagebus_thread import MessageBusThread

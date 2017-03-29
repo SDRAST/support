@@ -14,6 +14,7 @@ def iterativeRun(run_fn):
     Returns:
 
     """
+
     def wrapper(self):
 
         while True:
@@ -26,7 +27,9 @@ def iterativeRun(run_fn):
                 self._running.set()
                 run_fn(self)
                 self._running.clear()
+
     return wrapper
+
 
 class Pause(object):
     """
@@ -84,14 +87,14 @@ class PausableThread(threading.Thread):
 	It also has a running flag that can be used to determine if the process is still running.
 	"""
 
-    def __init__(self, **kwargs):
+    def __init__(self, name=None, **kwargs):
         """
-		kwargs:
+        kwargs:
 			-**kwargs: To be passed to TAMS_BackEnd.util.logging_config
 		"""
         threading.Thread.__init__(self)
 
-        self.name = kwargs.get('name', None)
+        self.name = name
         self.logger = logging_config(**kwargs)
 
         self._pause = threading.Event()

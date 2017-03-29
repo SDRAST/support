@@ -1,16 +1,21 @@
 # pyro4_server.py
 import logging
 import os
+import uuid
 import signal
 import threading
 import time
+import datetime
 
 import Pyro4
+from Pyro4.util import SerializerBase
 
 from support.logs import logging_config
 from support.tunneling import Tunnel, TunnelingException
 from pyro3_util import full_name
 from pyro4_util import arbitrary_tunnel, check_connection
+
+__all__ = ["Pyro4Server", "Pyro4Message", "SerializerBase"]
 
 def blocking(fn):
     """
@@ -43,6 +48,57 @@ def non_blocking(fn):
 
     return wrapper
 
+class Pyro4Message(object):
+    __slots__ = ("msgid", "success", "data", "timestamp")
+
+    def __init__(self, success=False, data=None, timestamp=None, msgid=None):
+        """
+        Args:
+            success (bool): Whether or not the message was successfully created.
+            data (None): The data to send to the client.
+        """
+        if not data: data = {}
+        if not timestamp: timestamp = datetime.datetime.utcnow()
+        if not msgid: msgid = uuid.uuid1()
+
+
+        self.success = success
+        self.data = data
+        self.timestamp = timestamp
+        self.msgid = msgid
+
+    # def update_timestamp(self):
+    #     """
+    #     Update the internal timestamp.
+    #     Returns:
+    #         None
+    #     """
+    #     self.timestamp = datetime.datetime.utcnow()
+
+    @staticmethod
+    def to_dict(obj):
+        """
+        Return the message object as a dictionary.
+        Returns:
+            dict:
+                keys: 'success', 'data', 'timestamp'
+        """
+        return {"__class__": "support.pyro.Pyro4Message",
+                'msgid': obj.msgid,
+                'success': obj.success,
+                 'data': obj.data,
+                 'timestamp': obj.timestamp.isoformat()}
+
+    @classmethod
+    def from_dict(cls, classname, d):
+        return cls(uuid.UUID(d["msgid"]),
+                   d["success"],
+                   d["data"],
+                   datetime.datetime.strptime(d["timestamp"], "%Y-%m-%dT%H:%M:%S.%f"))
+
+SerializerBase.register_class_to_dict(Pyro4Message, Pyro4Message.to_dict)
+SerializerBase.register_dict_to_class("support.pyro.Pyro4Message", Pyro4Message.from_dict)
+
 class Pyro4ServerError(Pyro4.errors.CommunicationError):
     pass
 
@@ -51,18 +107,21 @@ class Pyro4Server(object):
     A super class for servers.
     """
 
-    def __init__(self, name, obj=None, **kwargs):
+    def __init__(self, name, obj=None, simulated=False, **kwargs):
         """
         Setup logging for the server, in addition to creating a
         lock. Subclasses of this class can interact directly with the lock,
         or through the blocking and non-blocking decorators.
-        args:
-            - name (str): The name of the Pyro server.
-        kwargs:
-            - **kwargs: TAMS_BackEnd.util.logging_config kwargs
+        Args:
+            name (str): The name of the Pyro server.
+            **kwargs: TAMS_BackEnd.util.logging_config kwargs
+
         """
         self.serverlog = logging_config(**kwargs)
         self.lock = threading.Lock()
+        self._simulated = simulated
+        if self._simulated:
+            self.serverlog.info("Running in simulation mode")
         self._name = name
         self._running = False
         self._tunnel = None
@@ -82,7 +141,7 @@ class Pyro4Server(object):
 
     @Pyro4.expose
     def running(self):
-        with self._lock:
+        with self.lock:
             return self._running
 
     @Pyro4.expose
@@ -94,6 +153,15 @@ class Pyro4Server(object):
     @property
     def locked(self):
         return self.lock.locked()
+
+    @Pyro4.expose
+    @property
+    def simulated(self):
+        """
+        Is the server returning simulated (fake) data?
+        """
+        return self._simulated
+
 
     def handler(self, signum, frame):
         """
@@ -163,7 +231,6 @@ class Pyro4Server(object):
             self._launch_server_local('localhost', local_forwarding_port, False)
         else:
             raise TunnelingException("Could not successfully tunnel to remote!")
-            return
 
 
     def _launch_server_local(self, host, port, threaded=False):
@@ -194,7 +261,7 @@ class Pyro4Server(object):
             signal.signal(signal.SIGINT, self.handler)
         else:
             pass
-        with self._lock:
+        with self.lock:
             self._running = True
         self.serverlog.debug("Starting request loop")
         self.daemon.requestLoop(self.running)
@@ -217,7 +284,7 @@ class Pyro4Server(object):
         t.join()
         ```
         """
-        with self._lock:
+        with self.lock:
             self._running = False
             if self._exposed_obj:
                 self.daemon.unregister(self._exposed_obj)
@@ -233,19 +300,88 @@ class Pyro4Server(object):
                 proc.kill()
 
 
+class Pyro4PublisherServer(Pyro4Server):
+
+    def __init__(self, name, publisher_thread_class,
+                            publisher_thread_kwargs={},
+                            bus=None,
+                            obj=None, **kwargs):
+
+        Pyro4Server.__init__(self, name, obj=obj, **kwargs)
+        self.bus = bus
+        self.publisher_thread_class = publisher_thread_class
+        self.publisher_thread_kwargs = publisher_thread_kwargs
+        self.publisher = self.publisher_thread_class(self, bus=self.bus, **self.publisher_thread_kwargs)
+        self._publishing_started = False
+
+    @Pyro4.expose
+    @property
+    def publishing_started(self):
+        return self._publishing_started
+
+    @Pyro4.expose
+    def start_publishing(self):
+        """
+        Start publishing power meter readings
+        Returns:
+            None
+        """
+        if self._publishing_started:
+            return
+        self._publishing_started = True
+        self.serverlog.info("Starting to publish power meter readings")
+
+        if self.publisher.stopped():
+            self.publisher = self.publisher_thread_class(self, bus=self.bus, **self.publisher_thread_kwargs)
+            self.publisher.daemon = True
+
+        self.publisher.start()
+
+    @Pyro4.expose
+    def stop_publishing(self):
+        """
+        Stop the publisher.
+        Returns:
+            None
+        """
+        self.publisher.stop()
+        self.publisher.join()
+        self._publishing_started = False
+
+    @Pyro4.expose
+    def pause_publshing(self):
+        """
+        Pause the publisher
+        Returns:
+            None
+        """
+        self.publisher.pause()
+
+    @Pyro4.expose
+    def unpause_publishing(self):
+        """
+        Unpause the publisher
+        Returns:
+            None
+        """
+        self.publisher.unpause()
 
 if __name__ == '__main__':
 
-    @Pyro4.expose
-    class BasicServer(object):
+    msg = Pyro4Message(1, False, {'el': 0.0})
+    from TAMS_BackEnd.examples.basic_pyro4_server import BasicServer
 
-        def __init__(self):
-            pass
-
-        def square(self, x):
-
-            return x**2
-
-    server = Pyro4Server("BasicServer", obj=BasicServer(),loglevel=logging.DEBUG)
-    server.launch_server('192.168.0.143', remote_port=2222, remote_username='dean', ns_host='localhost', ns_port=2224)
+    # print(msg['timestamp'])
+    # @Pyro4.expose
+    # class BasicServer(object):
+    #
+    #     def __init__(self):
+    #         pass
+    #
+    #     def square(self, x):
+    #
+    #         return x**2
+    #
+    # server = Pyro4Server("BasicServer", obj=BasicServer(),loglevel=logging.DEBUG)
+    # server.launch_server('192.168.0.143', remote_port=2222, remote_username='dean', ns_host='localhost', ns_port=2224)
 
