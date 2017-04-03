@@ -84,10 +84,50 @@ def simple_parse_args(init_description):
     """
     parser = argparse.ArgumentParser(description=init_description)
 
+    parser.add_argument('--remote_server_name', '-rsn', dest='remote_server_name',
+                        action='store', default='localhost', type=str, required=False,
+                        help="""Specify the name of the remote host. If you're trying to access a Pyro nameserver that
+                             is running locally, then use localhost. If you supply a value other than 'localhost'
+                             then make sure to give other remote login information.""")
+
+    parser.add_argument('--remote_port', '-rp', dest='remote_port',
+                        action='store', type=int, required=False, default=22,
+                        help="""Specify the remote port.""")
+
+    parser.add_argument('--tunnel_username', '-tu', dest='tunnel_username',
+                        action='store', type=str, required=False,
+                        help="""Specify the username to use for creating the tunnel to the remote machine.
+                                This is probably the same as your JPL username""")
+
+    parser.add_argument('--remote_username', '-ru', dest='remote_username',
+                        action='store', type=str, required=False, default='ops',
+                        help="""Specify the remote username.""")
+
+    parser.add_argument('--local_forwarding_port', '-lfp', dest='local_forwarding_port',
+                        action='store', type=int, required=False,
+                        help="""Specify the local forwarding port to use.
+                                If you supply nothing then the Pyro Object Discoverer will forward on the same
+                                port as the remote nameserver port.""")
+
     parser.add_argument("--ns_host", "-nsn", dest='ns_host', action='store',default='localhost',
                         help="Specify a host name for the Pyro name server. Default is localhost")
 
     parser.add_argument("--ns_port", "-nsp", dest='ns_port', action='store',default=9090,type=int,
                         help="Specify a port number for the Pyro name server. Default is 9090.")
 
-    return parser.parse_args()
+    parser.add_argument("--msg_bus_host", "-msg_n", dest='msg_bus_host', action='store', default='localhost',
+                        help="Specify a host name for the MessageBus server. Default is localhost.")
+
+    parser.add_argument("--msg_bus_port", "-msg_p", dest='msg_bus_port', action='store', default=0, type=int,
+                        help="Specify a port number for the MessageBus server. If nothing is provided, defaults to 0 (random).")
+
+    parser.add_argument("--messagebusflag", "-mbflg", dest='messagebusflag', action='store_false', default=True,
+                        help="Specify whether or not to start up a fresh messagebus server.")
+
+    parser.add_argument("--simulated", "-s", dest='simulated', action='store_true', default=False,
+                        help="Specify whether or not the server is running in simulator mode.")
+
+    parser.add_argument("--verbose", "-v", dest="verbose", action='store_true', default=False,
+                        help="Specify whether not the loglevel should be DEBUG")
+
+    return parser

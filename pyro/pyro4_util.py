@@ -81,16 +81,16 @@ class Pyro4ObjectDiscoverer(object):
     """
 
     def __init__(self,
-                 remote_server_name,
+                 remote_server_name='crux',
                  remote_port=22,
                  remote_ns_port=9090,
                  remote_ns_host='localhost',
                  local_forwarding_port=None,
                  tunnel_username=None,
-                 username=None,
+                 remote_username=None,
                  **kwargs):
         """
-        Create a Pyro4Tunnel object.
+        Create a Pyro4ObjectDiscoverer object.
         Args:
             remote_server_name (str): Name or ip of remote server.
         Keyword Args:
@@ -109,19 +109,19 @@ class Pyro4ObjectDiscoverer(object):
         self.remote_ns_port = remote_ns_port
         self.local_forwarding_port = local_forwarding_port
         self.tunnel_username = tunnel_username
-        self.username = username
+        self.remote_username = remote_username
 
         logger = logging.getLogger(module_logger.name + ".Pyro4Tunnel")
         self.logger = logging_config(logger=logger, **kwargs)
         self.processes = []
         self._local = False
 
-        if remote_server_name in full_name.keys():
+        if remote_server_name == 'localhost':
+            self._local = True
+        elif remote_server_name in full_name.keys():
             self.tunnel = Tunnel(remote_server_name, username=tunnel_username)
             self.remote_port = self.tunnel.port
             self.remote_server_ip = 'localhost'
-        elif remote_server_name == 'localhost':
-            self._local = True
         else:
             self.tunnel = None
             self.remote_server_ip = remote_server_name
@@ -136,11 +136,12 @@ class Pyro4ObjectDiscoverer(object):
                                            self.remote_ns_port,
                                            self.local_forwarding_port,
                                            self.remote_port,
-                                           self.username)
+                                           self.remote_username)
         elif self._local:
             self.ns = Pyro4.locateNS(host=self.remote_ns_host, port=self.remote_ns_port)
 
         self.uris = {}
+        self.requested_objects = []
 
     def find_nameserver(self,
                         remote_server_ip,
@@ -148,7 +149,7 @@ class Pyro4ObjectDiscoverer(object):
                         remote_ns_port,
                         local_forwarding_port,
                         remote_port,
-                        username):
+                        remote_username):
         """
         Get the nameserver sitting on remote_ns_port on the remote server.
         We explicitly pass arguments instead of using attributes so we can
@@ -167,7 +168,7 @@ class Pyro4ObjectDiscoverer(object):
 
         self.logger.debug("Remote server IP: {}".format(remote_server_ip))
         proc_ns = arbitrary_tunnel(remote_server_ip, 'localhost', local_forwarding_port,
-                                   remote_ns_port, username=username, port=remote_port)
+                                   remote_ns_port, username=remote_username, port=remote_port)
 
         self.processes.append(proc_ns)
         if check_connection(Pyro4.locateNS, kwargs={'host': remote_ns_host, 'port': local_forwarding_port}):
@@ -188,19 +189,27 @@ class Pyro4ObjectDiscoverer(object):
             Pyro4.URI corresponding to requested pyro object, or
             None if connections wasn't successful.
         """
-        obj_uri = self.ns.lookup(remote_obj_name)
+        try:
+            obj_uri = self.ns.lookup(remote_obj_name)
+        except AttributeError:
+            self.logger.error("Need to call find_nameserver.")
+            return None
+
+        self.requested_objects.append(remote_obj_name)
         obj_proxy = Pyro4.Proxy(obj_uri)
+
         if self._local:
             return obj_proxy
         elif not self._local:
             obj_host, obj_port = obj_uri.location.split(":")
             proc_obj = arbitrary_tunnel(self.remote_server_ip, 'localhost', obj_port,
-                                        obj_port, username=self.username, port=self.remote_port)
+                                        obj_port, username=self.remote_username, port=self.remote_port)
 
             self.processes.append(proc_obj)
-            if check_connection(getattr, args=(obj_proxy, 'name')):  # We are trying to get property, hence getattr
+            # if check_connection(getattr, args=(obj_proxy, 'name')):  # We are trying to get property, hence getattr
+            if check_connection(obj_proxy._pyroBind):
                 self.uris[remote_obj_name] = obj_uri
-                return Pyro4.Proxy(obj_uri)
+                return obj_proxy
             else:
                 self.logger.error("Couldn't connect to the object", exc_info=True)
                 return None
@@ -211,9 +220,22 @@ class Pyro4ObjectDiscoverer(object):
         Returns:
             None
         """
+        try:
+            ns = self.ns
+            for name in self.requested_objects:
+                ns.remove(name)
+        except AttributeError as err:
+            self.logger.error("cleanup: Couldn't remove requested objects from the nameserver: {}".format(err))
+
+        self.logger.debug("Cleaning up ssh connections.")
         for proc in self.processes:
             proc.kill()
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        self.cleanup()
 
 def check_connection(callback, timeout=1.0, attempts=10, args=(), kwargs={}):
     """
@@ -270,12 +292,12 @@ def arbitrary_tunnel(remote_ip, relay_ip,
             or else BasicProcess instance, the corresponds to already running tunnel command.
 
     """
-    command = "ssh -l {0} -p {1} -L {2}:{3}:{4} {5}".format(username,
-                                                            port, local_port,
-                                                            relay_ip, remote_port, remote_ip)
+    #-c arcfour -o ServerAliveInterval=60 -o TCPKeepAlive=no
+    command = "ssh -N -T -l {0} -p {1} -L {2}:{3}:{4} {5}"
+    command = command.format(username,port, local_port, relay_ip, remote_port, remote_ip)
 
     command_relay = "{0}:{1}:{2} {3}".format(local_port, relay_ip, remote_port, remote_ip)
-    module_logger.debug(command_relay)
+    # module_logger.debug(command_relay)
     ssh_proc = search_response(['ps', 'x'], ['grep', 'ssh'])
     # re_pid = re.compile("\d+")
     # re_name = re.compile("ssh.*")
@@ -293,4 +315,4 @@ def arbitrary_tunnel(remote_ip, relay_ip,
 
 
 if __name__ == '__main__':
-    pass
+    proc = arbitrary_tunnel('localhost', 'localhost', 2222, 50000, port=50046, username='ops')

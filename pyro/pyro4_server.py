@@ -48,57 +48,6 @@ def non_blocking(fn):
 
     return wrapper
 
-class Pyro4Message(object):
-    __slots__ = ("msgid", "success", "data", "timestamp")
-
-    def __init__(self, success=False, data=None, timestamp=None, msgid=None):
-        """
-        Args:
-            success (bool): Whether or not the message was successfully created.
-            data (None): The data to send to the client.
-        """
-        if not data: data = {}
-        if not timestamp: timestamp = datetime.datetime.utcnow()
-        if not msgid: msgid = uuid.uuid1()
-
-
-        self.success = success
-        self.data = data
-        self.timestamp = timestamp
-        self.msgid = msgid
-
-    # def update_timestamp(self):
-    #     """
-    #     Update the internal timestamp.
-    #     Returns:
-    #         None
-    #     """
-    #     self.timestamp = datetime.datetime.utcnow()
-
-    @staticmethod
-    def to_dict(obj):
-        """
-        Return the message object as a dictionary.
-        Returns:
-            dict:
-                keys: 'success', 'data', 'timestamp'
-        """
-        return {"__class__": "support.pyro.Pyro4Message",
-                'msgid': obj.msgid,
-                'success': obj.success,
-                 'data': obj.data,
-                 'timestamp': obj.timestamp.isoformat()}
-
-    @classmethod
-    def from_dict(cls, classname, d):
-        return cls(uuid.UUID(d["msgid"]),
-                   d["success"],
-                   d["data"],
-                   datetime.datetime.strptime(d["timestamp"], "%Y-%m-%dT%H:%M:%S.%f"))
-
-SerializerBase.register_class_to_dict(Pyro4Message, Pyro4Message.to_dict)
-SerializerBase.register_dict_to_class("support.pyro.Pyro4Message", Pyro4Message.from_dict)
-
 class Pyro4ServerError(Pyro4.errors.CommunicationError):
     pass
 
@@ -121,7 +70,9 @@ class Pyro4Server(object):
         self.lock = threading.Lock()
         self._simulated = simulated
         if self._simulated:
+            self.serverlog.name = self.serverlog.name + ".simulator"
             self.serverlog.info("Running in simulation mode")
+
         self._name = name
         self._running = False
         self._tunnel = None
@@ -162,7 +113,6 @@ class Pyro4Server(object):
         """
         return self._simulated
 
-
     def handler(self, signum, frame):
         """
         Define actions that should occur before the server
@@ -176,7 +126,7 @@ class Pyro4Server(object):
         finally:
             os.kill(os.getpid(), signal.SIGKILL)
 
-    def launch_server(self, remote_server_name,
+    def launch_server(self, remote_server_name='localhost',
                             remote_port=22,
                             ns_host='localhost',
                             ns_port=9090,
@@ -221,9 +171,10 @@ class Pyro4Server(object):
         # Create tunnel to nameserver
         proc_ns = arbitrary_tunnel(self._remote_ip, 'localhost', local_forwarding_port, ns_port,
                                 port=self._remote_port, username=remote_username)
+        self.serverlog.debug("")
         self._proc.append(proc_ns)
         # now check the tunnel
-        success = check_connection(Pyro4.locateNS, args=('localhost', local_forwarding_port))
+        success = check_connection(Pyro4.locateNS, timeout=2, args=('localhost', local_forwarding_port))
 
         self.serverlog.debug("Lauching server.")
         # now launch the server "locally"
@@ -292,10 +243,15 @@ class Pyro4Server(object):
                 self.daemon.unregister(self)
             # if we use daemon.close, this will hang forever in a thread.
             # This might appear to hang.
+
             self.daemon.shutdown()
             # remove the name/uri from the nameserver so we can't try to access
             # it later when there is no daemon running.
-            self.ns.remove(self._name)
+            try:
+                self.ns.remove(self._name)
+            except Pyro4.errors.ConnectionClosedError as err:
+                self.serverlog.debug("Connection to object already shutdown: {}".format(err))
+
             for proc in self._proc:
                 proc.kill()
 
@@ -366,10 +322,33 @@ class Pyro4PublisherServer(Pyro4Server):
         """
         self.publisher.unpause()
 
+def pyro4message(success=False, data=None, timestamp=None, id=None):
+    """
+    Create a dictionary that can be sent to the client.
+    This is a wrapper around existing data. The idea is that by having
+    known parameters, it can streamline client interaction with the server.
+    Args:
+        success (bool): A flag to indicate if the data was received successfully
+        data (anything): The data, whatever it may be
+        timestamp (datetime.datetime.utcnow()): When the message was created
+        id (uuid.uuid1): a unique identifier for the message
+    Returns:
+        dict
+    """
+    if not timestamp: timestamp = datetime.datetime.utcnow().isoformat()
+    if not id: id = str(uuid.uuid1())
+
+    return {'success':success,
+            'data':data,
+            'timestamp':timestamp,
+            'id':id}
+
 if __name__ == '__main__':
 
-    msg = Pyro4Message(1, False, {'el': 0.0})
-    from TAMS_BackEnd.examples.basic_pyro4_server import BasicServer
+    # msg = Pyro4Message(1, False, {'el': 0.0})
+    # from TAMS_BackEnd.examples.basic_pyro4_server import BasicServer
+
+    server = Pyro4Server("TestServer", simulated=True)
 
     # print(msg['timestamp'])
     # @Pyro4.expose
