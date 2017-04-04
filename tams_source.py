@@ -1,6 +1,7 @@
 import ephem
 
-class TAMSSource(object):
+class TAMS_Source(object):
+
     def __init__(self,
                  name="",
                  ra=0.0, dec=0.0,
@@ -90,6 +91,14 @@ class TAMSSource(object):
                 'velo': self.velo,
                 'name': self.name,
                 'category': self.category}
+
+    @staticmethod
+    def fromDict(src_dict):
+
+        if isinstance(src_dict, dict):
+            return TAMS_Source(**src_dict)
+        elif isinstance(src_dict, TAMS_Source):
+            return src_dict
 
 
 def compute_az_el(source_entry, observer):

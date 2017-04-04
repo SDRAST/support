@@ -25,7 +25,7 @@ class Pyro4Client(object):
 
         """
         self.server = proxy
-        self.clientlog = logging_config(**kwargs)
+        self.logger = logging_config(**kwargs)
 
     def __getattr__(self, attr):
         """

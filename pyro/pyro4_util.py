@@ -88,6 +88,7 @@ class Pyro4ObjectDiscoverer(object):
                  local_forwarding_port=None,
                  tunnel_username=None,
                  remote_username=None,
+                 loglevel=logging.INFO,
                  **kwargs):
         """
         Create a Pyro4ObjectDiscoverer object.
@@ -112,7 +113,7 @@ class Pyro4ObjectDiscoverer(object):
         self.remote_username = remote_username
 
         logger = logging.getLogger(module_logger.name + ".Pyro4Tunnel")
-        self.logger = logging_config(logger=logger, **kwargs)
+        self.logger = logging_config(logger=logger, loglevel=loglevel, **kwargs)
         self.processes = []
         self._local = False
 
@@ -138,7 +139,7 @@ class Pyro4ObjectDiscoverer(object):
                                            self.remote_port,
                                            self.remote_username)
         elif self._local:
-            self.logger.info("Local nameserver host:port: {}:{}".format(self.remote_ns_host, self.remote_ns_port))
+            self.logger.debug("Local nameserver host:port: {}:{}".format(self.remote_ns_host, self.remote_ns_port))
             self.ns = Pyro4.locateNS(host=self.remote_ns_host, port=self.remote_ns_port)
 
         self.uris = {}
@@ -221,12 +222,13 @@ class Pyro4ObjectDiscoverer(object):
         Returns:
             None
         """
-        try:
-            ns = self.ns
-            for name in self.requested_objects:
-                ns.remove(name)
-        except AttributeError as err:
-            self.logger.error("cleanup: Couldn't remove requested objects from the nameserver: {}".format(err))
+        # try:
+        #
+        #     ns = self.ns
+        #     for name in self.requested_objects:
+        #         ns.remove(name)
+        # except AttributeError as err:
+        #     self.logger.error("cleanup: Couldn't remove requested objects from the nameserver: {}".format(err))
 
         self.logger.debug("Cleaning up ssh connections.")
         for proc in self.processes:
