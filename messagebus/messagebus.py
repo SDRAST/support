@@ -109,8 +109,8 @@ class Subscriber(object):
                 continue
             try:
                 self.consume_message(topic, message)
-            except Exception:
-                print("Error while consuming message:", file=sys.stderr)
+            except Exception as err:
+                print("Error while consuming message: {}".format(err), file=sys.stderr)
                 # traceback.print_exc(file=sys.stderr)
 
     def consume_message(self, topic, message):
