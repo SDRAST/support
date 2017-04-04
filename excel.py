@@ -47,7 +47,7 @@ def get_column_names(sh):
     @type  sh : Worksheet object
     """
     size = sh.calculate_dimension()
-    if openpyxl.__version__ >= 2.4:
+    if openpyxl.__version__ >= '2.4':
         maxrow = sh.max_row
         maxcol = sh.max_column
 
