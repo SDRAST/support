@@ -121,7 +121,7 @@ def simple_parse_args(init_description):
     parser.add_argument("--msg_bus_port", "-msg_p", dest='msg_bus_port', action='store', default=0, type=int,
                         help="Specify a port number for the MessageBus server. If nothing is provided, defaults to 0 (random).")
 
-    parser.add_argument("--messagebusflag", "-mbflg", dest='messagebusflag', action='store_false', default=True,
+    parser.add_argument("--messagebusflag", "-mbflg", dest='messagebusflag', action='store_true', default=False,
                         help="Specify whether or not to start up a fresh messagebus server.")
 
     parser.add_argument("--simulated", "-s", dest='simulated', action='store_true', default=False,
