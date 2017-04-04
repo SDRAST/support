@@ -138,7 +138,7 @@ class Pyro4ObjectDiscoverer(object):
                                            self.remote_port,
                                            self.remote_username)
         elif self._local:
-            self.logger.debug("Local nameserver host:port: {}:{}".format(self.remote_ns_host, self.remote_ns_port))
+            self.logger.info("Local nameserver host:port: {}:{}".format(self.remote_ns_host, self.remote_ns_port))
             self.ns = Pyro4.locateNS(host=self.remote_ns_host, port=self.remote_ns_port)
 
         self.uris = {}
