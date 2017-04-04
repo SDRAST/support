@@ -110,8 +110,8 @@ class Subscriber(object):
             try:
                 self.consume_message(topic, message)
             except Exception as err:
-                print("Error while consuming message: {}".format(err), file=sys.stderr)
-                # traceback.print_exc(file=sys.stderr)
+                print("Error while consuming message: {}".format(err))
+                traceback.print_exc()
 
     def consume_message(self, topic, message):
         # this is called from a background thread
