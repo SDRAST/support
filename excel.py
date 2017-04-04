@@ -14,7 +14,7 @@ import openpyxl
 from openpyxl import load_workbook
 from openpyxl import workbook
 # from worksheet import cells_from_range
-if openpyxl.__version__ >= 2.4:
+if openpyxl.__version__ >= '2.4':
     from openpyxl.utils import get_column_letter
     OPENPYXL_INDEX = 1
 else:
@@ -111,7 +111,7 @@ def get_column(ws, column_name):
     module_logger.debug("get_column: column ID for %s is %s",
                         column_name, column_id)
     if column_id != None:
-        if openpyxl.__version__ >= 2.0:
+        if openpyxl.__version__ >= '2.0':
             column = list(ws.columns)[column_id]
         else:
             column = ws.columns[column_id]
@@ -143,7 +143,7 @@ def insert_empty_row_after(ws, prior_row):
 
     @return: True
     """
-    if openpyxl.__version__ >= 2.4:
+    if openpyxl.__version__ >= '2.4':
         highest_row = ws.max_row
         highest_col = ws.max_col
     else:
@@ -172,7 +172,7 @@ def get_row_number(ws, column, value):
 
     @param value : value to be matched by contents
     """
-    if openpyxl.__version__ >= 2.4:
+    if openpyxl.__version__ >= '2.4':
         highest_row = ws.max_row
     else:
         highest_row = ws.get_highest_row()
