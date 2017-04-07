@@ -96,9 +96,11 @@ def set_module_loggers(logger_dict):
   for module in logger_dict.keys():
     try:
       command = "from "+module+" import module_logger as temp"
-    except:
+      exec(command)
+    except ImportError:
+      # for the newer modules
       command = "from "+module+" import logger as temp"
-    exec(command)
+      exec(command)
     loggers[module] = temp
     level = logger_dict[module]
     command = "loggers['"+module+"'].setLevel(logging."+level.upper()+")"
