@@ -56,15 +56,16 @@ class Pyro4Server(object):
     A super class for servers.
     """
 
-    def __init__(self, name, obj=None, simulated=False, **kwargs):
+    def __init__(self, name, obj=None, simulated=False, local=False, **kwargs):
         """
         Setup logging for the server, in addition to creating a
         lock. Subclasses of this class can interact directly with the lock,
         or through the blocking and non-blocking decorators.
         Args:
             name (str): The name of the Pyro server.
+            simulated (bool): Simulation mode bool
+            local (bool): Local run bool
             **kwargs: TAMS_BackEnd.util.logging_config kwargs
-
         """
         self.serverlog = logging_config(**kwargs)
         self.lock = threading.Lock()
@@ -73,6 +74,7 @@ class Pyro4Server(object):
             self.serverlog.name = self.serverlog.name + ".simulator"
             self.serverlog.info("Running in simulation mode")
 
+        self._local = local
         self._name = name
         self._running = False
         self._tunnel = None
@@ -112,6 +114,11 @@ class Pyro4Server(object):
         Is the server returning simulated (fake) data?
         """
         return self._simulated
+
+    @Pyro4.expose
+    @property
+    def local(self):
+        return self._local
 
     def handler(self, signum, frame):
         """

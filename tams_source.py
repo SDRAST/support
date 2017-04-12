@@ -85,8 +85,17 @@ class TAMS_Source(object):
 
     def toDict(self):
 
-        return {'ra': self.body._ra,
-                'dec': self.body._dec,
+        try:
+            ra = self.body.ra
+            dec = self.body.dec
+        except Exception as err:
+            print("Couldn't calculate ra and dec before first compute.\nUsing old values.")
+            ra = self.body._ra
+            dec = self.body._dec
+
+
+        return {'ra': ra,
+                'dec': dec,
                 'flux': self.flux,
                 'velo': self.velo,
                 'name': self.name,

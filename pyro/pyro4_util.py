@@ -180,6 +180,22 @@ class Pyro4ObjectDiscoverer(object):
             self.logger.error("Couldn't connect to the remote Nameserver", exc_info=True)
             return None
 
+    def register_daemon(self, daemon):
+        """
+        Args:
+            daemon (Pyro4.Daemon):
+
+        Returns:
+        """
+        if self._local:
+            return None
+        else:
+            daemon_host, daemon_port = daemon.locationStr.split(":")
+            proc_daemon = arbitrary_tunnel(self.remote_server_ip, 'localhost', daemon_port,
+                                           daemon_port, username=self.remote_username,
+                                           port=self.remote_port, reverse=True)
+            self.processes.append(proc_daemon)
+
     def get_pyro_object(self, remote_obj_name):
         """
         Say we wanted to connect to the APC server on crux, and the APC server
@@ -271,7 +287,7 @@ def check_connection(callback, timeout=1.0, attempts=10, args=(), kwargs={}):
 
 def arbitrary_tunnel(remote_ip, relay_ip,
                      local_port, remote_port,
-                     port=22, username=''):
+                     port=22, username='', reverse=False):
     """
     Create an arbitrary ssh tunnel, after checking to see if a tunnel already exists.
     This just spawns the process that creates the tunnel, it doesn't check to see if the tunnel
@@ -296,7 +312,11 @@ def arbitrary_tunnel(remote_ip, relay_ip,
 
     """
     #-c arcfour -o ServerAliveInterval=60 -o TCPKeepAlive=no
-    command = "ssh -N -T -l {0} -p {1} -L {2}:{3}:{4} {5}"
+    if not reverse:
+        command = "ssh -N -l {0} -p {1} -L {2}:{3}:{4} {5}"
+    elif reverse:
+        command = "ssh -N -l {0} -p {1} -R {2}:{3}:{4} {5}"
+
     command = command.format(username,port, local_port, relay_ip, remote_port, remote_ip)
 
     command_relay = "{0}:{1}:{2} {3}".format(local_port, relay_ip, remote_port, remote_ip)
