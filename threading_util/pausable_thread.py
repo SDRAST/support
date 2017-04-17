@@ -3,6 +3,7 @@ import time
 
 from support.logs import logging_config
 
+
 def iterativeRun(run_fn):
     """
     A decorator for running functions repeatedly inside a PausableThread.
@@ -49,18 +50,24 @@ class Pause(object):
         if not isinstance(self.thread, dict):
             self.thread = {'thread': self.thread}
 
-        self.init_pause_status = {name: self.thread[name].paused() for name in self.thread.keys()}
+        self.init_pause_status = {}
+        for name in self.thread.keys():
+            if self.thread[name]:
+                self.init_pause_status[name] = self.thread[name].paused()
+            else:
+                self.init_pause_status[name] = None
+        # self.init_pause_status = {name: self.thread[name].paused() for name in self.thread.keys()}
 
     def __enter__(self):
         """
 		Pause the thread in quesiton, and make sure that whatever 
 		functionality is being performing is actually stopped.
 		"""
-
         for name in self.thread.keys():
             t = self.thread[name]
-            if t and not self.init_pause_status[name]:
-                t.pause()
+            if t:
+                if not self.init_pause_status[name]:
+                    t.pause()
             else:
                 pass
         # now make sure that they're actually paused.
@@ -73,14 +80,13 @@ class Pause(object):
                 pass
 
     def __exit__(self, *args):
-
         for name in self.thread.keys():
             t = self.thread[name]
-            if t and not self.init_pause_status[name]:
-                self.thread[name].unpause()
+            if t:
+                if not self.init_pause_status[name]:
+                    self.thread[name].unpause()
             else:
                 pass
-
 
 class PausableThread(threading.Thread):
     """A pausable stoppable thread.

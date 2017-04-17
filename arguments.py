@@ -127,6 +127,9 @@ def simple_parse_args(init_description):
     parser.add_argument("--simulated", "-s", dest='simulated', action='store_true', default=False,
                         help="Specify whether or not the server is running in simulator mode.")
 
+    parser.add_argument("--local", "-l", dest='local', action='store_true', default=False,
+                        help="Specify whether or not the server is running locally or on a remote server.")
+
     parser.add_argument("--verbose", "-v", dest="verbose", action='store_true', default=False,
                         help="Specify whether not the loglevel should be DEBUG")
 
