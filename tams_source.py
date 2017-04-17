@@ -84,15 +84,19 @@ class TAMS_Source(object):
         return getattr(self.body, attr)
 
     def toDict(self):
-
-        try:
-            ra = self.body.ra
-            dec = self.body.dec
-        except Exception as err:
-            print("Couldn't calculate ra and dec before first compute.\nUsing old values.")
-            ra = self.body._ra
-            dec = self.body._dec
-
+        """
+        We want to supply the _ra and _dec values to the dictionary, instead of the calculated values.
+        This means that when we load the dictionary in using the TAMS_Source.from_dict static method,
+        then we don't use the calculated values as the _ra and _dec attributes.
+        Returns:
+            dict: With main attributes of source.
+        """
+        # try:
+        #     ra = self.body.ra
+        #     dec = self.body.dec
+        # except AttributeError:
+        ra = self.body._ra
+        dec = self.body._dec
 
         return {'ra': ra,
                 'dec': dec,
