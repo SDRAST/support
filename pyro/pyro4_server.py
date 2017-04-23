@@ -120,6 +120,10 @@ class Pyro4Server(object):
     def local(self):
         return self._local
 
+    @Pyro4.expose
+    def ping(self):
+        return True
+
     def handler(self, signum, frame):
         """
         Define actions that should occur before the server

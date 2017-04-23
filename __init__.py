@@ -13,10 +13,10 @@ from time import sleep, time
 
 from numpy import array
 
-from support.process import BasicProcess
-from support.process import invoke
-from support.arguments import simple_parse_args
-from support.tams_source import TAMS_Source
+from process import BasicProcess
+from process import invoke
+from arguments import simple_parse_args
+from tams_source import TAMS_Source
 
 module_logger = logging.getLogger(__name__)
 
