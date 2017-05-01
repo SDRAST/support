@@ -14,6 +14,7 @@ from support.tunneling import Tunnel
 from support.process import invoke, search_response, BasicProcess
 from support.logs import logging_config
 from pyro3_util import full_name
+from pyro4_client import AutoReconnectingProxy
 
 module_logger = logging.getLogger(__name__)
 logging_config(logger=module_logger, loglevel=logging.DEBUG)
@@ -81,9 +82,9 @@ class Pyro4ObjectDiscoverer(object):
     """
 
     def __init__(self,
-                 remote_server_name='crux',
-                 remote_port=22,
-                 remote_ns_port=9090,
+                 remote_server_name='localhost',
+                 remote_port=50046,
+                 remote_ns_port=50000,
                  remote_ns_host='localhost',
                  local_forwarding_port=None,
                  tunnel_username=None,
@@ -108,39 +109,38 @@ class Pyro4ObjectDiscoverer(object):
         self.remote_server_name = remote_server_name
         self.remote_ns_host = remote_ns_host
         self.remote_ns_port = remote_ns_port
+        if not local_forwarding_port: local_forwarding_port = remote_ns_port
         self.local_forwarding_port = local_forwarding_port
         self.tunnel_username = tunnel_username
         self.remote_username = remote_username
-
         logger = logging.getLogger(module_logger.name + ".Pyro4Tunnel")
         self.logger = logging_config(logger=logger, loglevel=loglevel, **kwargs)
         self.processes = []
-        self._local = False
 
-        if remote_server_name == 'localhost':
-            self._local = True
-        elif remote_server_name in full_name.keys():
-            self.tunnel = Tunnel(remote_server_name, username=tunnel_username)
-            self.remote_port = self.tunnel.port
-            self.remote_server_ip = 'localhost'
+        if not remote_port:
+            self.local = True
+            self.logger.debug("Local nameserver host:port: {}:{}".format(self.remote_ns_host, self.remote_ns_port))
+            self.ns = Pyro4.locateNS(host=self.remote_ns_host, port=self.remote_ns_port)
+
         else:
-            self.tunnel = None
-            self.remote_server_ip = remote_server_name
-            self.remote_port = remote_port
+            self.local = False
+            if remote_server_name in full_name.keys() and remote_server_name != 'localhost':
+                self.logger.debug("Checking for existing Tunnel.")
+                self.tunnel = Tunnel(remote_server_name, username=tunnel_username)
+                self.remote_port = self.tunnel.port
+                self.remote_server_ip = 'localhost'
+            else:
+                self.logger.debug("Provided server name not on JPL network.")
+                self.tunnel = None
+                self.remote_server_ip = remote_server_name
+                self.remote_port = remote_port
 
-        if not self.local_forwarding_port:
-            self.local_forwarding_port = self.remote_ns_port
-
-        if not self._local:
             self.ns = self.find_nameserver(self.remote_server_ip,
                                            self.remote_ns_host,
                                            self.remote_ns_port,
                                            self.local_forwarding_port,
                                            self.remote_port,
                                            self.remote_username)
-        elif self._local:
-            self.logger.debug("Local nameserver host:port: {}:{}".format(self.remote_ns_host, self.remote_ns_port))
-            self.ns = Pyro4.locateNS(host=self.remote_ns_host, port=self.remote_ns_port)
 
         self.uris = {}
         self.requested_objects = []
@@ -187,7 +187,7 @@ class Pyro4ObjectDiscoverer(object):
 
         Returns:
         """
-        if self._local:
+        if self.local:
             return None
         else:
             daemon_host, daemon_port = daemon.locationStr.split(":")
@@ -196,7 +196,7 @@ class Pyro4ObjectDiscoverer(object):
                                            port=self.remote_port, reverse=True)
             self.processes.append(proc_daemon)
 
-    def get_pyro_object(self, remote_obj_name):
+    def get_pyro_object(self, remote_obj_name, use_autoconnect=False):
         """
         Say we wanted to connect to the APC server on crux, and the APC server
         was sitting on nameserver port 50000 on crux. We could do this as follows:
@@ -214,11 +214,14 @@ class Pyro4ObjectDiscoverer(object):
             return None
 
         self.requested_objects.append(remote_obj_name)
-        obj_proxy = Pyro4.Proxy(obj_uri)
+        if use_autoconnect:
+            obj_proxy = AutoReconnectingProxy(obj_uri)
+        else:
+            obj_proxy = Pyro4.Proxy(obj_uri)
 
-        if self._local:
+        if self.local:
             return obj_proxy
-        elif not self._local:
+        elif not self.local:
             obj_host, obj_port = obj_uri.location.split(":")
             proc_obj = arbitrary_tunnel(self.remote_server_ip, 'localhost', obj_port,
                                         obj_port, username=self.remote_username, port=self.remote_port)
@@ -231,7 +234,6 @@ class Pyro4ObjectDiscoverer(object):
             else:
                 self.logger.error("Couldn't connect to the object", exc_info=True)
                 return None
-
     def cleanup(self):
         """
         Kill all the existing tunnels that correspond to processes created
