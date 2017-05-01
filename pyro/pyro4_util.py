@@ -15,7 +15,10 @@ from support.process import invoke, search_response, BasicProcess
 from support.logs import logging_config
 from pyro3_util import full_name
 from pyro4_client import AutoReconnectingProxy
-
+try:
+    full_name.pop('localhost')
+except KeyError:
+    pass
 module_logger = logging.getLogger(__name__)
 logging_config(logger=module_logger, loglevel=logging.DEBUG)
 
@@ -83,7 +86,7 @@ class Pyro4ObjectDiscoverer(object):
 
     def __init__(self,
                  remote_server_name='localhost',
-                 remote_port=50046,
+                 remote_port=None,
                  remote_ns_port=50000,
                  remote_ns_host='localhost',
                  local_forwarding_port=None,
@@ -117,30 +120,37 @@ class Pyro4ObjectDiscoverer(object):
         self.logger = logging_config(logger=logger, loglevel=loglevel, **kwargs)
         self.processes = []
 
-        if not remote_port:
-            self.local = True
-            self.logger.debug("Local nameserver host:port: {}:{}".format(self.remote_ns_host, self.remote_ns_port))
-            self.ns = Pyro4.locateNS(host=self.remote_ns_host, port=self.remote_ns_port)
-
+        if remote_server_name in full_name.keys():
+            self.local = False
+            self.logger.debug("Checking for existing Tunnel.")
+            self.tunnel = Tunnel(remote_server_name, username=tunnel_username)
+            self.remote_port = self.tunnel.port
+            self.remote_server_ip = 'localhost'
+        elif remote_server_name == 'localhost':
+            if remote_port:
+                self.local = False
+                self.remote_port = remote_port
+            else:
+                self.local = True
         else:
             self.local = False
-            if remote_server_name in full_name.keys() and remote_server_name != 'localhost':
-                self.logger.debug("Checking for existing Tunnel.")
-                self.tunnel = Tunnel(remote_server_name, username=tunnel_username)
-                self.remote_port = self.tunnel.port
-                self.remote_server_ip = 'localhost'
-            else:
-                self.logger.debug("Provided server name not on JPL network.")
-                self.tunnel = None
-                self.remote_server_ip = remote_server_name
-                self.remote_port = remote_port
+            self.logger.debug("Provided server name not on JPL network.")
+            self.tunnel = None
+            self.remote_server_ip = remote_server_name
+            self.remote_port = remote_port
 
+
+        if self.local:
+            self.logger.debug("Local nameserver host:port: {}:{}".format(self.remote_ns_host, self.remote_ns_port))
+            self.ns = Pyro4.locateNS(host=self.remote_ns_host, port=self.remote_ns_port)
+        else:
             self.ns = self.find_nameserver(self.remote_server_ip,
                                            self.remote_ns_host,
                                            self.remote_ns_port,
                                            self.local_forwarding_port,
                                            self.remote_port,
                                            self.remote_username)
+
 
         self.uris = {}
         self.requested_objects = []

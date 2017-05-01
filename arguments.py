@@ -113,7 +113,7 @@ def simple_parse_args(init_description):
                         help="Specify a host name for the Pyro name server. Default is localhost")
 
     parser.add_argument("--ns_port", "-nsp", dest='ns_port', action='store',default=50000,type=int,
-                        help="Specify a port number for the Pyro name server. Default is 9090.")
+                        help="Specify a port number for the Pyro name server. Default is 50000.")
 
     parser.add_argument("--msg_bus_host", "-msg_n", dest='msg_bus_host', action='store', default='localhost',
                         help="Specify a host name for the MessageBus server. Default is localhost.")
