@@ -127,6 +127,7 @@ class Pyro4ObjectDiscoverer(object):
             self.remote_port = self.tunnel.port
             self.remote_server_ip = 'localhost'
         elif remote_server_name == 'localhost':
+            self.remote_server_ip = 'localhost'
             if remote_port:
                 self.local = False
                 self.remote_port = remote_port
