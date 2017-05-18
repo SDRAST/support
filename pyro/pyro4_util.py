@@ -15,6 +15,7 @@ from support.process import invoke, search_response, BasicProcess
 from support.logs import logging_config
 from pyro3_util import full_name
 from pyro4_client import AutoReconnectingProxy
+full_name = full_name.copy()
 try:
     full_name.pop('localhost')
 except KeyError:

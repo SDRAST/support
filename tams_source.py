@@ -1,4 +1,5 @@
 import ephem
+import numpy as np
 
 class TAMS_Source(object):
 
@@ -28,11 +29,43 @@ class TAMS_Source(object):
         self.plot_params = plot_params
 
     @property
+    def _ra_deg(self):
+        return np.rad2deg(float(self.body._ra))
+
+    @property
+    def ra_deg(self):
+        return np.rad2deg(float(self.body.ra))
+
+    @property
+    def _dec_deg(self):
+        return np.rad2deg(float(self.body._dec))
+
+    @property
+    def dec_deg(self):
+        return np.rad2deg(float(self.body.dec))
+
+    @property
+    def az_deg(self):
+        try:
+            az = self._az
+        except AttributeError:
+            az = self.body.az
+        return np.rad2deg(float(az))
+
+    @property
     def az(self):
         try:
             return self._az
         except AttributeError:
             return self.body.az
+
+    @property
+    def alt_deg(self):
+        try:
+            alt = self._alt
+        except AttributeError:
+            alt = self.body.alt
+        return np.rad2deg(float(alt))
 
     @property
     def alt(self):
@@ -91,10 +124,6 @@ class TAMS_Source(object):
         Returns:
             dict: With main attributes of source.
         """
-        # try:
-        #     ra = self.body.ra
-        #     dec = self.body.dec
-        # except AttributeError:
         ra = self.body._ra
         dec = self.body._dec
 
@@ -133,3 +162,10 @@ def compute_az_el(source_entry, observer):
     source.compute(observer)
 
     return source
+
+
+if __name__ == '__main__':
+    ra = "7:09:07.54"
+    dec = "-49:35:11.1"
+    b = TAMS_Source("J07084", ra=ra, dec=dec, epoch=ephem.now())
+    print(b.name, b._ra, b._dec, b._ra_deg, b._dec_deg)
