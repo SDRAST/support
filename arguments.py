@@ -109,7 +109,7 @@ def simple_parse_args(init_description):
                                 If you supply nothing then the Pyro Object Discoverer will forward on the same
                                 port as the remote nameserver port.""")
 
-    parser.add_argument("--ns_host", "-nsn", dest='ns_host', action='store',default='localhost',
+    parser.add_argument("--ns_host", "-nsn", dest='ns_host', action='store', default='localhost',
                         help="Specify a host name for the Pyro name server. Default is localhost")
 
     parser.add_argument("--ns_port", "-nsp", dest='ns_port', action='store',default=50000,type=int,

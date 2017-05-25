@@ -10,18 +10,22 @@ class TAMS_Source(object):
                  epoch=ephem.J2000,
                  flux=0.0, velo=0.0,
                  category=None,
+                 body=None,
                  plot_params=None):
         """
         """
-        self.body = ephem.FixedBody()
-        self._name = name
-        self.body._ra = ra
-        self.body._dec = dec
-        self.body._epoch = epoch
+        if not body:
+            self.body = ephem.FixedBody()
+            self._name = name
+            self.body._ra = ra
+            self.body._dec = dec
+            self.body._epoch = epoch
 
-        if az != None or alt != None:
-            self._az = az
-            self._alt = alt
+            if az != None or alt != None:
+                self._az = az
+                self._alt = alt
+        elif body:
+            self.body = body
 
         self._velo = velo
         self._flux = flux
