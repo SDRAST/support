@@ -24,6 +24,7 @@ from tams_source import TAMS_Source
 import logging
 logger = logging.getLogger(__name__)
 
+__version__ = 1.1
 
 class NamedClass(object):
     """

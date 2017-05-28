@@ -5,6 +5,8 @@ import logging
 import time
 import sys
 
+from support.options import initiate_option_parser
+
 module_logger = logging.getLogger(__name__)
 
 def logging_config(name="", logger=None, logfile=None, loglevel=logging.INFO, handlers=None, **kwargs):
