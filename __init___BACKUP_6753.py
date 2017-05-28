@@ -8,10 +8,14 @@ import datetime
 import logging
 import os
 import sys
+<<<<<<< HEAD
 
 from numpy import array
 from os import environ, makedirs
 from os.path import exists
+=======
+from os import environ
+>>>>>>> TAMS_dev
 from time import sleep, time
 
 from numpy import array
@@ -21,8 +25,12 @@ from process import invoke
 from arguments import simple_parse_args
 from tams_source import TAMS_Source
 
+<<<<<<< HEAD
 import logging
 logger = logging.getLogger(__name__)
+=======
+module_logger = logging.getLogger(__name__)
+>>>>>>> TAMS_dev
 
 
 class NamedClass(object):
@@ -110,6 +118,7 @@ def nearest_index(np_array, value):
     else:
         return index
 
+
 def get_user():
     """
     Returns the user running this session
@@ -133,6 +142,7 @@ def get_user():
 
 
 def check_permission(group):
+<<<<<<< HEAD
   """
   Verify that the user has the necessary permissions.
 
@@ -152,13 +162,47 @@ def check_permission(group):
       logger.error("You must be in group '%s', root or 'sudo'er", group)
       return False
   logger.info(" User permissions verified")
+=======
+    """
+    Verify that the user has the necessary permissions.
+>>>>>>> TAMS_dev
+
+    Permissions can be gained by being superuser, using 'sudo' or by belonging to
+    the right group.
+
+    Example::
+      check_permission('dialout')
+    """
+    p = invoke("groups")  # What groups does the user belong to?
+    groups = p.stdout.readline().split()
+    try:
+        groups.index(group)
+        return True
+    except ValueError:
+        if environ['USER'] != 'root':
+            module_logger.error("You must be in group '%s', root or 'sudo'er", group)
+            return False
+    module_logger.info(" User permissions verified")
+
 
 def sync_second():
     """
     Wait until the second changes
 
+<<<<<<< HEAD
+          
+def mkdir_if_needed(path):
+  """
+  """  
+  if exists(path) == False:
+    logger.warning(" Creating %s", path)
+    makedirs(path, 0775)
+
+
+=======
     This returns roughly 6.2 ms after the second changes. I can't seem to get the
     delay below this.
+>>>>>>> TAMS_dev
 
     Using 'sleep' rather than 'pass' requires less CPU cycles.
     """
@@ -166,16 +210,10 @@ def sync_second():
     while not bool(int(time()) - now):
         sleep(0.0001)
 
+
 def cpu_arch():
     """
     """
     p = invoke('uname -a')
     text = p.stdout.readline()
     return text.split()[-2]
-
-def mkdir_if_needed(path):
-    """
-    """
-    if exists(path) == False:
-        logger.warning(" Creating %s", path)
-        makedirs(path, 0775)
