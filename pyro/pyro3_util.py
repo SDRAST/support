@@ -9,9 +9,9 @@ import Pyro
 import Pyro.core
 import Pyro.naming
 import Pyro.errors
-import tunneling as T
 import time
 import logging
+import numpy
 import os, os.path
 import atexit
 import socket
@@ -21,6 +21,7 @@ from support import NamedClass
 from support.logs import set_module_loggers, initiate_option_parser
 from support.logs import init_logging, get_loglevel, set_loglevel
 from support.network import get_domain, get_local_network
+import support.tunneling as T
 
 # Set up Pyro system logging
 NONE = 0
@@ -127,10 +128,6 @@ class PyroServer(Pyro.core.ObjBase):
     Attribute run may be set to False by a sub-class
     """
     return self.run
-    #if self.run:
-    #  return True
-    #else:
-    #  return False
 
   def halt(self):
     """
