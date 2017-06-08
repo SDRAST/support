@@ -90,6 +90,7 @@ from   support.process import invoke, search_response
 from   support.network import get_domain
 
 module_logger = logging.getLogger(__name__)
+
 DEFAULTMOUNTROOT= os.environ.get ("HOME") + os.sep + "mnt"
 
 # --------------------------- module classes ------------------------------
@@ -635,7 +636,7 @@ def makePortProxy(endpoint,
                   localport,
                   remotehost,
                   remoteport,
-                  user=support.get_user()):
+                  user=None):
   """
   Connect a local port to a port on a remote host through a tunnel
 
@@ -664,8 +665,11 @@ def makePortProxy(endpoint,
   tunnel_port = PORT[endpoint]
   module_logger.debug('makePortProxy: called for port %d', tunnel_port)
   if tunnel_port == 50099:
-    # more REALLY UGLY
+    # more REALLY UGLY <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     user = 'pi'
+  if user == None:
+    user=support.get_user()
+  module_logger.debug('makePortProxy: user is %s', user)
   command_list = ["ssh", "-N", "-p", str(tunnel_port),
                   "-L",str(localport)+":"+remotehost+":"+str(remoteport),
                   user+"@127.0.0.1", "&"]

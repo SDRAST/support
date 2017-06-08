@@ -106,16 +106,30 @@ def get_user():
   actual user is.
   """
   try:
-    os.environ['USER'] == "root"
+    test = os.environ['USER']
+    # there is a USER
+    logger.debug("get_user: USER = %s", test)
+  except KeyError:
+    # probably was run by a cron job
+    logger.debug("get_user: no USER; trying LOGNAME")
+    try:
+      test = os.environ['LOGNAME']
+    except KeyError:
+      logger.error("get_user: no USER or LOGNAME")
+      logger.debug("get_user: environment is %s", os.environ)
+      return None
+  if test == "root":
     try:
       # maybe the user was using 'sudo'
+      logger.debug("get_user: user is %s; trying SUDO_USER", test)
       user = os.environ['SUDO_USER']
     except KeyError:
       # no, this is really by 'root'
+      logger.debug("get_user: SUDO_USER not set")
       user = "root"
-  except KeyError:
-    # probably was run by a cron job
-    user = os.environ['LOGNAME']
+  else:
+    user = test
+    logger.debug("get_user: settled on %s", user)
   return user
 
 def check_permission(group):
