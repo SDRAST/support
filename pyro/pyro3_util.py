@@ -449,7 +449,7 @@ class NameserverResource:
 
 # --------------------------- module methods -------------------------------
 
-def pyro_server_request(task,*args,**kwargs):
+def pyro_server_request(task, *args, **kwargs):
   """
   Make a request of a Pyro server
 
@@ -475,7 +475,7 @@ def pyro_server_request(task,*args,**kwargs):
   result = None
   while timeout > 0:
     try:
-      result = task(*args,**kwargs)
+      result = task(*args, **kwargs)
     except Pyro.errors.ProtocolError, details:
       module_logger.warning("pyro_server_request: %s (%f sec left)",
                        details,timeout)
@@ -555,7 +555,7 @@ def get_nameserver(pyro_ns = "dto", pyro_port = 9090):
   again.
 
   Examples of what you might do with it::
-   In [5]: from Observatory.pyro_support import get_nameserver
+   In [5]: from support.pyro import get_nameserver
    In [6]: ns = get_nameserver()
    In [7]: ns.flatlist()
    Out[7]:

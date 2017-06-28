@@ -111,26 +111,39 @@ def nearest_index(np_array, value):
         return index
 
 def get_user():
-    """
-    Returns the user running this session
-
-    This will return the username of the logged-in user.  If the user is logged
-    in as 'root' (or by doing 'su'), then there is no way to find out who the
-    actual user is.
-    """
+  """
+  Returns the user running this session
+  
+  This will return the username of the logged-in user.  If the user is logged
+  in as 'root' (or by doing 'su'), then there is no way to find out who the
+  actual user is.
+  """
+  try:
+    test = os.environ['USER']
+    # there is a USER
+    logger.debug("get_user: USER = %s", test)
+  except KeyError:
+    # probably was run by a cron job
+    logger.debug("get_user: no USER; trying LOGNAME")
     try:
-        os.environ['USER'] == "root"
-        try:
-            # maybe the user was using 'sudo'
-            user = os.environ['SUDO_USER']
-        except KeyError:
-            # no, this is really by 'root'
-            user = "root"
+      test = os.environ['LOGNAME']
     except KeyError:
-        # probably was run by a cron job
-        user = os.environ['LOGNAME']
-    return user
-
+      logger.error("get_user: no USER or LOGNAME")
+      logger.debug("get_user: environment is %s", os.environ)
+      return None
+  if test == "root":
+    try:
+      # maybe the user was using 'sudo'
+      logger.debug("get_user: user is %s; trying SUDO_USER", test)
+      user = os.environ['SUDO_USER']
+    except KeyError:
+      # no, this is really by 'root'
+      logger.debug("get_user: SUDO_USER not set")
+      user = "root"
+  else:
+    user = test
+    logger.debug("get_user: settled on %s", user)
+  return user
 
 def check_permission(group):
   """
