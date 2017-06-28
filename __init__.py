@@ -19,7 +19,6 @@ from numpy import array
 from process import BasicProcess
 from process import invoke
 from arguments import simple_parse_args
-from tams_source import TAMS_Source
 
 import logging
 logger = logging.getLogger(__name__)

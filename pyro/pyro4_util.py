@@ -246,6 +246,7 @@ class Pyro4ObjectDiscoverer(object):
             else:
                 self.logger.error("Couldn't connect to the object", exc_info=True)
                 return None
+
     def cleanup(self):
         """
         Kill all the existing tunnels that correspond to processes created
@@ -326,14 +327,27 @@ def arbitrary_tunnel(remote_ip, relay_ip,
 
     """
     #-c arcfour -o ServerAliveInterval=60 -o TCPKeepAlive=no
-    if not reverse:
-        command = "ssh -N -l {0} -p {1} -L {2}:{3}:{4} {5}"
-    elif reverse:
-        command = "ssh -N -l {0} -p {1} -R {2}:{3}:{4} {5}"
+    # First thing is check to see if the remote_ip is ~/.ssh/config
+    home_dir = os.path.expanduser("~")
+    ssh_config = os.path.join(home_dir, ".ssh/config")
+    with open(ssh_config, 'r') as config:
+        contents = config.read()
 
-    command = command.format(username,port, local_port, relay_ip, remote_port, remote_ip)
+    pattern = "host (.*)\n"
+    hosts = [match for match in re.findall(pattern, contents)]
 
-    command_relay = "{0}:{1}:{2} {3}".format(local_port, relay_ip, remote_port, remote_ip)
+    r_option = "-L"
+    if reverse:
+        r_option = "-R"
+
+    if remote_ip in hosts:
+        command = "ssh -N {0} {1}:{2}:{3} {4}"
+        command = command.format(r_option, local_port, relay_ip, remote_port, remote_ip)
+    else:
+        command = "ssh -N -l {0} -p {1} {2} {3}:{4}:{5} {6}"
+        command = command.format(username, port, r_option, local_port, relay_ip, remote_port, remote_ip)
+
+    command_relay = "{0} {1}:{2}:{3} {4}".format(r_option, local_port, relay_ip, remote_port, remote_ip)
     # module_logger.debug(command_relay)
     ssh_proc = search_response(['ps', 'x'], ['grep', 'ssh'])
     # re_pid = re.compile("\d+")
