@@ -66,7 +66,8 @@ The remote mount class came from:
 http://code.activestate.com/recipes/573473-sshfs-mount-tool/
 
 For notes on socket programming see:
-http://dsnra.jpl.nasa.gov/software/sockets/ http://dsnra.jpl.nasa.gov/software/Python/html/lib/module-socket.html
+http://dsnra.jpl.nasa.gov/software/sockets/ 
+http://dsnra.jpl.nasa.gov/software/Python/html/lib/module-socket.html
 
 For notes on tunneling see:
 /home/kuiper/Projects/SPIE/SPIE-2012/ssh-tunnels.html
@@ -90,13 +91,7 @@ from   support.process import invoke, search_response
 from   support.network import get_domain
 
 module_logger = logging.getLogger(__name__)
-<<<<<<< HEAD
-
-DEFAULTMOUNTROOT= os.environ.get ("HOME") + os.sep + "mnt"
-=======
 DEFAULTMOUNTROOT = os.environ.get("HOME") + os.sep + "mnt"
-
->>>>>>> 303c1140f720fe1f73f483312ea37daa1e7075a3
 
 # --------------------------- module classes ------------------------------
 
@@ -836,55 +831,8 @@ if __name__ == '__main__':
       run tunneling.py -p 50091 kuiper@localhost
     The file system attributes can be queried:
 
-<<<<<<< HEAD
-def makePortProxy(endpoint,
-                  localport,
-                  remotehost,
-                  remoteport,
-                  user=None):
-  """
-  Connect a local port to a port on a remote host through a tunnel
-
-  This uses an existing tunnel to create another tunnel through it so that
-  a port on a remote host can be accessed via a local port.
-
-  One advantage is that only one tunnel needs to be created through a firewall
-  that requires active authentication.  Another is when the remote port is
-  a privileged port, like 80 (web server) or 5900 (X11 console).
-
-  @param endpoint : endpoint of the existing tunnel (through the firewall)
-  @type  endpoint : str
-
-  @param localport : port number on localhost to serve as proxy
-  @type  localport : int
-
-  @param remotehost : host with the port to be accessed
-  @type  remotehost : int
-
-  @param remoteport : port on the remote host
-  @type  remoteport : int
-
-  @param user : remote host user name, default is local user name
-  @type  user : str
-  """
-  tunnel_port = PORT[endpoint]
-  module_logger.debug('makePortProxy: called for port %d', tunnel_port)
-  if tunnel_port == 50099:
-    # more REALLY UGLY <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    user = 'pi'
-  if user == None:
-    user=support.get_user()
-  module_logger.debug('makePortProxy: user is %s', user)
-  command_list = ["ssh", "-N", "-p", str(tunnel_port),
-                  "-L",str(localport)+":"+remotehost+":"+str(remoteport),
-                  user+"@127.0.0.1", "&"]
-  module_logger.debug("makePortProxy: command is\n%s",str(command_list))
-  p = invoke(command_list)
-  return p
-=======
     In [1]: run tunneling.py -p 50091 kuiper@localhost
     kuiper@localhost:. mounted as kuiper-localhost:50091 in /home/kuiper/mnt
->>>>>>> 303c1140f720fe1f73f483312ea37daa1e7075a3
 
     In [2]: m.mountpoint
     Out[2]: 'kuiper-localhost:50091'
