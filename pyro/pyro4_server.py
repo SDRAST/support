@@ -15,7 +15,7 @@ from support.tunneling import Tunnel, TunnelingException
 from pyro3_util import full_name
 from pyro4_util import arbitrary_tunnel, check_connection
 
-__all__ = ["Pyro4Server", "Pyro4Message", "SerializerBase"]
+__all__ = ["Pyro4Server"]
 
 def blocking(fn):
     """
@@ -175,36 +175,41 @@ class Pyro4Server(object):
 
         # now with tunnel in place (or not depending on condition), we can create
         # further ssh tunnels to allow us to register object.
-        # First estalbish what port to use for local forwarding
+        # First establish what port to use for local forwarding
         if not local_forwarding_port:
             local_forwarding_port = ns_port
 
         # Create tunnel to nameserver
         proc_ns = arbitrary_tunnel(self._remote_ip, 'localhost', local_forwarding_port, ns_port,
                                 port=self._remote_port, username=remote_username)
+
         self.serverlog.debug("")
         self._proc.append(proc_ns)
         # now check the tunnel
         success = check_connection(Pyro4.locateNS, timeout=2, args=('localhost', local_forwarding_port))
-
         self.serverlog.debug("Lauching server.")
-        # now launch the server "locally"
         if success:
-            self._launch_server_local('localhost', local_forwarding_port, False)
+            self._launch_server_local('localhost', ns_port,
+                                      create_tunnel=True,
+                                      threaded=threaded,
+                                      username=remote_username,
+                                      port=self._remote_port,
+                                      reverse=True)
         else:
-            raise TunnelingException("Could not successfully tunnel to remote!")
+            raise TunnelingException("Couldn't create tunnel to remote nameserver")
 
-
-    def _launch_server_local(self, host, port, threaded=False):
+    def _launch_server_local(self, ns_host, ns_port, create_tunnel=False, threaded=False, **kwargs):
         """
         Connect to a Pyro name server. This also sets up the program such that
         a kill command (ctrl+c) will attempt to call close on the server before exiting.
         This is useful in the case of an APC server, as it is necessary to issue
         the close command before exiting a program with a socket connection to the APC.
-        args:
-            - host (str): The name server host.
-            - port (int): The name server port.
+        Args:
+            ns_host (str): The name server host.
+            ns_port (int): The name server port.
+            kwargs: For arbitrary_tunnel
         kwargs:
+            - create_tunnel (bool): Whether or not to create a tunnel to the remote object.
             - threaded (bool): If we're running this on a thread, then we can't use signaling.
         """
         self.serverlog.info("Connecting to the Pyro nameserver.")
@@ -214,8 +219,12 @@ class Pyro4Server(object):
             self.server_uri = self.daemon.register(self._exposed_obj)
         else: # means we're using Pyro4Server as parent class.
             self.server_uri = self.daemon.register(self)
+        if create_tunnel:
+            obj_host, obj_port = self.server_uri.location.split(":")
+            arbitrary_tunnel(self._remote_ip, 'localhost', obj_port, obj_port, **kwargs)
+
         self.serverlog.debug("Server uri is {}".format(self.server_uri))
-        self.ns = Pyro4.locateNS(port=port, host=host)
+        self.ns = Pyro4.locateNS(port=ns_port, host=ns_host)
         self.ns.register(self._name, self.server_uri)
         self.serverlog.info("{} available".format(self._name))
 
