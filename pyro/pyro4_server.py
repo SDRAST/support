@@ -92,22 +92,22 @@ class Pyro4Server(object):
         self.daemon_thread = None
         self.daemon = None
 
-    @Pyro4.expose
+    #@Pyro4.expose
     def running(self):
         with self.lock:
             return self._running
 
-    @Pyro4.expose
+    #@Pyro4.expose
     @property
     def name(self):
         return self._name
 
-    @Pyro4.expose
+    #@Pyro4.expose
     @property
     def locked(self):
         return self.lock.locked()
 
-    @Pyro4.expose
+    #@Pyro4.expose
     @property
     def simulated(self):
         """
@@ -115,12 +115,12 @@ class Pyro4Server(object):
         """
         return self._simulated
 
-    @Pyro4.expose
+    #@Pyro4.expose
     @property
     def local(self):
         return self._local
 
-    @Pyro4.expose
+    #@Pyro4.expose
     def ping(self):
         return True
 
@@ -290,12 +290,12 @@ class Pyro4PublisherServer(Pyro4Server):
         self.publisher = self.publisher_thread_class(self, bus=self.bus, **self.publisher_thread_kwargs)
         self._publishing_started = False
 
-    @Pyro4.expose
+    #@Pyro4.expose
     @property
     def publishing_started(self):
         return self._publishing_started
 
-    @Pyro4.expose
+    #@Pyro4.expose
     def start_publishing(self):
         """
         Start publishing power meter readings
@@ -313,7 +313,7 @@ class Pyro4PublisherServer(Pyro4Server):
 
         self.publisher.start()
 
-    @Pyro4.expose
+    #@Pyro4.expose
     def stop_publishing(self):
         """
         Stop the publisher.
@@ -324,7 +324,7 @@ class Pyro4PublisherServer(Pyro4Server):
         self.publisher.join()
         self._publishing_started = False
 
-    @Pyro4.expose
+    #@Pyro4.expose
     def pause_publshing(self):
         """
         Pause the publisher
@@ -333,7 +333,7 @@ class Pyro4PublisherServer(Pyro4Server):
         """
         self.publisher.pause()
 
-    @Pyro4.expose
+    #@Pyro4.expose
     def unpause_publishing(self):
         """
         Unpause the publisher
