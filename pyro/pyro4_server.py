@@ -67,6 +67,7 @@ class Pyro4Server(object):
             local (bool): Local run bool
             **kwargs: TAMS_BackEnd.util.logging_config kwargs
         """
+        self._logfile = kwargs.get("logfile", "")
         self.serverlog = logging_config(**kwargs)
         self.lock = threading.Lock()
         self._simulated = simulated
@@ -91,6 +92,10 @@ class Pyro4Server(object):
         self.server_uri = None
         self.daemon_thread = None
         self.daemon = None
+
+    @property
+    def logfile(self):
+        return self._logfile
 
     #@Pyro4.expose
     def running(self):
@@ -383,4 +388,3 @@ if __name__ == '__main__':
     #
     # server = Pyro4Server("BasicServer", obj=BasicServer(),loglevel=logging.DEBUG)
     # server.launch_server('192.168.0.143', remote_port=2222, remote_username='dean', ns_host='localhost', ns_port=2224)
-
