@@ -18,6 +18,11 @@ How to use this:
 
 """
 import argparse
+import logging
+
+logger = logging.getLogger(__name__)
+
+################################## Classes ###################################
 
 class OptParser(argparse.ArgumentParser):
   """
@@ -37,6 +42,38 @@ class PlainHelpFormatter(argparse.HelpFormatter):
       return description + "\n"
     else:
       return ""
+    
+class ArgumentInterpreter(object):
+  """
+  Interprets the argument provided as the specied type of iterable
+  
+  If a list is expected, a single value is embedded in a list.  A tuple is
+  converted to a list. An nparray is flattened and converted to a list::
+    a = ArgumentInterpreter()
+    l = a.as_list(thing)
+  
+  Note
+  ----
+  As needed, we will as 'as_nparray', 'as_tuple'
+  """
+  def __init__(self):
+    """
+    """
+    self.logger = logging.getLogger(logger.name+".ArgumentInterpreter")
+  
+  def as_list(self, argument):
+    """
+    """
+    if type(argument) == list:
+      return argument
+    elif type(argument) == tuple:
+      return list(argument)
+    elif type(argument) == numpy.ndarray:
+      return list(argument.flatten())
+    else:
+      return [argument]
+
+################################### Methods ##################################
 
 def initiate_option_parser(description, examples):
   """

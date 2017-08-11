@@ -54,6 +54,7 @@ def get_loglevel(level):
 
   @return: int
   """
+  level = level.lower()
   if level == "dump":
     Level = 5
   elif level == "debug":
@@ -67,6 +68,7 @@ def get_loglevel(level):
   elif level == "critical":
     Level = logging.CRITICAL
   else:
+    Level = logging.WARNING
     module_logger.warning("Invalid logging level %s.  Set to 'warning' (%d)",
                      level, Level)
   return Level
