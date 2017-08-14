@@ -16,22 +16,25 @@ networks = {"fltops": ["137.228.202",
                    "128.149.252",
                    "137.79.89"]}
 
-def LAN_hosts_status():
+services = {"rdp": 3389, "vnc": 5900, "vncJava": 5800, "ssh": 22, "MSrcp": 135,
+            "ftp": 21, "sftp": 115}
+
+def LAN_hosts_status(port=22):
   """
-  Get information about and status of hosts on the local newtwork
+  Get information about and status of local network hosts with port open
   
-  Returns a list with::
-    - hosts up
-    - hosts down
-    - IP addresses
-    - MAC addresses
-    - list of ROACHes
+  Returns a dict with::
+    - "up":    hosts up
+    - "down":  hosts down
+    - "IP":    IP addresses
+    - "MAC":   MAC addresses
+    - "ROACH": list of ROACHes
   
   This is too crude; very senstive to format changes
   """
   print "If asked for a password, remember this host is",socket.gethostname()
   domain = get_local_network()
-  response = invoke("sudo nmap -sP -PS22 "+domain+".*").stdout.readlines()
+  response = invoke("sudo nmap -sP -PS"+str(port)+" "+domain+".*").stdout.readlines()
   up = []
   down = []
   IP = {}
@@ -60,17 +63,24 @@ def LAN_hosts_status():
   up.sort()
   down.sort()
   ROACHlist.sort()
-  return up, down, IP, MAC, ROACHlist
+  return {"up": up,
+          "down": down,
+          "IP": IP, 
+          "MAC:": MAC,
+          "ROACH": ROACHlist}
 
-def get_local_network(internal=True):
+def get_local_network(private=False, subnet=100):
   """
   Returns the IP address of the local network
+  
+  Defaults to the local area network.  If 'private", defaults to '100' for
+  the ROACH network.
   """
-  if internal:
-    return "192.168.100"
+  if private:
+    IP = socket.gethostbyname("192.168."+str(subnet)+".1")
   else:
     IP = socket.gethostbyname(socket.gethostname())
-    return '.'.join(IP.split('.')[:-1])
+  return '.'.join(IP.split('.')[:-1])
 
 def get_domain(netIP):
   """
