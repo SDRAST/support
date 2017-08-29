@@ -9,9 +9,9 @@ import Pyro
 import Pyro.core
 import Pyro.naming
 import Pyro.errors
-import tunneling as T
 import time
 import logging
+import numpy
 import os, os.path
 import atexit
 import socket
@@ -21,6 +21,7 @@ from support import NamedClass
 from support.logs import set_module_loggers, initiate_option_parser
 from support.logs import init_logging, get_loglevel, set_loglevel
 from support.network import get_domain, get_local_network
+import support.tunneling as T
 
 # Set up Pyro system logging
 NONE = 0
@@ -127,10 +128,6 @@ class PyroServer(Pyro.core.ObjBase):
     Attribute run may be set to False by a sub-class
     """
     return self.run
-    #if self.run:
-    #  return True
-    #else:
-    #  return False
 
   def halt(self):
     """
@@ -452,7 +449,7 @@ class NameserverResource:
 
 # --------------------------- module methods -------------------------------
 
-def pyro_server_request(task,*args,**kwargs):
+def pyro_server_request(task, *args, **kwargs):
   """
   Make a request of a Pyro server
 
@@ -478,7 +475,7 @@ def pyro_server_request(task,*args,**kwargs):
   result = None
   while timeout > 0:
     try:
-      result = task(*args,**kwargs)
+      result = task(*args, **kwargs)
     except Pyro.errors.ProtocolError, details:
       module_logger.warning("pyro_server_request: %s (%f sec left)",
                        details,timeout)
@@ -558,7 +555,7 @@ def get_nameserver(pyro_ns = "dto", pyro_port = 9090):
   again.
 
   Examples of what you might do with it::
-   In [5]: from Observatory.pyro_support import get_nameserver
+   In [5]: from support.pyro import get_nameserver
    In [6]: ns = get_nameserver()
    In [7]: ns.flatlist()
    Out[7]:
@@ -687,14 +684,14 @@ def launch_server(serverhost, taskname, task):
 GATEWAY, IP, PORT = T.make_port_dict()
 pyro_server_name = {'127.0.0.1':      'localhost',
                     '128.149.22.95':  'roachnest',
-                    '128.149.22.108': 'dto',
+                    '137.228.236.103': 'dto',
                     '137.228.236.70': 'rac13b',
                     '137.228.246.31': 'wbdc',
                     '137.228.246.38': 'tpr',
                     '137.228.246.57': 'crux',
                     '137.228.246.105':'krx43'}
 full_name = {'crux':      'crux.cdscc.fltops.jpl.nasa.gov',
-             'dto':       'dto.jpl.nasa.gov',
+             'dto':       'dto1.gdscc.fltops.jpl.nasa.gov',
              'krx43':     'K2R43.cdscc.fltops.jpl.nasa.gov',
              'localhost': 'localhost',
              'rac13b':    'venus-rac3.gdscc.fltops.jpl.nasa.gov',
