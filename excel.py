@@ -13,15 +13,19 @@ import sys
 import openpyxl
 from openpyxl import load_workbook
 from openpyxl import workbook
+
+logger = logging.getLogger(__name__)
+
 # from worksheet import cells_from_range
+logger.debug("openpyxl.__version__ is %s", openpyxl.__version__)
 if openpyxl.__version__ >= '2.4':
     from openpyxl.utils import get_column_letter
     OPENPYXL_INDEX = 1
 else:
     from openpyxl.cell import get_column_letter
     OPENPYXL_INDEX = 0
-
-module_logger = logging.getLogger(__name__)
+    
+logger.debug("OPENPYXL_INDEX = %d", OPENPYXL_INDEX)
 
 def getValueWithMergeLookup(sheet, col, row):
     """
@@ -37,7 +41,6 @@ def getValueWithMergeLookup(sheet, col, row):
             # in the first cell of the merge range
             return sheet.cell(cells[0]).value
     return sheet.cell(row=row, column=col).value
-
 
 def get_column_names(sh):
     """
@@ -80,7 +83,7 @@ def get_column_id(sh, col_name):
         if col_names[col_id] == col_name:
             return col_id
     # not found
-    # module_logger.error("get_column_id: %s not found", col_name)
+    # logger.error("get_column_id: %s not found", col_name)
     return None
 
 
@@ -90,7 +93,7 @@ def find_column(sh, name):
     """
     col = get_column_id(sh, name)
     if col == None:
-        # module_logger.error("Column %s not found",name,exc_info=True)
+        # logger.error("Column %s not found",name,exc_info=True)
         col = sh.get_highest_column()
         sh.cell(column=col, row=0).value = name
     return col
@@ -108,21 +111,21 @@ def get_column(ws, column_name):
     @return: list of data
     """
     column_id = get_column_id(ws, column_name)
-    module_logger.debug("get_column: column ID for %s is %s",
+    logger.debug("get_column: column ID for %s is %s",
                         column_name, column_id)
     if column_id != None:
         if openpyxl.__version__ >= '2.0':
             column = list(ws.columns)[column_id]
         else:
             column = ws.columns[column_id]
-        # module_logger.debug("get_column: column label is %s", column[0])
+        # logger.debug("get_column: column label is %s", column[0])
         column_data = []
         # The first cell always has the label
         for cell in column[1:]:
             column_data.append(cell.value)
         return column_data
     else:
-        # module_logger.debug("get_column: failed")
+        # logger.debug("get_column: failed")
         return None
     column = ws.columns[column_id]
     column_data = []
@@ -152,7 +155,7 @@ def insert_empty_row_after(ws, prior_row):
     max_col_letter = get_column_letter(highest_col)
     print max_col_letter
     for row in range(highest_row, prior_row, -1):
-        module_logger.debug("insert_empty_row_after: processing row %d", row)
+        logger.debug("insert_empty_row_after: processing row %d", row)
         for col in range(highest_col):
             ws.cell(row=row + 1, column=col).value = ws.cell(row=row, column=col).value
     for col in range(highest_col):
@@ -197,7 +200,7 @@ def column_id(index):
         col_letter = chr(65 + index)
     else:
         col_letter = chr(64 + (index / 26)) + chr(65 + (index % 26))
-    module_logger.debug("column_id: column %d has code %s", index, col_letter)
+    logger.debug("column_id: column %d has code %s", index, col_letter)
     return col_letter
 
 
@@ -225,7 +228,7 @@ def set_column_dimensions(ws):
     for index in range(ws.get_highest_column()):
         width = max(len(str(ws.cell(row=0, column=index).value)),
                     len(str(ws.cell(row=1, column=index).value)))
-        module_logger.debug("set_column_dimensions: processing column %d", index)
+        logger.debug("set_column_dimensions: processing column %d", index)
         sys.stdout.flush()
         col_letter = column_id(index)
         ws.column_dimensions[col_letter].width = width + 1
@@ -238,7 +241,7 @@ def column_ID_dict(worksheet):
     """
     column_names = get_column_names(worksheet)
     column_index = {}
-    module_logger.debug("column_ID_dict: %s has columns: %s",
+    logger.debug("column_ID_dict: %s has columns: %s",
                         worksheet.title, str(column_names))
     for col in column_names.keys():
         column_index[column_names[col]] = get_column_id(worksheet,
@@ -309,7 +312,7 @@ def add_columns(sheet, names):
         add_column(sheet, col, names[index])
 
 
-class Workbook(workbook.Workbook):
+class Workbookclass(workbook.Workbook):
     """
     incomplete
     """
@@ -322,4 +325,4 @@ class Workbook(workbook.Workbook):
             self = load_workbook(path + file)
         self.path = path
         self.file = file
-        self.logger = logging.getLogger(module_logger.name + ".Workbook")
+        self.logger = logging.getLogger(logger.name + ".Workbook")
