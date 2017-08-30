@@ -7,7 +7,7 @@ import sys
 
 from support.options import initiate_option_parser
 
-module_logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 def logging_config(name="", logger=None, logfile=None, loglevel=logging.INFO, handlers=None, **kwargs):
     """
@@ -59,7 +59,7 @@ def logging_config(name="", logger=None, logfile=None, loglevel=logging.INFO, ha
     return logger
 
 
-def init_logging(logger,
+def init_logging(extlogger,
                  loglevel=logging.INFO,
                  consolevel=logging.INFO,
                  logname="/tmp/logging.log"):
@@ -79,9 +79,12 @@ def init_logging(logger,
     """
     # default handler is the logger to sys.stderr
     logger.debug("init_logging: handlers: %s", logger.handlers)
-    dh = logger.handlers[0]
+    dh = extlogger.handlers[0]
     logger.debug("init_logging: default handler is %s", dh)
+    logger.debug("init_logging: default handler level is %s", dh.level)
+    logger.debug("init_logging: requested level is %s", consolevel)
     dh.setLevel(consolevel)
+    logger.debug("init_logging: default handler level is %s", dh.level)
 
     # create formatter and add it to the handler
     formatter = logging.Formatter(
@@ -91,12 +94,12 @@ def init_logging(logger,
     # create file handler which logs even debug messages
     fh = logging.FileHandler(logname)
     # add the handler to the logger
-    logger.addHandler(fh)
+    extlogger.addHandler(fh)
     fh.setLevel(loglevel)
+    logger.debug("init_logging: file handler level is %s", fh.level)
     fh.setFormatter(formatter)
-    logger.setLevel(min(dh.level, fh.level))
-    return logger
-
+    extlogger.setLevel(min(dh.level, fh.level))
+    return extlogger
 
 def get_loglevel(level):
     """
@@ -121,7 +124,7 @@ def get_loglevel(level):
     elif level == "critical":
         Level = logging.CRITICAL
     else:
-        module_logger.warning("Invalid logging level %s.  Set to 'warning' (%d)",
+        logger.warning("Invalid logging level %s.  Set to 'warning' (%d)",
                               level, Level)
     return Level
 
@@ -158,7 +161,7 @@ def set_module_loggers(logger_dict):
     loggers[module] = temp
     level = logger_dict[module]
     command = "loggers['"+module+"'].setLevel(logging."+level.upper()+")"
-    module_logger.debug("%s", command)
+    logger.debug("%s", command)
     exec(command)
   return loggers
 
