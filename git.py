@@ -267,8 +267,8 @@ def report_status(show_all=False):
     response = fd_out.readlines()
     fd_out.close()
     repo = status_path(git_dir) # os.path.basename(git_dir)
+    status = "unknown"
     if len(response) != 0:
-      status = "unknown"
       for f in response:
         line = f.strip()
         if re.search('On branch',line):
