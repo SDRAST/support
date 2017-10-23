@@ -32,7 +32,7 @@ try:
 except ImportError as err:
     logger.error("Coulnd't import tests_support package: {}".format(err))
 
-__version__ = 1.1
+__version__ = 1.2.0
 
 class NamedClass(object):
     """

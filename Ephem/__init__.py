@@ -36,19 +36,25 @@ import logging
 import datetime
 from math import pi
 
-from ephem import Date, FixedBody, Observer
+import ephem
 from matplotlib.dates import date2num
 
 from Astrophysics.Pulsars import pulsar_data as PD
 from Radio_Astronomy import michigan, vla_cal
 
-from .pulsar import Pulsar
-from .quasar import Quasar
-from .dss import DSS
-
 module_logger = logging.getLogger(__name__)
 
-J2000 = Date("2000/1/1 00:00:00")
+from .pulsar import Pulsar
+from .quasar import Quasar
+try:
+    from MonitorControl.Configurations.coordinates import DSS
+except ImportError as err:
+    module_logger.error(("Couldn't import support version of DSS Observer.
+                         "Falling back to unsupported version in this package."))
+    from .dss import DSS
+
+
+J2000 = ephem.Date("2000/1/1 00:00:00")
 
 diag = False
 

@@ -1,15 +1,31 @@
+"""
+This is deprecated.
+
+Instead of
+```python
+from support.Ephem import DSS
+```
+
+you should do the following:
+
+```python
+from MonitorControl.Configurations.coordinates import DSS
+```
+
+"""
 import logging
 
-from ephem import Observer
+import ephem
 
 import Astronomy
+# from MonitorControl.Configurations import coordinates as coord
 
 dsn = Astronomy.get_geodetic_coords()
 xyz = Astronomy.get_cartesian_coordinates()
 
 module_logger = logging.getLogger(__name__)
 
-class DSS(Observer):
+class DSS(ephem.Observer):
   """
   Observer class for DSN stations
   """
