@@ -268,6 +268,7 @@ def report_status(show_all=False):
     fd_out.close()
     repo = status_path(git_dir) # os.path.basename(git_dir)
     status = "unknown"
+    branch = ""
     if len(response) != 0:
       for f in response:
         line = f.strip()
