@@ -6,6 +6,8 @@ except ImportError as err:
     else:
         print(err)
 
+from .pyro4_support.pyr4_support import *
+
 # try:
 #     from .Pyro4.util import SerializerBase
 #     from .pyro4_util import Pyro4ObjectDiscoverer, arbitrary_tunnel, check_connection

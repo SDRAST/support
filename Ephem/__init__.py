@@ -116,7 +116,7 @@ def calibrator(name):
     Planets.index(name)
     exec('calibrator = '+name+'()')
     return calibrator
-  except Exception, details:
+  except Exception as details:
     if diag:
       print "Not a planet:",details
     # quasar?
