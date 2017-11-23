@@ -124,6 +124,7 @@ def get_loglevel(level):
     elif level == "critical":
         Level = logging.CRITICAL
     else:
+        Level = logging.WARNING
         logger.warning("Invalid logging level %s.  Set to 'warning' (%d)",
                               level, Level)
     return Level

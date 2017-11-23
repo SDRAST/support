@@ -8,7 +8,7 @@ import re
 import smtplib
 
 from email.mime.text import MIMEText
-from os.path import basename, splitext
+from os.path import basename, isdir, isfile, splitext
 from glob import glob
 
 NUL = "\x00"
@@ -77,8 +77,8 @@ def user_input(prompt,default):
   return response
 
 def select_files(pattern, text="Select file(s) by number"
-                              " separated with spaces: ",
-                         single=False):
+                               " separated with spaces: ",
+                 ftype=None, single=False):
   """
   Select files by glob pattern
 
@@ -87,16 +87,29 @@ def select_files(pattern, text="Select file(s) by number"
   if more than one, and returns a list with the selected files.
   If only one file is selected, then just that name is returned.
   """
-  logger.debug("select_files: looking for %s", pattern)
+  logger.debug("select_files: looking for %s type %s", pattern, ftype)
   files = glob(pattern)
   logger.debug("select_files: glob returned %s", files)
   files.sort()
   num_files = len(files)
   if num_files == 1:
-    return files[0]
+    if (ftype == "file" and isfile(files[0])) or \
+       (ftype == "dir" and isdir(files[0])):
+      return [files[0]]
+    else:
+      return []
   elif num_files > 1:
-    for index in range(num_files):
-      print index,'>',basename(files[index])
+    index = 0
+    for f in files:
+      if (ftype == "file" and isfile(f)) or (ftype == "dir" and isdir(f)) or \
+        (ftype == None):
+        print index,'>',basename(files[index])
+        index += 1
+      else:
+        files.remove(f)
+        continue
+    if files == []:
+      return files
     selections = raw_input(text)
     if not selections.isspace():
       indices = selections.split()
