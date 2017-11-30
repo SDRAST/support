@@ -16,3 +16,6 @@ sci_proj_path = auto_dir+"Science/"
 act_proj_path = auto_dir+"Activities/"
 
 project_data_dir = "/usr/local/project_data/"
+
+wvsr_dir = "/data2/"
+wvsr_fft_dir = wvsr_dir+"cjnaudet/auto/"
