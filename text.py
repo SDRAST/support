@@ -87,9 +87,8 @@ def select_files(pattern, text="Select file(s) by number"
   if more than one, and returns a list with the selected files.
   If only one file is selected, then just that name is returned.
   """
-  logger.debug("select_files: looking for %s type %s", pattern, ftype)
+  logger.debug("select_files: looking for %s (type %s)", pattern, ftype)
   files = glob(pattern)
-  logger.debug("select_files: glob returned %s", files)
   files.sort()
   num_files = len(files)
   if num_files == 1:
