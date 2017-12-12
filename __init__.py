@@ -16,14 +16,23 @@ from time import sleep, time
 
 from numpy import array
 
-from process import BasicProcess
-from process import invoke
-from arguments import simple_parse_args
+from .process import BasicProcess
+from .process import invoke
+from .arguments import simple_parse_args
 
-import logging
 logger = logging.getLogger(__name__)
 
-__version__ = 1.1
+try:
+    import pyro_support as pyro4_support
+except ImportError as err:
+    logger.error("Coulnd't import pyro_support package: {}".format(err))
+
+try:
+    import tests_support as test
+except ImportError as err:
+    logger.error("Coulnd't import tests_support package: {}".format(err))
+
+__version__ = "1.2.0"
 
 class NamedClass(object):
     """
@@ -113,7 +122,7 @@ def nearest_index(np_array, value):
 def get_user():
   """
   Returns the user running this session
-  
+
   This will return the username of the logged-in user.  If the user is logged
   in as 'root' (or by doing 'su'), then there is no way to find out who the
   actual user is.
@@ -191,4 +200,7 @@ def mkdir_if_needed(path):
     """
     if exists(path) == False:
         logger.warning(" Creating %s", path)
-        makedirs(path, 0775)
+        # if PYVERSION[0] == 2:
+        #     makedirs(path, mode=0775)
+        # elif PYVERSION[0] == 3:
+        makedirs(path, mode=0o775)
