@@ -1,4 +1,4 @@
-Version 1.1
+Version 1.2.0
 
 Package to provide extended functions for various objects and modules.
 
@@ -14,3 +14,10 @@ to import from itself.  So we call the module `support/Ephem.py`.
 
 The `tests` and `pyro/pyro4_support` subdirectories are git submodules
 corresponding to the `tests-support` and `pyro-support` packages.
+
+To pull these submodules, do the following:
+
+```
+me@local:/path/to/support$ git submodule init --recursive
+me@local:/path/to/support$ git submodule update --recursive --remote
+```
