@@ -1,11 +1,4 @@
-try:
-    from .pyro3_util import *
-except ImportError as err:
-    if "Pyro" in str(err):
-        pass
-    else:
-        print(err)
-
+from .pyro3_util import *
 from .pyro4_support.pyro_support import *
 
 # try:
