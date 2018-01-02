@@ -20,6 +20,8 @@ How to use this:
 import argparse
 import logging
 
+from local_dirs import log_dir
+
 logger = logging.getLogger(__name__)
 
 ################################## Classes ###################################
@@ -83,7 +85,7 @@ def initiate_option_parser(description, examples):
   the Python logging module::
     --console_loglevel: stdout/stderr handler logging level (default: WARNING)
     --file_loglevel:    file handler logging level (default: WARNING)
-    --logfilepath:      path to the log file (default: /usr/local/logs/)
+    --logfilepath:      path to the log file (default: /usr/local/Logs/`hostname`)
     --module_loglevels: modified module logger levels, a dict of logging levels
                         keyed on module, e.g.,
                         "support.arguments": logging.WARNING
@@ -105,7 +107,7 @@ def initiate_option_parser(description, examples):
   p.add_argument('-l', '--logfilepath',
                  dest = 'logpath',
                  type = str,
-                 default = '/usr/local/logs/',
+                 default = log_dir,
                  help = 'directory path for log file')
   p.add_argument('--module_loglevels',
                  dest = 'modloglevels',

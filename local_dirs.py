@@ -1,6 +1,8 @@
 """
 paths to local packages and data
 """
+from socket import gethostname
+
 local_packages = "/usr/local/lib/python2.7/DSN-Sci-packages/"
 
 auto_pkg_dir = local_packages+"Automation/"
@@ -19,3 +21,5 @@ project_data_dir = "/usr/local/project_data/"
 
 wvsr_dir = "/data2/"
 wvsr_fft_dir = wvsr_dir+"cjnaudet/auto/"
+
+log_dir = "/usr/local/Logs/"+gethostname()+"/"
