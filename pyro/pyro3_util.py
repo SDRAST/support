@@ -17,6 +17,7 @@ import atexit
 import socket
 import sys
 
+from local_dirs import log_dir
 from support import NamedClass
 from support.logs import set_module_loggers, initiate_option_parser
 from support.logs import init_logging, get_loglevel, set_loglevel
@@ -31,8 +32,8 @@ ALL = 3
 Pyro.config.PYRO_TRACELEVEL = WARNINGS
 Pyro.config.PYRO_STDLOGGING = True
 SLog = Pyro.util.SystemLogger()
-if not os.path.exists("/usr/local/logs/PYRO/"):
-  os.mkdir("/usr/local/logs/PYRO/")
+if not os.path.exists(log_dir+"PYRO/"):
+  os.mkdir(log_dir+"PYRO/")
 
 # Set up Python logging
 logging.basicConfig(level=logging.WARNING)
