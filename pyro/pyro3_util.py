@@ -180,7 +180,7 @@ class PyroServerLauncher(object):
   def _start_Pyro_log(self):
     """
     """
-    Pyro.config.PYRO_LOGFILE = '/usr/local/logs/PYRO/'+self.name+'.log'
+    Pyro.config.PYRO_LOGFILE = log_dir+'PYRO/'+self.name+'.log'
     SLog.msg(self.name,"pyro_support module imported")
     SLog.msg(self.name,"server started")
 
