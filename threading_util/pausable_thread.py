@@ -3,7 +3,6 @@ import time
 
 from support.logs import logging_config
 
-
 def iterativeRun(run_fn):
     """
     A decorator for running functions repeatedly inside a PausableThread.
@@ -35,7 +34,7 @@ def iterativeRun(run_fn):
 class Pause(object):
     """
 	A context manager for pausing threads.
-	This makes sure that when we unpause the thread when we're done 
+	This makes sure that when we unpause the thread when we're done
 	doing whatever task we needed.
 	"""
 
@@ -60,7 +59,7 @@ class Pause(object):
 
     def __enter__(self):
         """
-		Pause the thread in quesiton, and make sure that whatever 
+		Pause the thread in quesiton, and make sure that whatever
 		functionality is being performing is actually stopped.
 		"""
         for name in self.thread.keys():
@@ -102,14 +101,14 @@ class PausableThread(threading.Thread):
 
         self.name = name
         self.logger = logging_config(**kwargs)
-
+        self._lock = threading.Lock()
         self._pause = threading.Event()
         self._stop = threading.Event()
         self._running = threading.Event()
 
     def stop(self):
         """
-		Stop the thread from running all together. Make 
+		Stop the thread from running all together. Make
 		sure to join this up with threading.Thread.join()
 		"""
         self._stop.set()
@@ -133,8 +132,8 @@ class PausableThread(threading.Thread):
 class PausableThreadCallback(threading.Thread):
     """
 	A thread that runs the same callback over an over again, with some
-	predetermined wait time. 
-	This thread can be paused, unpaused, and stopped in a thread-safe manner. 
+	predetermined wait time.
+	This thread can be paused, unpaused, and stopped in a thread-safe manner.
 	"""
 
     def __init__(self, callback, name=None, *args):

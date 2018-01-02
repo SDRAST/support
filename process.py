@@ -80,11 +80,11 @@ def invoke(command):
     module_logger.debug("invoke: argument list is %s", str(args))
     try:
         p = Popen(args, shell=False, stdout=PIPE, stderr=PIPE)
-    except OSError, details:
+    except OSError as details:
         raise
-    except ValueError, details:
+    except ValueError as details:
         raise
-    except Exception, details:
+    except Exception as details:
         raise
     else:
         return p

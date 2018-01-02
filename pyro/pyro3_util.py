@@ -44,7 +44,7 @@ nameserver = None
 class PyroServer(Pyro.core.ObjBase):
   """
   Superclass for Pyro servers
-  
+
   Public Attributes::
     logger - logging.Logger object
     run    - True if server is running
@@ -125,7 +125,7 @@ class PyroServer(Pyro.core.ObjBase):
   def running(self):
     """
     Report if the manager is running.
-    
+
     Attribute run may be set to False by a sub-class
     """
     return self.run
@@ -140,16 +140,16 @@ class PyroServer(Pyro.core.ObjBase):
 class PyroServerLauncher(object):
   """
   Class to create Pyro daemons which can be linked to Pyro servers
-  
+
   Pyro servers are sub-classes of Pyro.core.ObjBase.  They are linked to
   Pyro daemons and then published by a Pyro namserver.
   """
   def __init__(self, name, nameserver_host='dto'):
     """
     Create a PyroServerLauncher() object.
-    
+
     If a nameserver host is not given then a nameserver is selected according
-    the domain of the local host. TO DO: allow a different nameserver host at 
+    the domain of the local host. TO DO: allow a different nameserver host at
     each Complex.
 
     @param name : name to be used for logging
@@ -161,9 +161,9 @@ class PyroServerLauncher(object):
     self.name = name
     self.logger = logging.getLogger(module_logger.name+".PyroServerLauncher")
     self.logger.debug(" Initiating PyroServerLauncher for %s", nameserver_host)
-    
+
     self._start_Pyro_log()
-  
+
     if nameserver_host == None:
       domain = get_domain(get_local_network())
       if domain == 'fltops':
@@ -176,7 +176,7 @@ class PyroServerLauncher(object):
     self._create_daemon(nameserver_host)
     # our nameserver is now self.ns.
     self.logger.debug(" %s initialized", self.name)
-    
+
   def _start_Pyro_log(self):
     """
     """
@@ -187,7 +187,7 @@ class PyroServerLauncher(object):
   def _create_daemon(self, nameserver_host):
     """
     Create the server daemon.
-    
+
     The nameserver host may be behind a firewall, in which case a tunnel is
     created to it.
 
@@ -223,7 +223,7 @@ class PyroServerLauncher(object):
         # Is the following used at all?
         p = T.makePortProxy(server, pyro_port, server, 9090)
       return pyro_host, pyro_port
-    
+
     self.logger.debug("_create_daemon: entered")
     self.pyro_host, self.pyro_port = _connect_to_pyro_nameserver(nameserver_host)
     self.logger.debug('_create_daemon: %s using host %s and port %d',
@@ -244,7 +244,7 @@ class PyroServerLauncher(object):
   def start(self, server):
     """
     Starts the server running.
-    
+
     @param server : the Pyro task server object
     @type  server : instance of subclass of Pyro.core.ObjBase
 
@@ -254,7 +254,7 @@ class PyroServerLauncher(object):
     self.server = server
     try:
       uri=self.daemon.connect(server, self.name)
-    except Pyro.errors.NamingError, details:
+    except Pyro.errors.NamingError as details:
       self.logger.error(
         "start: could not connect server object to Pyro daemon. %s already exists",
         str(details[1]), exc_info=True)
@@ -292,15 +292,15 @@ class PyroServerLauncher(object):
     except Pyro.errors.NamingError:
       self.logger.debug("%s was already unregistered", self.name)
     self.logger.info("%s finished", self.name)
-    
-    
+
+
 class PyroTaskClient(Pyro.core.DynamicProxy):
   """
   Superclass for clients of Pyro tasks
 
   This creates a DynamicProxy.  It also creates a temporary nameserver
   client which goes away after the initialization.
-  
+
   Pulic attributes::
    ns -          Pyro nameserver object used by client
    server -      Pyro remote task server object
@@ -344,7 +344,7 @@ class PyroTaskClient(Pyro.core.DynamicProxy):
         # Give connection time to be established
         time.sleep(2)
       self.logger.debug(" dynamicProxy instantiated.")
-    
+
 class NameserverResource:
   """
   """
@@ -352,7 +352,7 @@ class NameserverResource:
     """
     """
     self.logger = logging.getLogger(module_logger.name+".NameserverResource")
-    
+
     class PyroNameserver:
       """
       """
@@ -437,7 +437,7 @@ class NameserverResource:
           self.logger.debug(
                     "_cleanup: %s removed from NameserverResource tunnel list",
                     str(task))
-        
+
     self.nameserver_obj = PyroNameserver(pyro_ns = pyro_ns,
                                          pyro_port = pyro_port)
     return self.nameserver_obj
@@ -477,7 +477,7 @@ def pyro_server_request(task, *args, **kwargs):
   while timeout > 0:
     try:
       result = task(*args, **kwargs)
-    except Pyro.errors.ProtocolError, details:
+    except Pyro.errors.ProtocolError as details:
       module_logger.warning("pyro_server_request: %s (%f sec left)",
                        details,timeout)
       if str(details) == "connection failed":
@@ -639,11 +639,11 @@ def get_device_server(servername, pyro_ns = "dto", pyro_port = 9090):
     module_logger.debug("get_device_server: proxy request: %s",device_request)
     device = Pyro.core.DynamicProxy(device_request)
     module_logger.debug("get_device_server: returns %s", device)
-  except Pyro.errors.NamingError, details:
+  except Pyro.errors.NamingError as details:
     module_logger.error("get_device_server: Pyro name error: %s: %s",
                         details[0],details[1])
     return [None, "get_device_server: Pyro name error", str(details)]
-  except Exception,details:
+  except Exception as details:
     module_logger.error("get_device_server: Request for server connection failed\n%s",
                         details)
     return [None,"Request for server connection failed",str(details)]
@@ -653,7 +653,7 @@ def get_device_server(servername, pyro_ns = "dto", pyro_port = 9090):
 def launch_server(serverhost, taskname, task):
   """
   Combines a device controller class with a Pyro class
-  
+
   This seems not to be in use anymore.  Use the PyroServerLauncher class
   """
   # create the server launcher
@@ -679,7 +679,7 @@ def launch_server(serverhost, taskname, task):
     module_logger.error(
                       "               If not, do 'pyro-nsc remove %s'",taskname)
     raise RuntimeError("Task is already registered")
-    
+
 
 # Generally, JPL/DSN hosts cannot be resolved by DNS
 GATEWAY, IP, PORT = T.make_port_dict()
@@ -707,21 +707,21 @@ atexit.register(cleanup_tunnels)
 if __name__ == "__main__":
 
   examples = """This command::
-  
+
     In [1]: run pyro.py
-    
+
   will launch a very simple server::
-  
+
     kuiper@dto:~$ pyro-nsc list
     Locator: searching Pyro Name Server...
     NS is at 128.149.22.108 (dto.jpl.nasa.gov) port 9090
     :Default --> ( TestServer )
-    
+
   which can be checked this way.  To check for name conflict before launching
   a server us::
-  
+
   """
-  
+
   class ServerTask(NamedClass):
     """
     """
@@ -730,7 +730,7 @@ if __name__ == "__main__":
       self.name = "TestServer"
       super(ServerTask,self).__init__()
       self.logger.debug(" instantiated")
-    
+
   class TestServerClass(PyroServer, ServerTask):
     """
     """
@@ -743,7 +743,7 @@ if __name__ == "__main__":
       #ServerTask.__init__(self)
       self.logger.debug(" server instantiated")
       self.run = True
-  
+
   def main():
     """
     """
@@ -751,9 +751,9 @@ if __name__ == "__main__":
      """Generic Pyro server which servers as a template for actual servers.""",
      examples)
     # Add other options here
-  
+
     opts, args = p.parse_args(sys.argv[1:])
-  
+
     # This cannot be delegated to another module or class
     mylogger = init_logging(logging.getLogger(),
                             loglevel   = get_loglevel(opts.file_loglevel),
@@ -765,7 +765,7 @@ if __name__ == "__main__":
     psl = PyroServerLauncher("TestServer", nameserver_host='dto')
     m = TestServerClass()
     psl.start(m)
-  
+
     psl.finish()
-  
+
   main()
