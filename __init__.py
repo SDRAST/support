@@ -22,17 +22,17 @@ from .arguments import simple_parse_args
 
 logger = logging.getLogger(__name__)
 
-try:
-    import pyro
-except ImportError as err:
-    logger.error("Couldn't import pyro_support package: {}".format(err))
-    import pyro_support as pyro4_support
+#try:
+#    import pyro
+#except ImportError as err:
+#    logger.error("Couldn't import pyro_support package: {}".format(err))
+#    import pyro_support as pyro4_support
 
-try:
-    import test.tests_support as test
-except ImportError as err:
-    logger.error("Couldn't import tests_support package: {}".format(err))
-    import tests_support as test
+#try:
+#    import test.tests_support as test
+#except ImportError as err:
+#    logger.error("Couldn't import tests_support package: {}".format(err))
+#    import tests_support as test
 
 __version__ = "1.2.0"
 
