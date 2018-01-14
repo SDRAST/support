@@ -21,16 +21,17 @@ from numpy import array
 
 logger = logging.getLogger(__name__)
 
-# import pyro
-# except ImportError as err:
-#     logger.error("Couldn't import pyro_support package: {}".format(err))
-#     import pyro_support as pyro4_support
-#
-# try:
-#     import test.tests_support as test
-# except ImportError as err:
-#     logger.error("Couldn't import tests_support package: {}".format(err))
-#     import tests_support as test
+#try:
+#    import pyro
+#except ImportError as err:
+#    logger.error("Couldn't import pyro_support package: {}".format(err))
+#    import suport_pyro as pyro4_support
+
+#try:
+#    import test.support_test as test
+#except ImportError as err:
+#    logger.error("Couldn't import tests_support package: {}".format(err))
+#    import support_test
 
 __version__ = "1.2.0"
 

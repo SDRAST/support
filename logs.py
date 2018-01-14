@@ -9,7 +9,8 @@ from support.options import initiate_option_parser
 
 logger = logging.getLogger(__name__)
 
-def logging_config(name="", logger=None, logfile=None, loglevel=logging.INFO, handlers=None, **kwargs):
+def logging_config(name="", logger=None, logfile=None, loglevel=logging.INFO,
+                   handlers=None, **kwargs):
     """
     Configure stream and file output logging.
     If we don't provide a logfile (discouraged) then we don't do

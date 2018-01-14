@@ -18,7 +18,7 @@ It uses the script 'ssh-tunnel2' which will use the local username or, for
 some hosts, known alternates like 'ops'.
 
 Remote Mounting
-============
+===============
 Once a tunnel is established, remote file systems can be mounted through it
 like this:
 
@@ -220,7 +220,7 @@ class RemoteDir:
                      for line in open("/etc/mtab", "r").readlines()]
             return [mount for mount in lines if mount[2] == "fuse.sshfs"]
         except:
-            print self.name, ": Could not read mtab"
+            self.logger.error("_get_mounted_fs: could not read mtab")
 
     def read_mountroot_cfg(self):
         """
@@ -239,14 +239,19 @@ class RemoteDir:
                     if line.startswith('mountroot='):
                         self.mountroot = line.rsplit("=")[1].strip("\n")
             except:
-                print self.name, ": Configuration file exists but is not readable."
+                self.logger.error(
+                 "read_mountroot_cfg: Config file exists but is not readable.")
         else:
             try:
                 self.mountroot = DEFAULTMOUNTROOT
                 open(rcfile, "w").writelines("mountroot=%s" % DEFAULTMOUNTROOT)
-                print self.name, ": Writing default mountroot %s to .mntrc" % DEFAULTMOUNTROOT
+                self.logger.warning(
+                  "read_mountroot_cfg: Writing default mountroot %s to .mntrc",
+                   DEFAULTMOUNTROOT)
             except:
-                print self.name, ": Could not write .mntrc (%s)" % rcfile
+                self.logger.error(
+                             "read_mountroot_cfg: Could not write .mntrc (%s)",
+                             rcfile)
 
     def _split_ssh_source(self, source):
         """
@@ -340,7 +345,8 @@ class RemoteDir:
             try:
                 os.rmdir(self.mp)
             except OSError, details:
-                self.logger.error("do_mount: could not remove", self.mp, exc_info=True)
+                self.logger.error("do_mount: could not remove %s", self.mp,
+                                  exc_info=True)
             return False
 
     def do_umount_all(self):
@@ -742,7 +748,10 @@ def check_for_tunnels():
     return: dict as for make_port_dict()
     """
     # Get a list of current sockets
-    p = invoke("netstat -vat")
+    try:
+      p = invoke("netstat -vat")
+    except Exception, details:
+      self.logger.warning("check_for_tunnels: failed because %s", details)
     try:
         err = p.stderr.read()
     except IOError:
