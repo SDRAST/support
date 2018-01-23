@@ -17,10 +17,9 @@ import atexit
 import socket
 import sys
 
-from local_dirs import log_dir
 from support import NamedClass
-from support.logs import set_module_loggers, initiate_option_parser
-from support.logs import init_logging, get_loglevel, set_loglevel
+from support.local_dirs import log_dir
+from support.logs import set_module_loggers, initiate_option_parser,init_logging, get_loglevel, set_loglevel
 from support.network import get_domain, get_local_network
 import support.tunneling as T
 
