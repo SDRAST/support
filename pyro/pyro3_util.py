@@ -39,7 +39,7 @@ module_logger = logging.getLogger(__name__)
 try:
   pyro_log_dir = os.path.join(log_dir, "PYRO")
   if not os.path.exists(pyro_log_dir):
-    os.mkdir(pyro_log_dir)
+    os.makedirs(pyro_log_dir)
 except OSError as err:
   module_logger.error("Couldn't create {}".format(pyro_log_dir))
 
