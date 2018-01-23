@@ -31,12 +31,17 @@ ALL = 3
 Pyro.config.PYRO_TRACELEVEL = WARNINGS
 Pyro.config.PYRO_STDLOGGING = True
 SLog = Pyro.util.SystemLogger()
-if not os.path.exists(log_dir+"PYRO/"):
-  os.mkdir(log_dir+"PYRO/")
 
 # Set up Python logging
 logging.basicConfig(level=logging.WARNING)
 module_logger = logging.getLogger(__name__)
+
+try:
+  pyro_log_dir = os.path.join(log_dir, "PYRO")
+  if not os.path.exists(pyro_log_dir):
+    os.mkdir(pyro_log_dir)
+except OSError as err:
+  module_logger.error("Couldn't create {}".format(pyro_log_dir))
 
 nameserver = None
 
