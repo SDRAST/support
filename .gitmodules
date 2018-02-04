@@ -1,3 +1,6 @@
 [submodule "test"]
 	path = test
 	url = git@ra.jpl.nasa.gov:dshaff/support_test.git
+[submodule "pyro"]
+	path = pyro
+	url = git@ra.jpl.nasa.gov:dshaff/support_pyro.git
