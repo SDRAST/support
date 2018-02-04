@@ -166,4 +166,3 @@ def set_module_loggers(logger_dict):
     logger.debug("%s", command)
     exec(command)
   return loggers
-
