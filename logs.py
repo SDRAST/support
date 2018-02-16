@@ -9,7 +9,32 @@ from support.options import initiate_option_parser
 
 logger = logging.getLogger(__name__)
 
-def logging_config(name="", logger=None, logfile=None, loglevel=logging.INFO,
+def setup_logging(logger=None, logfile=None, logLevel=logging.DEBUG):
+
+    logging.basicConfig(level=logLevel)
+    if logger is None:
+        logger = logging.getLogger("")
+
+    formatter = logging.Formatter('%(levelname)s:%(name)s:%(message)s')
+
+    logger.handlers = []
+    logger.setLevel(logLevel)
+
+    if logfile is not None:
+        fh = logging.FileHandler(logfile)
+        fh.setLevel(logging.DEBUG)
+        fh.setFormatter(formatter)
+        logger.addHandler(fh)
+
+    sh = logging.StreamHandler()
+    sh.setLevel(logLevel)
+    sh.setFormatter(formatter)
+    logger.addHandler(sh)
+
+    return logger
+
+
+def logging_config(name="", logger=None, logfile=None, level=logging.INFO,
                    handlers=None, **kwargs):
     """
     Configure stream and file output logging.
@@ -28,7 +53,7 @@ def logging_config(name="", logger=None, logfile=None, loglevel=logging.INFO,
         logger = logging.getLogger(name)
 
     logger.propagate = False
-    logger.setLevel(loglevel)
+    logger.setLevel(level)
 
     if len(logger.handlers) != 0:
         pass
