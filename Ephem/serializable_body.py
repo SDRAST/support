@@ -5,14 +5,16 @@ class SerializableBody(ephem.FixedBody):
     Simple extension to ephem.FixedBody that allows for conversion to and
     from a Python dictionary
     """
-    def __init__(self, info=None):
+    def __init__(self, info=None, name=""):
         super(SerializableBody, self).__init__()
         if info is None:
             self.info = {}
+        self.name = name
 
     def to_dict(self):
         return_dict = {
             "info": self.info,
+            "name":self.name,
             "_ra": float(self._ra),
             "_dec": float(self._dec),
             "__class__":self.__class__.__name__
@@ -34,4 +36,5 @@ class SerializableBody(ephem.FixedBody):
         obj._ra = src_dict["_ra"]
         obj._dec = src_dict["_dec"]
         obj.info = src_dict["info"]
+        obj.name = src_dict["name"]
         return obj
