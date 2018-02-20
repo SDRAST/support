@@ -1,7 +1,7 @@
 """
 module with enhancements to the Python logging
 """
-import logging
+import logging, logging.handlers
 import time
 import sys
 
@@ -9,11 +9,61 @@ from support.options import initiate_option_parser
 
 logger = logging.getLogger(__name__)
 
-def setup_logging(logger=None, logfile=None, logLevel=logging.DEBUG):
+class TLSSMTPHandler(logging.handlers.SMTPHandler):
+    def emit(self, record):
+        """
+        Emit a record.
 
-    logging.basicConfig(level=logLevel)
+        Format the record and send it to the specified addressees.
+        """
+        try:
+            import smtplib
+            try:
+                from email.utils import formatdate
+            except ImportError:
+                formatdate = self.date_time
+            port = self.mailport
+            if not port:
+                port = smtplib.SMTP_PORT
+            smtp = smtplib.SMTP(self.mailhost, port)
+            msg = self.format(record)
+            msg = "From: {}\r\nTo: {}\r\nSubject: {}\r\nDate: {}\r\n\r\n{}".format(
+                            self.fromaddr,
+                            ",".join(self.toaddrs),
+                            self.getSubject(record),
+                            formatdate(), msg)
+            if self.username:
+                smtp.ehlo() # for tls add this line
+                smtp.starttls() # for tls add this line
+                smtp.ehlo() # for tls add this line
+                smtp.login(self.username, self.password)
+            smtp.sendmail(self.fromaddr, self.toaddrs, msg)
+            smtp.quit()
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except:
+            self.handleError(record)
+
+def setup_email_handler(toaddr, logLevel=logging.ERROR):
+    from support.cred import username, password
+    if not isinstance(toaddr, list):
+        toaddr = [toaddr]
+    formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(name)s:%(message)s')
+    eh = TLSSMTPHandler(mailhost=("smtp.gmail.com",587),
+                            fromaddr="tams.dsn@gmail.com",
+                            toaddrs=toaddr,
+                            subject="MonitorControl logging",
+                            credentials=(username, password),
+                            secure=None)
+
+    eh.setLevel(logLevel)
+    eh.setFormatter(formatter)
+    return eh
+
+def setup_logging(logger=None, logfile=None, logLevel=logging.DEBUG, handlers=None):
+
     if logger is None:
-        logger = logging.getLogger("")
+        logger = logging.getLogger()
 
     formatter = logging.Formatter('%(levelname)s:%(name)s:%(message)s')
 
@@ -30,6 +80,12 @@ def setup_logging(logger=None, logfile=None, logLevel=logging.DEBUG):
     sh.setLevel(logLevel)
     sh.setFormatter(formatter)
     logger.addHandler(sh)
+
+    if handlers is not None:
+        if not isinstance(handlers, list):
+            handlers = [handlers]
+        for handler in handlers:
+            logger.addHandler(handler)
 
     return logger
 
