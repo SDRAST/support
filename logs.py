@@ -120,7 +120,7 @@ def logging_config(name="", logger=None, logfile=None, level=logging.INFO,
 
         # configure stream logging (the output to stdout)
         sh = logging.StreamHandler(sys.stdout)
-        sh.setLevel(loglevel)
+        sh.setLevel(level)
         sh.setFormatter(formatter)
 
         logger.addHandler(sh)
@@ -128,7 +128,7 @@ def logging_config(name="", logger=None, logfile=None, level=logging.INFO,
         # if we have a logfile, configure file logging.
         if logfile:
             fh = logging.FileHandler(logfile)
-            fh.setLevel(loglevel)
+            fh.setLevel(level)
             fh.setFormatter(formatter_file)
             logger.addHandler(fh)
 
