@@ -61,13 +61,12 @@ def setup_email_handler(toaddr, logLevel=logging.ERROR):
     return eh
 
 def setup_logging(logger=None, logfile=None, logLevel=logging.DEBUG, handlers=None):
-
     if logger is None:
         logger = logging.getLogger()
-
     formatter = logging.Formatter('%(levelname)s:%(name)s:%(message)s')
-
-    logger.handlers = []
+    map(logger.removeHandler, logger.handlers[:])
+    map(logger.removeFilter, logger.filters[:])
+    # logger.handlers = []
     logger.setLevel(logLevel)
 
     if logfile is not None:
@@ -86,9 +85,7 @@ def setup_logging(logger=None, logfile=None, logLevel=logging.DEBUG, handlers=No
             handlers = [handlers]
         for handler in handlers:
             logger.addHandler(handler)
-
     return logger
-
 
 def logging_config(name="", logger=None, logfile=None, level=logging.INFO,
                    handlers=None, **kwargs):
