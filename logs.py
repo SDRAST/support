@@ -60,6 +60,14 @@ def setup_email_handler(toaddr, logLevel=logging.ERROR):
     eh.setFormatter(formatter)
     return eh
 
+def remove_handlers(logger):
+    """
+    remove any handlers associated with a logger
+    """
+    map(logger.removeHandler, logger.handlers[:])
+    map(logger.removeFilter, logger.filters[:])
+    return logger
+
 def setup_logging(logger=None, logfile=None, logLevel=logging.DEBUG, handlers=None):
     if logger is None:
         logger = logging.getLogger()
