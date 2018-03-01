@@ -72,6 +72,8 @@ def setup_logging(logger=None, logfile=None, logLevel=logging.DEBUG, handlers=No
     if logger is None:
         logger = logging.getLogger()
     formatter = logging.Formatter('%(levelname)s:%(name)s:%(message)s')
+    file_formatter = logging.Formatter('%(asctime)s::%(levelname)s:%(name)s:%(message)s')
+
     map(logger.removeHandler, logger.handlers[:])
     map(logger.removeFilter, logger.filters[:])
     # logger.handlers = []
@@ -80,7 +82,7 @@ def setup_logging(logger=None, logfile=None, logLevel=logging.DEBUG, handlers=No
     if logfile is not None:
         fh = logging.FileHandler(logfile)
         fh.setLevel(logging.DEBUG)
-        fh.setFormatter(formatter)
+        fh.setFormatter(file_formatter)
         logger.addHandler(fh)
 
     sh = logging.StreamHandler()
