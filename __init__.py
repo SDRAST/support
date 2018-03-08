@@ -21,7 +21,6 @@ from numpy import array
 
 logger = logging.getLogger(__name__)
 
-<<<<<<< HEAD
 try:
     import pyro
 except ImportError as err:
@@ -39,19 +38,6 @@ except ImportError as err:
       import tests_support as test
     except ImportError:
       pass
-=======
-#try:
-#    import pyro
-#except ImportError as err:
-#    logger.error("Couldn't import pyro_support package: {}".format(err))
-#    import suport_pyro as pyro4_support
-
-#try:
-#    import test.support_test as test
-#except ImportError as err:
-#    logger.error("Couldn't import tests_support package: {}".format(err))
-#    import support_test
->>>>>>> 9cf479f625279cc49141c7007f09bcfec1fdaece
 
 __version__ = "1.2.0"
 
