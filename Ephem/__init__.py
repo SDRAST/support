@@ -37,19 +37,23 @@ import datetime
 from math import pi
 
 import ephem
-from matplotlib.dates import date2num
-
-from Astrophysics.Pulsars import pulsar_data as PD
-from Radio_Astronomy import michigan, vla_cal
 
 module_logger = logging.getLogger(__name__)
 
-from .pulsar import Pulsar
-from .quasar import Quasar
+from .serializable_body import SerializableBody
+
+try:
+    from Astrophysics.Pulsars import pulsar_data as PD
+    from Radio_Astronomy import michigan, vla_cal
+    from .pulsar import Pulsar
+    from .quasar import Quasar
+except Exception as err:
+    module_logger.error("Couldn't import pulsar data or vla calibrators: {}".format(err))
+
 try:
     from MonitorControl.Configurations.coordinates import DSS
 except ImportError as err:
-    module_logger.error(("Couldn't import support version of DSS Observer.
+    module_logger.error(("Couldn't import support version of DSS Observer."
                          "Falling back to unsupported version in this package."))
     from .dss import DSS
 
@@ -62,12 +66,16 @@ diag = False
 Planets = ['Jupiter', 'Mars', 'Mercury', 'Moon', 'Neptune', 'Pluto',
            'Saturn', 'Sun', 'Uranus', 'Venus']
 
-Jnames = PD.data.keys() # pulsar Julian epoch names
-Jnames.sort()
+try:
+    Jnames = PD.data.keys() # pulsar Julian epoch names
+    Jnames.sort()
 
-cal_dict = vla_cal.get_cal_dict() # VLA calibrators
-Bname_dict, cat_3C_dict = vla_cal.VLA_name_xref(cal_dict) # name dictionaries
-Bnames = vla_cal.Jnames_to_B(Bname_dict) # B names keyed on J names
+    cal_dict = vla_cal.get_cal_dict() # VLA calibrators
+    Bname_dict, cat_3C_dict = vla_cal.VLA_name_xref(cal_dict) # name dictionaries
+    Bnames = vla_cal.Jnames_to_B(Bname_dict) # B names keyed on J names
+except Exception as err:
+    module_logger.error("Couldn't process pulsar or vla calibration data: {}".format(err))
+
 
 def remove_item(thislist, item):
   """
