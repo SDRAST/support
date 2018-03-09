@@ -21,23 +21,23 @@ from numpy import array
 
 logger = logging.getLogger(__name__)
 
-try:
-    import pyro
-except ImportError as err:
-    logger.error("Couldn't import pyro_support package: {}".format(err))
-    try:
-      import pyro_support as pyro4_support
-    except ImportError:
-      pass
+#try:
+#    import .pyro
+#except ImportError as err:
+#    logger.error("Couldn't import pyro_support package: {}".format(err))
+#    try:
+#      import pyro_support as pyro4_support
+#    except ImportError:
+#      pass
 
-try:
-    import test.tests_support as test
-except ImportError as err:
-    logger.error("Couldn't import tests_support package: {}".format(err))
-    try:
-      import tests_support as test
-    except ImportError:
-      pass
+#try:
+#    import test.tests_support as test
+#except ImportError as err:
+#    logger.error("Couldn't import tests_support package: {}".format(err))
+#    try:
+#      import tests_support as test
+#    except ImportError:
+#      pass
 
 __version__ = "1.2.0"
 
