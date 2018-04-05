@@ -103,14 +103,23 @@ def logging_config(name="", logger=None, logfile=None, level=logging.INFO,
     Configure stream and file output logging.
     If we don't provide a logfile (discouraged) then we don't do
     file logging.
-    args:
-        - name (str): The name of the module from which we log.
-    kwargs:
-        - logfile (str): The name of the logfile to use for file logging.
-        - logger (logging.getLogger): An existing logger instance to which we want to add handlers.
-        - loglevel (logging level): The logging level to use.
-        - handlers (list of logging handlers): Extra handlers, that already have formatters.
-        - **kwargs: Other (unexpected) keyword arguments.
+    
+    @param name : The name of the module from which we log.
+    @type  name : str
+    
+    @param logger : An existing logger instance to which we want to add handlers.
+    @type  logger : logging.Logger
+    
+    @param logfile : The name of the logfile to use for file logging.
+    @type  logfile : str
+    
+    @param loglevel : The logging level to use.
+    @type  loglevel : logging.Level
+    
+    @param handlers : Extra handlers, that already have formatters.
+    @type  handlers : list of logging handlers
+    
+    @param **kwargs : Other (unexpected) keyword arguments.
     """
     if not logger:
         logger = logging.getLogger(name)
