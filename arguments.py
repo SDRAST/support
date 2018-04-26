@@ -6,9 +6,9 @@ How to use this:
     p = initiate_option_parser(description,examples)
     p.usage = usage
     # Add other options here
-  
+
     opts, args = p.parse_args(sys.argv[1:])
-  
+
     # This cannot be delegated to another module or class
     mylogger = init_logging(logging.getLogger(),
                             loglevel   = get_loglevel(opts.file_loglevel),
@@ -31,8 +31,8 @@ class OptParser(argparse.ArgumentParser):
   Subclass of OptionParser which does not mess up examples formatting
   """
   pass
-      
-class PlainHelpFormatter(argparse.HelpFormatter): 
+
+class PlainHelpFormatter(argparse.HelpFormatter):
   """
   Formatter which does not remove newline codes
   """
@@ -44,16 +44,16 @@ class PlainHelpFormatter(argparse.HelpFormatter):
       return description + "\n"
     else:
       return ""
-    
+
 class ArgumentInterpreter(object):
   """
   Interprets the argument provided as the specied type of iterable
-  
+
   If a list is expected, a single value is embedded in a list.  A tuple is
   converted to a list. An nparray is flattened and converted to a list::
     a = ArgumentInterpreter()
     l = a.as_list(thing)
-  
+
   Note
   ----
   As needed, we will as 'as_nparray', 'as_tuple'
@@ -62,7 +62,7 @@ class ArgumentInterpreter(object):
     """
     """
     self.logger = logging.getLogger(logger.name+".ArgumentInterpreter")
-  
+
   def as_list(self, argument):
     """
     """
@@ -80,7 +80,7 @@ class ArgumentInterpreter(object):
 def initiate_option_parser(description, examples):
   """
   Initiate an option parser with default logging options
-  
+
   This creates a command line option parser with predefined options for using
   the Python logging module::
     --console_loglevel: stdout/stderr handler logging level (default: WARNING)
@@ -154,14 +154,14 @@ def simple_parse_args(init_description):
     parser.add_argument("--ns_port", "-nsp", dest='ns_port', action='store',default=50000,type=int,
                         help="Specify a port number for the Pyro name server. Default is 50000.")
 
-    parser.add_argument("--msg_bus_host", "-msg_n", dest='msg_bus_host', action='store', default='localhost',
-                        help="Specify a host name for the MessageBus server. Default is localhost.")
-
-    parser.add_argument("--msg_bus_port", "-msg_p", dest='msg_bus_port', action='store', default=0, type=int,
-                        help="Specify a port number for the MessageBus server. If nothing is provided, defaults to 0 (random).")
-
-    parser.add_argument("--messagebusflag", "-mbflg", dest='messagebusflag', action='store_true', default=False,
-                        help="Specify whether or not to start up a fresh messagebus server.")
+    # parser.add_argument("--msg_bus_host", "-msg_n", dest='msg_bus_host', action='store', default='localhost',
+    #                     help="Specify a host name for the MessageBus server. Default is localhost.")
+    #
+    # parser.add_argument("--msg_bus_port", "-msg_p", dest='msg_bus_port', action='store', default=0, type=int,
+    #                     help="Specify a port number for the MessageBus server. If nothing is provided, defaults to 0 (random).")
+    #
+    # parser.add_argument("--messagebusflag", "-mbflg", dest='messagebusflag', action='store_true', default=False,
+    #                     help="Specify whether or not to start up a fresh messagebus server.")
 
     parser.add_argument("--simulated", "-s", dest='simulated', action='store_true', default=False,
                         help="Specify whether or not the server is running in simulator mode.")

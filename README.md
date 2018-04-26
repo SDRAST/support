@@ -12,12 +12,22 @@ to import from itself.  So we call the module `support/Ephem.py`.
 
 ### Submodules
 
-The `tests` and `pyro/pyro4_support` subdirectories are git submodules
-corresponding to the `tests-support` and `pyro-support` packages.
+The `test`, `pyro` and `trifeni` subdirectories are git submodules
+corresponding to the `support_test`, `support_pyro`, and `trifeni` packages.
 
 To pull these submodules, do the following:
 
 ```
 me@local:/path/to/support$ git submodule init --recursive
 me@local:/path/to/support$ git submodule update --recursive --remote
+```
+
+### Testing
+
+Note that the testing directory is `tests`, not `test`. The latter corresponds
+to the `support_test` submodule. Most of the subpackages have their own tests,
+so these are designed to determine whether packages can be imported or not.
+
+```
+/path/to/support$ python -m unittest discover -s tests -t .
 ```
