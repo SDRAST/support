@@ -228,7 +228,6 @@ def simple_parse_args(init_description):
                         type=int,
       help="Specify a port number for the Pyro name server. Default is 50000.")
 
-<<<<<<< HEAD
     parser.add_argument("--msg_bus_host", "-msg_n",
                         dest='msg_bus_host', 
                         action='store', 
@@ -247,16 +246,16 @@ def simple_parse_args(init_description):
                         action='store_true', 
                         default=False,
       help="Specify whether or not to start up a fresh messagebus server.")
-=======
-    # parser.add_argument("--msg_bus_host", "-msg_n", dest='msg_bus_host', action='store', default='localhost',
+    # parser.add_argument("--msg_bus_host", "-msg_n", dest='msg_bus_host', action='store',
+    #                     default='localhost',
     #                     help="Specify a host name for the MessageBus server. Default is localhost.")
     #
-    # parser.add_argument("--msg_bus_port", "-msg_p", dest='msg_bus_port', action='store', default=0, type=int,
+    # parser.add_argument("--msg_bus_port", "-msg_p", dest='msg_bus_port', action='store', default=0,
+    #                     type=int,
     #                     help="Specify a port number for the MessageBus server. If nothing is provided, defaults to 0 (random).")
     #
     # parser.add_argument("--messagebusflag", "-mbflg", dest='messagebusflag', action='store_true', default=False,
     #                     help="Specify whether or not to start up a fresh messagebus server.")
->>>>>>> f61e0cf875bf86373bfcb9d82af64e2cb62bbc85
 
     parser.add_argument("--simulated", "-s",
                         dest='simulated', 
