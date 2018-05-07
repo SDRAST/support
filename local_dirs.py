@@ -20,6 +20,8 @@ act_proj_path = auto_dir+"Activities/"
 
 project_data_dir = "/usr/local/project_data/"
 
-log_dir = os.path.join("/usr/local/logs/", gethostname())
+log_dir = os.path.join("/usr/local/Logs/", gethostname(),'')
 wvsr_dir = "/data/"   # was data2 on crab14
-wvsr_fft_dir = wvsr_dir+"post_processing/auto/" # was cjnaudet/auto on crab14
+postproc_dir = wvsr_dir+"post_processing/"
+wvsr_fft_dir = postproc_dir+"auto/" # was cjnaudet/auto on crab14
+SAOspec_dir = postproc_dir+"SAOspec/"
