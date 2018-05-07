@@ -10,9 +10,11 @@ def get_current_weather(lat, lon, mode='json'):
 
 if __name__ == '__main__':
     import time
+    import pdb
     lat_ad, lon_ad = 24.523338, 54.433461
-    lat_can, lon_can = -35.2835, 149.1281
+    # lat_can, lon_can = -35.2835, 149.1281
 
-    print(get_current_weather(lat_ad, lon_ad))
-    time.sleep(2.0)
-    print(get_current_weather(lat_can, lon_can))
+    weather = get_current_weather(lat_ad, lon_ad).json()
+    pdb.set_trace()
+    # time.sleep(2.0)
+    # print(get_current_weather(lat_can, lon_can).json()["main"])
