@@ -4,33 +4,44 @@ Module Ephem - extends module pyephem for radio astronomy
 
 Module Ephem extends module ephem (package pyephem).  Everything from
 module 'ephem' is inherited.  In addition, it provides the classes
-Quasar(), Pulsar() and DSS().  It also provides pulsar physical
+``Quasar``, ``Pulsar`` and ``DSS``.  It also provides pulsar physical
 data and quasar fluxes.  Use like this:
->>> from Astronomy import Ephem
->>> x = Ephem.Pulsar('J1809-0743')
+
+.. code-block:: python
+
+    >>> from Astronomy import Ephem
+    >>> x = Ephem.Pulsar('J1809-0743')
 
 Notes
 =====
+
 module ephem
 ------------
+
 http://rhodesmill.org/brandon/projects/pyephem-manual.html
 
 About Celestial Coordinates
 ---------------------------
-a_ra, a_dec — Astrometric geocentric position for epoch (e.g. J2000)
-g_ra, g_dec — Apparent geocentric position for date specified in
-              the compute(), after correcting for precession, relativistic
-              deflection, nutation and aberration
-ra, dec     - apparent topocentric position, after correction for parallax
-              and refraction. Set the Observer() attribute pressure to zero if
-              you want PyEphem to ignore the effects of atmospheric refraction
+
+* a_ra, a_dec: Astrometric geocentric position for epoch (e.g. J2000)
+* g_ra, g_dec: Apparent geocentric position for date specified in
+  the compute(), after correcting for precession, relativistic
+  deflection, nutation and aberration
+* ra, dec: Apparent topocentric position, after correction for parallax
+  and refraction. Set the ``Observer`` attribute pressure to zero if
+  you want PyEphem to ignore the effects of atmospheric refraction
 
 Diagnostics
 -----------
+
 To see what this module does internally:
->>> from Astronomy import Ephem
->>> Ephem.diag = True
->>> x = Ephem.Pulsar('J1809-0743')
+
+.. code-block:: python
+
+    >>> from Astronomy import Ephem
+    >>> Ephem.diag = True
+    >>> x = Ephem.Pulsar('J1809-0743')
+
 """
 import logging
 import datetime
@@ -72,7 +83,16 @@ from .pulsar import Pulsar
 from .quasar import Quasar
 from .serializable_body import SerializableBody
 
-__all__ = ["Quasar", "Pulsar", "SerializableBody", "EphemException", "calibrator"]
+__all__ = [
+        "Quasar",
+        "Pulsar",
+        "SerializableBody",
+        "EphemException",
+        "calibrator",
+        "Planets",
+        "PD",
+        "DSS"
+]
 
 class EphemException(Exception):
   """

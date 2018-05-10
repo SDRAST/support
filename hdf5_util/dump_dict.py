@@ -2,15 +2,11 @@ def dump_dict(f_obj_or_group, data_dict):
     """
     Dump the contents of a data dictionary into some file object or group.
 
-    Args:
-        f_obj_or_group (h5py.File/h5py.Group): h5py file or group object
-        data_dict (dict): dictionary whose contents we want to dump
-    Returns:
-        None
+    Examples:
 
-    Example:
+    .. code-block:: python
 
-        ```python
+        import numpy as np
         import h5py
 
         from support.hdf5_util import dump_dict
@@ -27,7 +23,13 @@ def dump_dict(f_obj_or_group, data_dict):
         print(f_obj["level0/level1/level2"][...])
         # >>> bunch of ones!
         f_obj.close()
-        ```
+
+    Args:
+        f_obj_or_group (h5py.File/h5py.Group): h5py file or group object
+        data_dict (dict): dictionary whose contents we want to dump
+    Returns:
+        None
+
     """
 
     def _dump_dict(grp, data):
