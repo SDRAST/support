@@ -1,22 +1,21 @@
+import logging
 import threading
 import time
 
-from support.logs import logging_config
+module_logger = logging.getLogger(__name__)
 
 def iterativeRun(run_fn):
     """
     A decorator for running functions repeatedly inside a PausableThread.
     Allows one to pause and stop the thread while its repeatedly calling
     the overriden run function.
+
     Args:
         run_fn: the overridden run function from PausableThread
-
     Returns:
-
+        callable
     """
-
     def wrapper(self):
-
         while True:
             if self.stopped():
                 break
@@ -27,7 +26,6 @@ def iterativeRun(run_fn):
                 self._running.set()
                 run_fn(self)
                 self._running.clear()
-
     return wrapper
 
 
@@ -40,11 +38,11 @@ class Pause(object):
 
     def __init__(self, pausable_thread):
         """
-		args:
-		    - pausable_thread (list, PausableThread): An instance, or
-			    list of instances of PausableThread.
-			    If we pass "None", then this gets dealt with properly down stream.
-		"""
+        Args:
+            pausable_thread (list, PausableThread): An instance, or list of
+                instances of PausableThread. If we pass ``None``, then this gets
+                dealt with properly down stream.
+        """
         self.thread = pausable_thread
         if not isinstance(self.thread, dict):
             self.thread = {'thread': self.thread}
@@ -59,9 +57,9 @@ class Pause(object):
 
     def __enter__(self):
         """
-		Pause the thread in quesiton, and make sure that whatever
-		functionality is being performing is actually stopped.
-		"""
+        Pause the thread in question, and make sure that whatever
+        functionality is being performing is actually stopped.
+        """
         for name in self.thread.keys():
             t = self.thread[name]
             if t:
@@ -90,17 +88,25 @@ class Pause(object):
 class PausableThread(threading.Thread):
     """A pausable stoppable thread.
 	It also has a running flag that can be used to determine if the process is still running.
-	"""
 
+    Attributes:
+        name ():
+        logger ():
+        _lock ():
+        _pause ():
+        _stop ():
+        _running ():
+	"""
     def __init__(self, name=None, **kwargs):
         """
-        kwargs:
-			-**kwargs: To be passed to TAMS_BackEnd.util.logging_config
+        Args:
+            name (str): name of thread.
+			**kwargs: To be passed to
 		"""
         threading.Thread.__init__(self)
 
         self.name = name
-        self.logger = logging_config(**kwargs)
+        self.logger = logging.getLogger(__name__)
         self._lock = threading.Lock()
         self._pause = threading.Event()
         self._stop = threading.Event()

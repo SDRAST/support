@@ -1,6 +1,8 @@
 """
 module with enhancements to the Python logging
 """
+import os
+import datetime
 import logging, logging.handlers
 import time
 import sys
@@ -103,22 +105,22 @@ def logging_config(name="", logger=None, logfile=None, level=logging.INFO,
     Configure stream and file output logging.
     If we don't provide a logfile (discouraged) then we don't do
     file logging.
-    
+
     @param name : The name of the module from which we log.
     @type  name : str
-    
+
     @param logger : An existing logger instance to which we want to add handlers.
     @type  logger : logging.Logger
-    
+
     @param logfile : The name of the logfile to use for file logging.
     @type  logfile : str
-    
+
     @param loglevel : The logging level to use.
     @type  loglevel : logging.Level
-    
+
     @param handlers : Extra handlers, that already have formatters.
     @type  handlers : list of logging handlers
-    
+
     @param **kwargs : Other (unexpected) keyword arguments.
     """
     if not logger:
@@ -263,3 +265,14 @@ def set_module_loggers(logger_dict):
     logger.debug("%s", command)
     exec(command)
   return loggers
+
+def create_year_doy_dir(base_dir):
+    """
+    Given some base directory, create `<<base_dir>>/<<year>>/<<doy>>`
+    directory structure, if not already existing.
+    """
+    year, doy = datetime.datetime.utcnow().strftime("%Y %j").split(" ")
+    year_doy_dir = os.path.join(base_dir, "{}/{}".format(year, doy))
+    if not os.path.exists(year_doy_dir):
+        os.makedirs(year_doy_dir)
+    return year_doy_dir

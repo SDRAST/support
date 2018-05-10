@@ -40,15 +40,8 @@ import ephem
 
 module_logger = logging.getLogger(__name__)
 
-from .serializable_body import SerializableBody
-
-try:
-    from Astrophysics.Pulsars import pulsar_data as PD
-    from Radio_Astronomy import michigan, vla_cal
-    from .pulsar import Pulsar
-    from .quasar import Quasar
-except Exception as err:
-    module_logger.error("Couldn't import pulsar data or vla calibrators: {}".format(err))
+from Astrophysics.Pulsars import pulsar_data as PD
+from Radio_Astronomy import michigan, vla_cal
 
 try:
     from MonitorControl.Configurations.coordinates import DSS
@@ -56,7 +49,6 @@ except ImportError as err:
     module_logger.error(("Couldn't import support version of DSS Observer."
                          "Falling back to unsupported version in this package."))
     from .dss import DSS
-
 
 J2000 = ephem.Date("2000/1/1 00:00:00")
 
@@ -76,21 +68,11 @@ try:
 except Exception as err:
     module_logger.error("Couldn't process pulsar or vla calibration data: {}".format(err))
 
+from .pulsar import Pulsar
+from .quasar import Quasar
+from .serializable_body import SerializableBody
 
-def remove_item(thislist, item):
-  """
-  Remove item from list without complaining if absent
-
-  @param thislist : list of items
-  @param item : item which may or may not be in the list
-
-  @return: reduced list
-  """
-  try:
-    thislist.remove(item)
-  except ValueError:
-    pass
-  return thislist
+__all__ = ["Quasar", "Pulsar", "SerializableBody", "EphemException", "calibrator"]
 
 class EphemException(Exception):
   """
