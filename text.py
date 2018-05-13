@@ -6,6 +6,7 @@ import logging
 import os
 import re
 import smtplib
+import socket
 
 from email.mime.text import MIMEText
 from os.path import basename, isdir, isfile, splitext
@@ -218,7 +219,10 @@ def send_email(msg_text, to, Subject="no subject",
   else:
     bc = Bc
   msg['Bc'] = ",".join(bc)
-  s = smtplib.SMTP('smtp.jpl.nasa.gov')
+  if socket.gethostname() == "crab14":
+    s = smtplib.SMTP('localhost')
+  else:
+    s = smtplib.SMTP('smtp.jpl.nasa.gov')
   addressees = to+bc+cc
   logger.debug("send_email: sending to %s", addressees)
   s.sendmail(From, addressees, msg.as_string())
