@@ -6,6 +6,7 @@ This uses the new tunneling scripts, which date from Sep.2012.
 
 Tunneling
 =========
+
 Tunnel parameters are predefined and can be obtained with show_remote_names().
 The domain and host names are nicknames for easy remembering.  They are
 accessed as 'localhost:port'.  A tunnel is set up with:
@@ -19,6 +20,7 @@ some hosts, known alternates like 'ops'.
 
 Remote Mounting
 ===============
+
 Once a tunnel is established, remote file systems can be mounted through it
 like this:
 
@@ -41,6 +43,7 @@ a tunnel will be created.
 
 Pushing Keys
 ============
+
 To avoid having to give a password for ssh logins which use simple passwords,
 one can push keys to the remote host which will authenticate you in future.
 This does not work across a gateway requiring two-factor (SecurID)
@@ -52,6 +55,7 @@ doing that has not been installed.  Check paramiko examples for hints.
 
 Port Proxies
 ============
+
 After a tunnel exists, it can be used to create local proxies for ports
 on the remote host:
 
@@ -62,11 +66,12 @@ dsnra:80.
 
 Notes
 =====
+
 The remote mount class came from:
 http://code.activestate.com/recipes/573473-sshfs-mount-tool/
 
 For notes on socket programming see:
-http://dsnra.jpl.nasa.gov/software/sockets/ 
+http://dsnra.jpl.nasa.gov/software/sockets/
 http://dsnra.jpl.nasa.gov/software/Python/html/lib/module-socket.html
 
 For notes on tunneling see:
