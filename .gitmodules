@@ -1,6 +1,12 @@
-[submodule "pyro/pyro4_support"]
-	path = pyro/pyro4_support
-	url = git@ra.jpl.nasa.gov:dshaff/pyro-support.git
 [submodule "test"]
 	path = test
-	url = git@ra.jpl.nasa.gov:dshaff/tests-support.git
+	url = git@ra.jpl.nasa.gov:dshaff/support_test.git
+	branch = master
+[submodule "pyro"]
+	path = pyro
+	url = git@ra.jpl.nasa.gov:dshaff/support_pyro.git
+	branch = master
+[submodule "trifeni"]
+	path = trifeni
+	url = git@ra.jpl.nasa.gov:dshaff/trifeni.git
+	branch = master

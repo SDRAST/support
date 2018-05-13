@@ -1,0 +1,5 @@
+pyro
+pyro4
+numpy
+pyzmq
+paramiko

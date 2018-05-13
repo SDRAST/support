@@ -1,7 +1,9 @@
 """
 module with enhancements to the Python logging
 """
-import logging
+import os
+import datetime
+import logging, logging.handlers
 import time
 import sys
 
@@ -9,26 +11,123 @@ from support.options import initiate_option_parser
 
 logger = logging.getLogger(__name__)
 
-def logging_config(name="", logger=None, logfile=None, loglevel=logging.INFO,
+class TLSSMTPHandler(logging.handlers.SMTPHandler):
+    def emit(self, record):
+        """
+        Emit a record.
+
+        Format the record and send it to the specified addressees.
+        """
+        try:
+            import smtplib
+            try:
+                from email.utils import formatdate
+            except ImportError:
+                formatdate = self.date_time
+            port = self.mailport
+            if not port:
+                port = smtplib.SMTP_PORT
+            smtp = smtplib.SMTP(self.mailhost, port)
+            msg = self.format(record)
+            msg = "From: {}\r\nTo: {}\r\nSubject: {}\r\nDate: {}\r\n\r\n{}".format(
+                            self.fromaddr,
+                            ",".join(self.toaddrs),
+                            self.getSubject(record),
+                            formatdate(), msg)
+            if self.username:
+                smtp.ehlo() # for tls add this line
+                smtp.starttls() # for tls add this line
+                smtp.ehlo() # for tls add this line
+                smtp.login(self.username, self.password)
+            smtp.sendmail(self.fromaddr, self.toaddrs, msg)
+            smtp.quit()
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except:
+            self.handleError(record)
+
+def setup_email_handler(toaddr, logLevel=logging.ERROR):
+    from support.cred import username, password
+    if not isinstance(toaddr, list):
+        toaddr = [toaddr]
+    formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(name)s:%(message)s')
+    eh = TLSSMTPHandler(mailhost=("smtp.gmail.com",587),
+                            fromaddr="tams.dsn@gmail.com",
+                            toaddrs=toaddr,
+                            subject="MonitorControl logging",
+                            credentials=(username, password),
+                            secure=None)
+
+    eh.setLevel(logLevel)
+    eh.setFormatter(formatter)
+    return eh
+
+def remove_handlers(logger):
+    """
+    remove any handlers associated with a logger
+    """
+    map(logger.removeHandler, logger.handlers[:])
+    map(logger.removeFilter, logger.filters[:])
+    return logger
+
+def setup_logging(logger=None, logfile=None, logLevel=logging.DEBUG, handlers=None):
+    if logger is None:
+        logger = logging.getLogger()
+    formatter = logging.Formatter('%(levelname)s:%(name)s:%(message)s')
+    file_formatter = logging.Formatter('%(asctime)s::%(levelname)s:%(name)s:%(message)s')
+
+    map(logger.removeHandler, logger.handlers[:])
+    map(logger.removeFilter, logger.filters[:])
+    # logger.handlers = []
+    logger.setLevel(logLevel)
+
+    if logfile is not None:
+        fh = logging.FileHandler(logfile)
+        fh.setLevel(logging.DEBUG)
+        fh.setFormatter(file_formatter)
+        logger.addHandler(fh)
+
+    sh = logging.StreamHandler()
+    sh.setLevel(logLevel)
+    sh.setFormatter(formatter)
+    logger.addHandler(sh)
+
+    if handlers is not None:
+        if not isinstance(handlers, list):
+            handlers = [handlers]
+        for handler in handlers:
+            logger.addHandler(handler)
+    return logger
+
+def logging_config(name="", logger=None, logfile=None, level=logging.INFO,
                    handlers=None, **kwargs):
     """
     Configure stream and file output logging.
     If we don't provide a logfile (discouraged) then we don't do
     file logging.
-    args:
-        - name (str): The name of the module from which we log.
-    kwargs:
-        - logfile (str): The name of the logfile to use for file logging.
-        - logger (logging.getLogger): An existing logger instance to which we want to add handlers.
-        - loglevel (logging level): The logging level to use.
-        - handlers (list of logging handlers): Extra handlers, that already have formatters.
-        - **kwargs: Other (unexpected) keyword arguments.
+
+    @param name : The name of the module from which we log.
+    @type  name : str
+
+    @param logger : An existing logger instance to which we want to add handlers.
+    @type  logger : logging.Logger
+
+    @param logfile : The name of the logfile to use for file logging.
+    @type  logfile : str
+
+    @param loglevel : The logging level to use.
+    @type  loglevel : logging.Level
+
+    @param handlers : Extra handlers, that already have formatters.
+    @type  handlers : list of logging handlers
+
+    @param **kwargs : Other (unexpected) keyword arguments.
     """
     if not logger:
         logger = logging.getLogger(name)
 
     logger.propagate = False
-    logger.setLevel(loglevel)
+    logger.setLevel(level)
 
     if len(logger.handlers) != 0:
         pass
@@ -39,7 +138,7 @@ def logging_config(name="", logger=None, logfile=None, loglevel=logging.INFO,
 
         # configure stream logging (the output to stdout)
         sh = logging.StreamHandler(sys.stdout)
-        sh.setLevel(loglevel)
+        sh.setLevel(level)
         sh.setFormatter(formatter)
 
         logger.addHandler(sh)
@@ -47,7 +146,7 @@ def logging_config(name="", logger=None, logfile=None, loglevel=logging.INFO,
         # if we have a logfile, configure file logging.
         if logfile:
             fh = logging.FileHandler(logfile)
-            fh.setLevel(loglevel)
+            fh.setLevel(level)
             fh.setFormatter(formatter_file)
             logger.addHandler(fh)
 
@@ -167,3 +266,13 @@ def set_module_loggers(logger_dict):
     exec(command)
   return loggers
 
+def create_year_doy_dir(base_dir):
+    """
+    Given some base directory, create `<<base_dir>>/<<year>>/<<doy>>`
+    directory structure, if not already existing.
+    """
+    year, doy = datetime.datetime.utcnow().strftime("%Y %j").split(" ")
+    year_doy_dir = os.path.join(base_dir, "{}/{}".format(year, doy))
+    if not os.path.exists(year_doy_dir):
+        os.makedirs(year_doy_dir)
+    return year_doy_dir

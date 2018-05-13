@@ -19,7 +19,7 @@ networks = {"fltops": ["137.228.202",
 services = {"rdp": 3389, "vnc": 5900, "vncJava": 5800, "ssh": 22, "MSrcp": 135,
             "ftp": 21, "sftp": 115}
 
-def LAN_hosts_status(port=22):
+def LAN_hosts_status(port=22, private=False):
   """
   Get information about and status of local network hosts with port open
   
@@ -33,7 +33,7 @@ def LAN_hosts_status(port=22):
   This is too crude; very senstive to format changes
   """
   print "If asked for a password, remember this host is",socket.gethostname()
-  domain = get_local_network()
+  domain = get_local_network(private=private)
   response = invoke("sudo nmap -sP -PS"+str(port)+" "+domain+".*").stdout.readlines()
   up = []
   down = []

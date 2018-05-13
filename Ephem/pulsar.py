@@ -11,22 +11,30 @@ class Pulsar(ephem.FixedBody):
   ephem.FixedBody() with pulsar properties.
 
   The pulsar astrophysical properties can be accessed with:
-  >>> x.properties
-  {'CLK': 'UTC(NIST)',
-   'DIST_DM': '+17.82',
-   'DIST_DM1': '6.33',
-   'DM': '240.70',
-   'EPHEM': 'DE200',
-   'FINISH': '51889.103',
-   'P0': '0.313885674748',
-   'P1': '1.521E-16',
-   'PEPOCH': '51650.000',
-   'S1400': '0.29',
-   'START': '51396.419',
-   'SURVEY': 'swmb,pksmb',
-   'W50': '12'}
+
+  .. code-block:: python
+
+      >>> x.properties
+      {'CLK': 'UTC(NIST)',
+       'DIST_DM': '+17.82',
+       'DIST_DM1': '6.33',
+       'DM': '240.70',
+       'EPHEM': 'DE200',
+       'FINISH': '51889.103',
+       'P0': '0.313885674748',
+       'P1': '1.521E-16',
+       'PEPOCH': '51650.000',
+       'S1400': '0.29',
+       'START': '51396.419',
+       'SURVEY': 'swmb,pksmb',
+       'W50': '12'}
+
   To find out what a property is:
-  >>> print Ephem.PD.help['S1400']
+
+  .. code-block:: python
+
+    >>> print Ephem.PD.help['S1400']
+    
   (PD stands for 'pulsar data'.)
   """
   def __init__(self, name):
