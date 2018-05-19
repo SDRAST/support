@@ -62,6 +62,14 @@ def LAN_hosts_status():
   ROACHlist.sort()
   return up, down, IP, MAC, ROACHlist
 
+def report_LAN_hosts_status():
+  up, down, IP, MAC, ROACHlist = LAN_hosts_status()
+  return {"up": up,
+          "down": down,
+          "IP": IP,
+          "MAC": MAC,
+          "roaches detected": ROACHlist}
+  
 def get_local_network(internal=True):
   """
   Returns the IP address of the local network
