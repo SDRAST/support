@@ -86,3 +86,24 @@ def tuple_keys_to_str(dictionary):
     finaldict[newkey]=dictionary[key]
   return finaldict
 
+def make_key_if_needed(thisdict, key, value=None):
+  """
+  Creates a key in an existing dictionary if it does not exist
+  
+  The key is assigned a value None by default.  If the key exists, the value
+  is assigned to it, replacing whatever it had.
+  
+  @param thisdict : the dictionary to be modified
+  @type  thisdict : dict
+  
+  @param key : key to be added or modified
+  @type  key : any object
+  
+  @param value : value assigned to the dict item for 'key'
+  @type  value : any object
+  """
+  if thisdict.has_key(key):
+    pass
+  else:
+    thisdict[key] = value
+  

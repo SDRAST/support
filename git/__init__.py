@@ -66,12 +66,12 @@ def find_sub_repos(path = os.getcwd(), fileobj = None):
 def check_repo(path):
   """
   Convenience so this test hast to be done only once
-  
+
   The directory is a git repo if it has a .git sub-directory.
-  
+
   @param path : the path to the directory to be checked
   @type  path : str
-  
+
   @return: bool
   """
   logger.debug("check_repo: path = %s", path)
@@ -83,16 +83,16 @@ def check_repo(path):
 def make_subdep_entry(path, fileobj=None):
   """
   Add submodule (separate repo in this directory) to subdep.txt
-  
+
   subdep.txt is a file listing all the sub-repos, that is, repos which are
   under this directory
-  
+
   @param path : path to the directory to be processed
   @type  path : str
-  
+
   @param fileobj : file object for file subdep.txt
   @type  fileobj : instance of a file class
-  
+
   @return: file object
   """
   global top_repos
@@ -118,9 +118,9 @@ def make_subdep_entry(path, fileobj=None):
 def make_superdeps(top_repos):
   """
   Create list of repos in the directory tree above this repo
-  
+
   This is kept in the file superdep.txt
-  
+
   @param top_repos : a list of top-level repos to be examined
   @type  top_repos : list of str
   """
@@ -157,7 +157,7 @@ def install_dependencies():
     path = os.path.dirname(fullpath)
     subdir = os.path.basename(fullpath)
     # make sure the destination exists
-    if os.path.exists(subdir) == False:      
+    if os.path.exists(subdir) == False:
       print "sudo mkdir -p",subdir
     print "cd",path
     print "git clone --jplra=jpl", url, subdir
@@ -236,7 +236,7 @@ def report_status(show_all=False):
 
   @param show_all : show full report for each non-clean repo
   @type  show_all : bool
-  
+
   @return: None
   """
   def status_path(path):
@@ -251,7 +251,7 @@ def report_status(show_all=False):
       except ValueError:
         base = 0
     return '/'.join(parts[base:])
-    
+
   git_dirs = get_git_dirs()
   state = {}
   state['clean'] = []
@@ -267,8 +267,9 @@ def report_status(show_all=False):
     response = fd_out.readlines()
     fd_out.close()
     repo = status_path(git_dir) # os.path.basename(git_dir)
+    status = "unknown"
+    branch = ""
     if len(response) != 0:
-      status = "unknown"
       for f in response:
         line = f.strip()
         if re.search('On branch',line):
@@ -295,7 +296,7 @@ def report_status(show_all=False):
   for status in state.keys():
     for report in state[status]:
       print ("%9s: %57s" % (status,report[:52]))
-  
+
 #------------------------ under development ------------------------------------
 
 def add_new_files():
@@ -367,4 +368,3 @@ def compare_to_remotes(remote):
       pass
     else:
       print "Ignoring",git_dir
-    

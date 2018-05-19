@@ -1,15 +1,25 @@
 """
 Various routines to support matplotlib graphics
 """
-
-import pylab as py
+import logging
+import math as m
 from numpy import empty, log10, conj
 from numpy.fft import fft, fftshift
-import math as m
-import logging
+import pylab as py
+import subprocess
 
 module_logger = logging.getLogger(__name__)
 
+def get_screen_resolution():
+    """
+    from https://stackoverflow.com/questions/3597965/\
+                                getting-monitor-resolution-in-python-on-ubuntu
+    """
+    output = subprocess.Popen('xrandr | grep "\*" | cut -d" " -f4', shell=True,
+                              stdout=subprocess.PIPE).communicate()[0]
+    resolution = output.split()[0].split(b'x')
+    return {'width': int(resolution[0]), 'height': int(resolution[1])}
+    
 def ticks(axis, axis_limits, new_limits, tick_range, label_format):
     """
     Label an axis with different units from the data
