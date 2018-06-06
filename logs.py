@@ -7,7 +7,10 @@ import logging, logging.handlers
 import time
 import sys
 
-from support.options import initiate_option_parser
+if sys.version_info >= (3, 5):
+    from .options import initiate_option_parser
+else:
+    from support.options import initiate_option_parser
 
 logger = logging.getLogger(__name__)
 

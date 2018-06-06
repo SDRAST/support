@@ -1,5 +1,7 @@
 import functools
 
+__all__ = ["coroutine", "CoroutineMixin"]
+
 def coroutine(func):
     """
     Simple decorator to "prime" a coroutine
@@ -35,3 +37,16 @@ def coroutine(func):
         return co
 
     return inner
+
+class CoroutineMixin(object):
+    """
+    This mixin assumes a ``_coro`` generator object is defined in __init__
+    """
+    def send(self, *args):
+        self._coro.send(*args)
+
+    def throw(self, *args):
+        self._coro.throw(*args)
+
+    def close(self):
+        self._coro.close()
