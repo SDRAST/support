@@ -25,6 +25,16 @@ class _DelayedCall(object):
                 time.sleep(timeout)
                 yield self.start - now
 
+    def wait(self, timeout=1.0):
+
+        def _wait():
+            while True:
+                yield
+                time.sleep(timeout)
+
+        for e in self.run(_wait):
+            yield e
+
     def run(self, generator_func):
         """
         """
@@ -43,7 +53,7 @@ class _DelayedCall(object):
                 else:
                     cond_val = [True]
 
-                if not all(cond_val):
+                if all(cond_val):
                     return
                 else:
                     yield val
@@ -89,7 +99,7 @@ class ControlFlowMixin(object):
     def _null_condition_factory(self):
 
         def null_condition():
-            return True
+            return False
 
         return null_condition
 
@@ -100,9 +110,9 @@ class ControlFlowMixin(object):
                 return True
             now = self.now()
             if now >= when:
-                return False
-            else:
                 return True
+            else:
+                return False
 
         return time_condition
 
@@ -116,9 +126,6 @@ class ControlFlowMixin(object):
             condition = cond
 
         return condition
-
-    # def run(self, *args, **kwargs):
-    #     return _DelayedCall().run(*args, **kwargs)
 
     def until(self, cond=None):
         """
