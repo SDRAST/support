@@ -64,7 +64,7 @@ class _DelayedCall(object):
         if self.condition is not None:
             cond_val = [c() for c in self.condition]
         else:
-            cond_val = [True]
+            cond_val = [False]
         return all(cond_val)
 
     def wait(self, timeout=1.0):
