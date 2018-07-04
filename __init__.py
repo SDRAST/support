@@ -64,7 +64,7 @@ class NamedClass(object):
 
 class PropertiedClass(NamedClass):
     """
-    A subclass of MCobject enhanced with with properties.
+    A subclass of MCobject enhanced with properties.
     """
 
     def __init__(self):

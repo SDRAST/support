@@ -1,0 +1,27 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+name = "pypi"
+verify_ssl = true
+
+[requires]
+python_version = "2.7"
+
+[packages]
+sphinx = "*"
+sphinx-rtd-theme = "*"
+numpy = "*"
+pyro = "*"
+"pyro4" = "*"
+zmq = "*"
+paramiko = "*"
+pyephem = "*"
+astropy = "==2.0.7"
+ipython = "==5.7.0"
+"h5py" = "*"
+matplotlib = "*"
+scipy = "*"
+tzlocal = "*"
+gnuplotlib = "*"
+"bs4" = "*"
+
+[dev-packages]

@@ -4,33 +4,44 @@ Module Ephem - extends module pyephem for radio astronomy
 
 Module Ephem extends module ephem (package pyephem).  Everything from
 module 'ephem' is inherited.  In addition, it provides the classes
-Quasar(), Pulsar() and DSS().  It also provides pulsar physical
+``Quasar``, ``Pulsar`` and ``DSS``.  It also provides pulsar physical
 data and quasar fluxes.  Use like this:
->>> from Astronomy import Ephem
->>> x = Ephem.Pulsar('J1809-0743')
+
+.. code-block:: python
+
+    >>> from Astronomy import Ephem
+    >>> x = Ephem.Pulsar('J1809-0743')
 
 Notes
 =====
+
 module ephem
 ------------
+
 http://rhodesmill.org/brandon/projects/pyephem-manual.html
 
 About Celestial Coordinates
 ---------------------------
-a_ra, a_dec — Astrometric geocentric position for epoch (e.g. J2000)
-g_ra, g_dec — Apparent geocentric position for date specified in
-              the compute(), after correcting for precession, relativistic
-              deflection, nutation and aberration
-ra, dec     - apparent topocentric position, after correction for parallax
-              and refraction. Set the Observer() attribute pressure to zero if
-              you want PyEphem to ignore the effects of atmospheric refraction
+
+* a_ra, a_dec: Astrometric geocentric position for epoch (e.g. J2000)
+* g_ra, g_dec: Apparent geocentric position for date specified in
+  the compute(), after correcting for precession, relativistic
+  deflection, nutation and aberration
+* ra, dec: Apparent topocentric position, after correction for parallax
+  and refraction. Set the ``Observer`` attribute pressure to zero if
+  you want PyEphem to ignore the effects of atmospheric refraction
 
 Diagnostics
 -----------
+
 To see what this module does internally:
->>> from Astronomy import Ephem
->>> Ephem.diag = True
->>> x = Ephem.Pulsar('J1809-0743')
+
+.. code-block:: python
+
+    >>> from Astronomy import Ephem
+    >>> Ephem.diag = True
+    >>> x = Ephem.Pulsar('J1809-0743')
+
 """
 import logging
 import datetime
@@ -40,15 +51,8 @@ import ephem
 
 module_logger = logging.getLogger(__name__)
 
-from .serializable_body import SerializableBody
-
-try:
-    from Astrophysics.Pulsars import pulsar_data as PD
-    from Radio_Astronomy import michigan, vla_cal
-    from .pulsar import Pulsar
-    from .quasar import Quasar
-except Exception as err:
-    module_logger.error("Couldn't import pulsar data or vla calibrators: {}".format(err))
+from Astrophysics.Pulsars import pulsar_data as PD
+from Radio_Astronomy import michigan, vla_cal
 
 try:
     from MonitorControl.Configurations.coordinates import DSS
@@ -56,7 +60,6 @@ except ImportError as err:
     module_logger.error(("Couldn't import support version of DSS Observer."
                          "Falling back to unsupported version in this package."))
     from .dss import DSS
-
 
 J2000 = ephem.Date("2000/1/1 00:00:00")
 
@@ -76,21 +79,20 @@ try:
 except Exception as err:
     module_logger.error("Couldn't process pulsar or vla calibration data: {}".format(err))
 
+from .pulsar import Pulsar
+from .quasar import Quasar
+from .serializable_body import SerializableBody
 
-def remove_item(thislist, item):
-  """
-  Remove item from list without complaining if absent
-
-  @param thislist : list of items
-  @param item : item which may or may not be in the list
-
-  @return: reduced list
-  """
-  try:
-    thislist.remove(item)
-  except ValueError:
-    pass
-  return thislist
+__all__ = [
+        "Quasar",
+        "Pulsar",
+        "SerializableBody",
+        "EphemException",
+        "calibrator",
+        "Planets",
+        "PD",
+        "DSS"
+]
 
 class EphemException(Exception):
   """
@@ -125,12 +127,11 @@ def calibrator(name):
     exec('calibrator = '+name+'()')
     return calibrator
   except Exception as details:
-    if diag:
-      print "Not a planet:",details
+    module_logger.debug("Not a planet: {}".format(details))
     # quasar?
     try:
       calibrator = Quasar(name)
       return calibrator
-    except Exception, details:
-      print "Not a quasar:",details
+    except Exception as details:
+      module_logger.debug("Not a quasar: {}".format(details))
       return None
