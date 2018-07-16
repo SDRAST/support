@@ -12,7 +12,9 @@ module_logger = logging.getLogger(__name__)
 
 def _get_prop_doc(prop):
     name = prop.fget.__name__
-    doc = prop.__doc__.strip()
+    doc = ""
+    if prop.__doc__ is not None:
+        doc = prop.__doc__.strip()
     return "{}:\n\t{}".format(name, doc)
 
 

@@ -7,6 +7,10 @@ from support.doc_util import get_help, _get_method_doc
 class TestClass(object):
 
     @property
+    def prop_no_doc(self):
+        pass
+
+    @property
     def prop1(self):
         """
         prop1 documentation
