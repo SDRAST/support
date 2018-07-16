@@ -32,7 +32,9 @@ def _get_method_doc(method, method_type="instance"):
         args_doc.append(arg)
     args_doc.extend(keyword_args_doc)
     args = ", ".join(args_doc)
-    doc = method.__doc__.strip()
+    doc = ""
+    if method.__doc__ is not None:
+        doc = method.__doc__.strip()
     method_doc = "{}({}):\n\t{}".format(name, args, doc)
     if method_type != "instance":
         return "{} {}".format(method_type, method_doc)

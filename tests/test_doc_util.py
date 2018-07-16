@@ -31,6 +31,9 @@ class TestClass(object):
         """
         pass
 
+    def method_no_doc(self):
+        pass
+
     @staticmethod
     def static_method1(arg1):
         """
@@ -44,6 +47,7 @@ class TestClass(object):
         class_method1 documentation
         """
         pass
+
 
 
 class TestDocUtil(unittest.TestCase):
