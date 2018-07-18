@@ -7,6 +7,7 @@ module_logger = logging.getLogger(__name__)
 
 __all__ = ["inspect_file_attrs", "inspect_file_structure"]
 
+
 def _get_file_obj(f_path_or_f_obj):
     """
     Get an instance of h5py.File from either an existing instance
@@ -61,6 +62,7 @@ def inspect_file_attrs(f_path_or_f_obj):
 
     return f_obj
 
+
 def inspect_file_structure(f_path_or_f_obj):
     """
     Get a dictionary that reports the structure of some HDF5 file.
@@ -91,6 +93,7 @@ def inspect_file_structure(f_path_or_f_obj):
 
     """
     report = {}
+
     def _inspect_file_structure(grp, report):
         if hasattr(grp, "keys"):
             for key in grp:
@@ -101,8 +104,9 @@ def inspect_file_structure(f_path_or_f_obj):
                     report[key] = grp[key].shape
 
     f_obj = _get_file_obj(f_path_or_f_obj)
-    _inspect_file_structure(f_obj,report)
+    _inspect_file_structure(f_obj, report)
     return report, f_obj
+
 
 if __name__ == "__main__":
     inspect_file_attrs(sys.argv[1]).close()
