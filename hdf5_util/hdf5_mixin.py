@@ -8,6 +8,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 
 module_logger = logging.getLogger(__name__)
 
+
 class HDF5Mixin(object):
     """
     Mixin class with methods for creating and writing to HDF5 files.
@@ -58,13 +59,15 @@ class HDF5Mixin(object):
             self.data_file_obj.close()
         # use current date in file name and path
         now = datetime.datetime.utcnow()
-        self.data_file_name = self.name + now.strftime("-%Y-%j-%H%M%S.h5py")
-        module_logger.debug("open_data_file %s",
-                       self.data_file_name)
+        self.data_file_name = self.name + now.strftime("-%Y-%j-%H%M%S.hdf5")
+        module_logger.debug("open_data_file {}".format(
+            self.data_file_name
+        ))
         data_dir = self.create_data_directory() # if needed
         self.data_file_path = os.path.join(data_dir, self.data_file_name)
-        module_logger.debug("open_data_file: path is %s",
-                       self.data_file_path)
+        module_logger.debug("open_data_file: path is {}".format(
+            self.data_file_path
+        ))
         self.data_file_obj = h5py.File(self.data_file_path, "w")
         self.initialize_data_file()
 
@@ -76,7 +79,8 @@ class HDF5Mixin(object):
 
         The registers that never change in a ROACH are put in top-level attributes
         """
-        module_logger.debug("initialize_data_file: file is {}".format(self.data_file_obj))
+        module_logger.debug("initialize_data_file: file is {}".format(
+            self.data_file_obj))
         self.data_file_obj.attrs["name"] = self.name
         for key in self.file_attr_keys:
             self.data_file_obj.attrs[key] = self.header[key]

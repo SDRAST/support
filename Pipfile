@@ -23,5 +23,6 @@ scipy = "*"
 tzlocal = "*"
 gnuplotlib = "*"
 "bs4" = "*"
+"ef187ba" = {path = "./pyro"}
 
 [dev-packages]

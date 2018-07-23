@@ -24,6 +24,7 @@ __all__ = [
     "TLSSMTPHandler"
 ]
 
+
 class TLSSMTPHandler(logging.handlers.SMTPHandler):
     """
     Custom handler for email logging using TLS encryption.
@@ -79,6 +80,7 @@ class TLSSMTPHandler(logging.handlers.SMTPHandler):
         except:
             self.handleError(record)
 
+
 def setup_email_handler(toaddr, logLevel=logging.ERROR):
     """
     Setup an instance of TLSSMTPHandler
@@ -98,6 +100,7 @@ def setup_email_handler(toaddr, logLevel=logging.ERROR):
     eh.setFormatter(formatter)
     return eh
 
+
 def remove_handlers(logger):
     """
     remove any handlers associated with a logger.
@@ -106,7 +109,12 @@ def remove_handlers(logger):
     map(logger.removeFilter, logger.filters[:])
     return logger
 
-def setup_logging(logger=None, logfile=None, logLevel=logging.DEBUG, handlers=None, **kwargs):
+
+def setup_logging(logger=None,
+                  logfile=None,
+                  logLevel=logging.DEBUG,
+                  handlers=None,
+                  **kwargs):
     """
     setup up some logging.getLogger instance with console logging and file logging
     handlers (StreamHandler and FileHandler handlers, respectively.)
@@ -187,6 +195,7 @@ def setup_logging(logger=None, logfile=None, logLevel=logging.DEBUG, handlers=No
         for handler in handlers:
             logger.addHandler(handler)
     return logger
+
 
 def logging_config(**kwargs):
     """alias for old logging_config function"""
