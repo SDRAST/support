@@ -15,11 +15,14 @@ pyro = "*"
 zmq = "*"
 paramiko = "*"
 pyephem = "*"
-astropy = "*"
-ipython = "*"
+astropy = "==2.0.7"
+ipython = "==5.7.0"
 "h5py" = "*"
-"ef187ba" = {path = "./pyro"}
 matplotlib = "*"
 scipy = "*"
+tzlocal = "*"
+gnuplotlib = "*"
+"bs4" = "*"
+"ef187ba" = {path = "./pyro"}
 
 [dev-packages]
