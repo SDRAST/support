@@ -83,7 +83,7 @@ class Configuration(object):
     "fits_data_dir",
     "boresight_data_dir",
     "flux_calibration_data_dir",
-    "tipping_data",
+    "tipping_data_dir",
     "status_dir",
     "sources_dir",
     "models_dir",
