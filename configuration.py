@@ -177,7 +177,7 @@ tams_config = Configuration(
     TAMSConfiguration,
     data_dir="/home/ops/roach_data/sao_test_data/RA_data",
     calibration_dir="/home/ops/roach_data/sao_test_data/data_dir",
-    project_dir="/home/ops/project/TAMS",
+    project_dir="/home/ops/projects/TAMS",
     log_dir="/usr/local/logs/dss43",
     product_dir="/home/ops/roach_data/sao_test_data/data_dir/products",
     boresight_model_file="AdaBoostClassifier.2018-07-05T09:17:31.dat"
