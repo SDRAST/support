@@ -46,7 +46,7 @@ class Configuration(object):
 
     def __getattr__(self, attr):
         if attr in Configuration._protected:
-            return object.__getattr__(self, attr, val)
+            return object.__getattr__(self, attr)
         elif attr in self._emitter.__class__.__dict__:
             return getattr(self._emitter, attr)
         else:
@@ -170,7 +170,7 @@ class TAMSConfiguration(object):
 
     @property
     def boresight_model_file_path(self):
-        return os.path.join(self.models_dir, self.boresight_model_file)
+        return os.path.join(self.models_dir, self._boresight_model_file)
 
 
 tams_config = Configuration(
