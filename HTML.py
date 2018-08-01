@@ -54,11 +54,11 @@ class TagBody(object):
     keywords = self.__dict__.keys()
     # the following attributes are not converted to HTML attributes
     for attr in keywords:
-      if attr != "tag" and \       # tag name
-         attr != "logger" and \    # logging.Logger
-         attr != "text" and \      # accumulates the HTML text
-         attr != "content" and \   # what was passed in 'args' when initialized
-         attr != "enclose":        # tag contents all on one line
+      if attr != "tag" and \
+         attr != "logger" and \
+         attr != "text" and \
+         attr != "content" and \
+         attr != "enclose":
         self.text += " "+attr+"="+self.str_if_needed(self.__dict__[attr])
     if self.enclose:
       self.text += ">"
