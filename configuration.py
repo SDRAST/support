@@ -46,7 +46,7 @@ class Configuration(object):
 
     def __getattr__(self, attr):
         if attr in Configuration._protected:
-            return object.__getattr__(self, attr, val)
+            return object.__getattr__(self, attr)
         elif attr in self._emitter.__class__.__dict__:
             return getattr(self._emitter, attr)
         else:
@@ -83,7 +83,7 @@ class Configuration(object):
     "fits_data_dir",
     "boresight_data_dir",
     "flux_calibration_data_dir",
-    "tipping_data",
+    "tipping_data_dir",
     "status_dir",
     "sources_dir",
     "models_dir",
@@ -170,14 +170,14 @@ class TAMSConfiguration(object):
 
     @property
     def boresight_model_file_path(self):
-        return os.path.join(self.models_dir, self.boresight_model_file)
+        return os.path.join(self.models_dir, self._boresight_model_file)
 
 
 tams_config = Configuration(
     TAMSConfiguration,
     data_dir="/home/ops/roach_data/sao_test_data/RA_data",
     calibration_dir="/home/ops/roach_data/sao_test_data/data_dir",
-    project_dir="/home/ops/project/TAMS",
+    project_dir="/home/ops/projects/TAMS",
     log_dir="/usr/local/logs/dss43",
     product_dir="/home/ops/roach_data/sao_test_data/data_dir/products",
     boresight_model_file="AdaBoostClassifier.2018-07-05T09:17:31.dat"
