@@ -69,6 +69,14 @@ def LAN_hosts_status(port=22, private=False):
           "MAC:": MAC,
           "ROACH": ROACHlist}
 
+def report_LAN_hosts_status():
+  up, down, IP, MAC, ROACHlist = LAN_hosts_status()
+  return {"up": up,
+          "down": down,
+          "IP": IP,
+          "MAC": MAC,
+          "roaches detected": ROACHlist}
+  
 def get_local_network(private=False, subnet=100):
   """
   Returns the IP address of the local network
@@ -136,6 +144,15 @@ def decode_MAC(MAC_address):
   else:
     raise RuntimeError("Invalid MAC address: %s" % MAC_address)
 
+def encode_IP(intIP):
+  """
+  """
+  part0 = intIP/2**24
+  part1 = (intIP - part0*2**24)/2**16
+  part2 = (intIP - part0*2**24 - part1*2**16)/2**8
+  part3 =  intIP - part0*2**24 - part1*2**16 - part2*2**8
+  return "%d.%d.%d.%d" % (part0, part1, part2, part3)
+  
 if __name__ == "__main__":
   up, down, IP, MAC, ROACHlist = LAN_hosts_status()
   print "Up:", up

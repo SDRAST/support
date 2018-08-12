@@ -2,6 +2,7 @@ import ephem
 
 __all__ = ["SerializerBase"]
 
+
 class SerializableBody(ephem.FixedBody):
     """
     Simple extension to ephem.FixedBody that allows for conversion to and
@@ -35,7 +36,7 @@ class SerializableBody(ephem.FixedBody):
         observer_info (dict): dictionary containing information about
             an ephem.Observer object.
     """
-    def __init__(self, info=None, name="",observer_info=None):
+    def __init__(self, info=None, name="", observer_info=None):
         super(SerializableBody, self).__init__()
         if info is None:
             self.info = {}

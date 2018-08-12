@@ -14,7 +14,7 @@ fits_dir = data_dir+"FITS/"
 hdf5_dir = data_dir+"HDF5/"
 
 projects_dir = "/usr/local/projects/"
-auto_dir     = projects_dir+"DSAO/"
+auto_dir = projects_dir+"DSAO/"
 sci_proj_path = auto_dir+"Science/"
 act_proj_path = auto_dir+"Activities/"
 

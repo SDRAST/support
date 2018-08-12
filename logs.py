@@ -7,16 +7,50 @@ import logging, logging.handlers
 import time
 import sys
 
-from support.options import initiate_option_parser
+if sys.version_info >= (3, 5):
+    from .options import initiate_option_parser
+else:
+    from support.options import initiate_option_parser
 
 logger = logging.getLogger(__name__)
 
+__all__ = [
+    "setup_logging",
+    "set_loglevel",
+    "get_loglevel",
+    "init_logging",
+    "setup_email_handler",
+    "remove_handlers",
+    "TLSSMTPHandler"
+]
+
+
 class TLSSMTPHandler(logging.handlers.SMTPHandler):
+    """
+    Custom handler for email logging using TLS encryption.
+
+    Examples:
+
+    Set up an instance to do gmail email logging.
+
+    .. code-block:: python
+
+        from cred import my_address, my_username, my_password
+
+        to_address = ["someemail@somedomain"]
+
+        eh = TLSSMTPHandler(mailhost=("smtp.gmail.com",587),
+                                fromaddr=my_address,
+                                toaddrs=to_address,
+                                subject="subject",Overriden method.
+                                credentials=(my_username, my_password),
+                                secure=None)
+
+    """
     def emit(self, record):
         """
-        Emit a record.
-
-        Format the record and send it to the specified addressees.
+        Format a logging record and send it to the specified addresses.
+        This method is never called directly.
         """
         try:
             import smtplib
@@ -46,7 +80,11 @@ class TLSSMTPHandler(logging.handlers.SMTPHandler):
         except:
             self.handleError(record)
 
+
 def setup_email_handler(toaddr, logLevel=logging.ERROR):
+    """
+    Setup an instance of TLSSMTPHandler
+    """
     from support.cred import username, password
     if not isinstance(toaddr, list):
         toaddr = [toaddr]
@@ -62,15 +100,74 @@ def setup_email_handler(toaddr, logLevel=logging.ERROR):
     eh.setFormatter(formatter)
     return eh
 
+
 def remove_handlers(logger):
     """
-    remove any handlers associated with a logger
+    remove any handlers associated with a logger.
     """
     map(logger.removeHandler, logger.handlers[:])
     map(logger.removeFilter, logger.filters[:])
     return logger
 
-def setup_logging(logger=None, logfile=None, logLevel=logging.DEBUG, handlers=None):
+
+def setup_logging(logger=None,
+                  logfile=None,
+                  logLevel=logging.DEBUG,
+                  handlers=None,
+                  **kwargs):
+    """
+    setup up some logging.getLogger instance with console logging and file logging
+    handlers (StreamHandler and FileHandler handlers, respectively.)
+
+    Examples:
+
+    Super basic setup, with no file logging.
+
+    .. code-block:: python
+
+        import logging
+
+        from support.logs import setup_logging
+
+        logger = logging.getLogger("")
+        setup_logging(logger=logger)
+
+    Add a file handler:
+
+    .. code-block:: python
+
+        import logging
+
+        from support.logs import setup_logging
+
+        logger = logging.getLogger("")
+        setup_logging(logger=logger, logfile="/path/to/logfile.log", logLevel=logging.INFO)
+
+    Setup a custom email handler that uses TLS encryption:
+
+    .. code-block:: python
+
+        import logging
+
+        from support.logs import setup_logging, setup_email_handler
+
+        handler = setup_email_handler(["me@domain.com"])
+        logger = logging.getLogger("")
+        setup_logging(logger=logger, logfile="/path/to/logfile.log",
+            logLevel=logging.INFO, handlers=handler)
+
+    Args:
+        logger (logging.getLogger, optional): logging instance to which to
+            add handlers
+        logfile (str, optional): logfile to log to. If this isn't provided,
+            no FileHandler will be set up.
+        logLevel (int, optional): logLevel for StreamHandler.
+        handlers (list/logging.Handler, optional): Additional handlers to
+            add to logging instance.
+        **kwargs: Extra keyword arguments
+    Returns:
+        logging.getLogger: logging instance with new handlers added
+    """
     if logger is None:
         logger = logging.getLogger()
     formatter = logging.Formatter('%(levelname)s:%(name)s:%(message)s')
@@ -99,64 +196,71 @@ def setup_logging(logger=None, logfile=None, logLevel=logging.DEBUG, handlers=No
             logger.addHandler(handler)
     return logger
 
-def logging_config(name="", logger=None, logfile=None, level=logging.INFO,
-                   handlers=None, **kwargs):
-    """
-    Configure stream and file output logging.
-    If we don't provide a logfile (discouraged) then we don't do
-    file logging.
 
-    @param name : The name of the module from which we log.
-    @type  name : str
+def logging_config(**kwargs):
+    """alias for old logging_config function"""
+    kwargs.pop("name")
+    kwargs["logLevel"] = kwargs.pop("level", None)
+    return setup_logging(**kwargs)
 
-    @param logger : An existing logger instance to which we want to add handlers.
-    @type  logger : logging.Logger
-
-    @param logfile : The name of the logfile to use for file logging.
-    @type  logfile : str
-
-    @param loglevel : The logging level to use.
-    @type  loglevel : logging.Level
-
-    @param handlers : Extra handlers, that already have formatters.
-    @type  handlers : list of logging handlers
-
-    @param **kwargs : Other (unexpected) keyword arguments.
-    """
-    if not logger:
-        logger = logging.getLogger(name)
-
-    logger.propagate = False
-    logger.setLevel(level)
-
-    if len(logger.handlers) != 0:
-        pass
-    else:
-        logging.Formatter.converter = time.gmtime
-        formatter_file = logging.Formatter('%(levelname)s:%(asctime)s:%(name)s:%(message)s')
-        formatter = logging.Formatter('%(levelname)s:%(name)s:%(message)s')
-
-        # configure stream logging (the output to stdout)
-        sh = logging.StreamHandler(sys.stdout)
-        sh.setLevel(level)
-        sh.setFormatter(formatter)
-
-        logger.addHandler(sh)
-
-        # if we have a logfile, configure file logging.
-        if logfile:
-            fh = logging.FileHandler(logfile)
-            fh.setLevel(level)
-            fh.setFormatter(formatter_file)
-            logger.addHandler(fh)
-
-    if handlers:
-        if not isinstance(handlers, list):
-            handlers = [handlers]
-        for handler in handlers:
-            logger.addHandler(handler)
-
-    return logger
+# def logging_config(name="", logger=None, logfile=None, level=logging.INFO,
+#                    handlers=None, **kwargs):
+#     """
+#     Configure stream and file output logging.
+#     If we don't provide a logfile (discouraged) then we don't do
+#     file logging.
+#
+#     @param name : The name of the module from which we log.
+#     @type  name : str
+#
+#     @param logger : An existing logger instance to which we want to add handlers.
+#     @type  logger : logging.Logger
+#
+#     @param logfile : The name of the logfile to use for file logging.
+#     @type  logfile : str
+#
+#     @param loglevel : The logging level to use.
+#     @type  loglevel : logging.Level
+#
+#     @param handlers : Extra handlers, that already have formatters.
+#     @type  handlers : list of logging handlers
+#
+#     @param **kwargs : Other (unexpected) keyword arguments.
+#     """
+#     if not logger:
+#         logger = logging.getLogger(name)
+#
+#     logger.propagate = False
+#     logger.setLevel(level)
+#
+#     if len(logger.handlers) != 0:
+#         pass
+#     else:
+#         logging.Formatter.converter = time.gmtime
+#         formatter_file = logging.Formatter('%(levelname)s:%(asctime)s:%(name)s:%(message)s')
+#         formatter = logging.Formatter('%(levelname)s:%(name)s:%(message)s')
+#
+#         # configure stream logging (the output to stdout)
+#         sh = logging.StreamHandler(sys.stdout)
+#         sh.setLevel(level)
+#         sh.setFormatter(formatter)
+#
+#         logger.addHandler(sh)
+#
+#         # if we have a logfile, configure file logging.
+#         if logfile:
+#             fh = logging.FileHandler(logfile)
+#             fh.setLevel(level)
+#             fh.setFormatter(formatter_file)
+#             logger.addHandler(fh)
+#
+#     if handlers:
+#         if not isinstance(handlers, list):
+#             handlers = [handlers]
+#         for handler in handlers:
+#             logger.addHandler(handler)
+#
+#     return logger
 
 
 def init_logging(extlogger,
@@ -268,7 +372,7 @@ def set_module_loggers(logger_dict):
 
 def create_year_doy_dir(base_dir):
     """
-    Given some base directory, create `<<base_dir>>/<<year>>/<<doy>>`
+    Given some base directory, create ``<base_dir>/<year>/<doy>``
     directory structure, if not already existing.
     """
     year, doy = datetime.datetime.utcnow().strftime("%Y %j").split(" ")

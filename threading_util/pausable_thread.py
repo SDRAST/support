@@ -4,6 +4,8 @@ import time
 
 module_logger = logging.getLogger(__name__)
 
+__all__ = ["iterativeRun", "Pause", "PausableThread", "PausableThreadCallback"]
+
 def iterativeRun(run_fn):
     """
     A decorator for running functions repeatedly inside a PausableThread.
@@ -191,30 +193,3 @@ class PausableThreadCallback(threading.Thread):
     def running(self):
 
         return self._running.isSet()
-
-
-if __name__ == '__main__':
-    def callback():
-        print("Called!")
-        time.sleep(5.0)
-
-
-    t = PausableThreadCallback(callback, name='test')
-    t.daemon = True
-    # t.pause()
-    # t.start()
-    # t.unpause()
-    # print("Starting thread.")
-    # t.start()
-    # time.sleep(0.1)
-    # print("Pausing thread.")
-    # t.pause()
-    # for i in xrange(7):
-    # 	print("Is the callback still running? {}".format(t.running()))
-    # 	time.sleep(1.0)
-    # print("Unpausing thread.")
-    # t.unpause()
-    # time.sleep(5.0)
-    # print("Stopping thread.")
-    # t.stop()
-    # t.join()
