@@ -26,6 +26,7 @@ value from a string to a Python variable type, e.g. float
 """
 import argparse
 import logging
+import numpy
 import sys
 
 from local_dirs import log_dir
