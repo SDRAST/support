@@ -48,17 +48,23 @@ class TagBody(object):
   def render(self):
     """
     convert self to str
+    
+    The following attributes are not converted to HTML attributes::
+      tag     - tag name
+      logger  - logging.Logger
+      text    - accumulates the HTML text
+      content - what was passed in 'args' when initialized
+      enclose - tag contents all on one line
     """
     self.logger.debug("render: opening %s", self.tag)
     self.text += "<"+self.tag
     keywords = self.__dict__.keys()
-    # the following attributes are not converted to HTML attributes
     for attr in keywords:
-      if attr != "tag" and \       # tag name
-         attr != "logger" and \    # logging.Logger
-         attr != "text" and \      # accumulates the HTML text
-         attr != "content" and \   # what was passed in 'args' when initialized
-         attr != "enclose":        # tag contents all on one line
+      if attr != "tag" and \
+         attr != "logger" and \
+         attr != "text" and \
+         attr != "content" and \
+         attr != "enclose":
         self.text += " "+attr+"="+self.str_if_needed(self.__dict__[attr])
     if self.enclose:
       self.text += ">"
@@ -129,6 +135,18 @@ class TableData(TagBody):
     self.enclose = True
     super(TableData, self).__init__(*args, **kwargs)
 
+class Link(TagBody):
+  def __init__(self, *args, **kwargs):
+    self.tag = "A"
+    self.enclose = True
+    super(Link, self).__init__(*args, **kwargs)
+
+class Centering(TagBody):
+  def __init__(self, *args, **kwargs):
+    self.tag = "CENTER"
+    self.enclose = False
+    super(Centering, self).__init__(*args, **kwargs)
+
 
 if __name__ == "__main__":
   mylogger = logging.getLogger()
@@ -175,11 +193,13 @@ if __name__ == "__main__":
       stn_idx = cell % len(stations)
       cell_data = cells[stn_idx, year_idx, month_idx]
       monthrow.append(TableData(str(cell_data)))
+      monthrow.append(",")
     month_rows.append(TableRow(*monthrow))
   # table: completed
   table = Table(hdr_row, yr_row, *month_rows, BORDER=1)
+  centered = Centering(table)
   # body: completed
-  body = Body(h1, table)
+  body = Body(h1, centered)
   # page: completed
   html = HTMLpage(head, body)
   
