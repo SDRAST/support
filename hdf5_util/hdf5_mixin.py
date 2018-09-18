@@ -40,7 +40,7 @@ class HDF5Mixin(object):
             data_dir = self.base_data_dir
         today_data_dir = os.path.join(data_dir, year, doy)
         if not os.path.exists(today_data_dir):
-            os.makedirs(today_data_dir, 0775)
+            os.makedirs(today_data_dir, mode=0o775)
         return today_data_dir
 
     def open_data_file(self):

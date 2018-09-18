@@ -50,9 +50,14 @@ from math import pi
 import ephem
 
 module_logger = logging.getLogger(__name__)
-
-from Astrophysics.Pulsars import pulsar_data as PD
-from Radio_Astronomy import michigan, vla_cal
+try:
+    from Astrophysics.Pulsars import pulsar_data as PD
+    from Radio_Astronomy import michigan, vla_cal
+except (ImportError, SyntaxError) as err:
+    module_logger.error(
+        ("Couldn't import Astrophysics.Pulsars "
+         "or Radio_Astronomy calibration data").format(err)
+    )
 
 try:
     from MonitorControl.Configurations.coordinates import DSS
@@ -79,8 +84,11 @@ try:
 except Exception as err:
     module_logger.error("Couldn't process pulsar or vla calibration data: {}".format(err))
 
-from .pulsar import Pulsar
-from .quasar import Quasar
+try:
+    from .pulsar import Pulsar
+    from .quasar import Quasar
+except ImportError as err:
+    module_logger.error("Cannot import Pulsar or Quasar: {}".format(err))
 from .serializable_body import SerializableBody
 
 __all__ = [
