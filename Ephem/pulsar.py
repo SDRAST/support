@@ -34,7 +34,7 @@ class Pulsar(ephem.FixedBody):
   .. code-block:: python
 
     >>> print Ephem.PD.help['S1400']
-    
+
   (PD stands for 'pulsar data'.)
   """
   def __init__(self, name):
@@ -67,12 +67,15 @@ class Pulsar(ephem.FixedBody):
     except:
       raise(self.name,"unknown pulsar")
     if diag:
-      print self.name
+      print(self.name)
     pulsar_data = PD.data[self.name]
     [ra,dec]    = PD.equatorial(pulsar_data)
     if diag:
-      print "From catalogue:", ra, dec
-      print "In ephem format:",ephem.hours(str(ra)),ephem.degrees(str(dec))
+      print("From catalogue: {}, {}".format(ra, dec))
+      print("In ephem format: {}, {}".format(
+        ephem.hours(str(ra)),
+        ephem.degrees(str(dec))
+     ))
     self._ra    = ephem.hours(str(ra))     # pulsar_data['RAJ']  or derived
     self._dec   = ephem.degrees(str(dec)) # pulsar_data['DECJ'] or derived
     self._pmra  = float(pulsar_data['PMRA'])
@@ -80,7 +83,7 @@ class Pulsar(ephem.FixedBody):
     self.period = PD.period(pulsar_data)
     self.dpdt   = PD.period_change_rate(pulsar_data)
     if diag:
-      print "As attributes:",self._ra, self._dec
+      print("As attributes: {}, {}".format(self._ra, self._dec))
     self._epoch = J2000
     self._class = "L"
     # to initialize ra, dec to something
@@ -96,7 +99,7 @@ class Pulsar(ephem.FixedBody):
     keys = remove_item(keys,'P0')
     keys = remove_item(keys,'P1')
     if diag:
-      print "Properties:",keys
+      print("Properties: {}".format(keys))
     self.properties = {}
     for prop in keys:
       self.properties[prop] = pulsar_data[prop]

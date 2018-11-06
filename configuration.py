@@ -89,7 +89,8 @@ class Configuration(object):
     "models_dir",
     "log_dir",
     "product_dir",
-    "dss"
+    "dss",
+    "rest_freq"
 ])
 class TAMSConfiguration(object):
 
@@ -99,7 +100,8 @@ class TAMSConfiguration(object):
                  project_dir="",
                  log_dir="",
                  product_dir="",
-                 boresight_model_file=""):
+                 boresight_model_file="",
+                 rest_freq=2.223508e10):
 
         self._data_dir = data_dir
         self._hdf5_data_dir = os.path.join(self._data_dir, "HDF5", "dss43")
@@ -131,6 +133,7 @@ class TAMSConfiguration(object):
         self._log_dir = log_dir
 
         self._product_dir = product_dir
+        self._rest_freq = rest_freq
 
     @property
     def data_dir(self):
@@ -180,5 +183,6 @@ tams_config = Configuration(
     project_dir="/home/ops/projects/TAMS",
     log_dir="/usr/local/logs/dss43",
     product_dir="/home/ops/roach_data/sao_test_data/data_dir/products",
-    boresight_model_file="AdaBoostClassifier.2018-07-05T09:17:31.dat"
+    boresight_model_file="AdaBoostClassifier.2018-07-05T09:17:31.dat",
+    rest_freq=2.223508e10
 )
