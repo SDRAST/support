@@ -5,6 +5,10 @@ __all__ = ["coroutine", "CoroutineMixin"]
 def coroutine(func):
     """
     Simple decorator to "prime" a coroutine
+    
+    Uses Python 2.5 extension to decorators, in which 'yield' has a return
+    value other than None when the 'send()' is invoked.  Then 'yield' returns
+    the received value.
 
     Examples:
 
@@ -40,7 +44,10 @@ def coroutine(func):
 
 class CoroutineMixin(object):
     """
-    This mixin assumes a ``_coro`` generator object is defined in __init__
+    This provides a subclass with a ``_coro`` attribute which provides the
+    class with the new generator features defined in Python 2.5.
+    
+    This mixin assumes a ``_coro`` generator object is defined in ``__init__``.
     """
     def send(self, *args):
         self._coro.send(*args)

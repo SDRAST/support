@@ -175,6 +175,16 @@ def remove_extra_spaces(data):
   p = re.compile(r'\s+')
   return p.sub(' ', data)
 
+def make_title(text):
+  """
+  turn a text string of words into a title by capitalizing each word
+  """
+  words = text.split()
+  new_words = []
+  for word in words:
+    new_words.append(word[0].upper()+word[1:])
+  return ' '.join(new_words)
+  
 def longest_text(textlist):
   """
   Find the length of the longest string in a list

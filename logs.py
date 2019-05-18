@@ -164,7 +164,7 @@ def setup_logging(logger=None,
         logLevel (int, optional): logLevel for StreamHandler.
         handlers (list/logging.Handler, optional): Additional handlers to
             add to logging instance.
-        **kwargs: Extra keyword arguments
+        **kwargs: Extra keyword arguments, not used here.
     Returns:
         logging.getLogger: logging instance with new handlers added
     """

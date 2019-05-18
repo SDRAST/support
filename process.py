@@ -35,7 +35,7 @@ class BasicProcess(object):
         try:
             self.pid = int(pid)
         except ValueError:
-            module_logger.error("Provided PID is not valid. Won't be able to call kill")
+            module_logger.error("__init__: Provided PID is not valid. Won't be able to call kill")
         if ps_line:
             self.name, self.pid = self.process_ps_line(ps_line, command_name)
 

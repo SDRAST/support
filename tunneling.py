@@ -11,7 +11,7 @@ Tunnel parameters are predefined and can be obtained with show_remote_names().
 The domain and host names are nicknames for easy remembering.  They are
 accessed as 'localhost:port'.  A tunnel is set up with:
 
-In [1]: from tunneling import *
+In [1]: from support.tunneling import *
 
 In [2]: t = Tunnel("ra")
 
@@ -49,7 +49,7 @@ one can push keys to the remote host which will authenticate you in future.
 This does not work across a gateway requiring two-factor (SecurID)
 authentication.
 
-There is a Catch 22 situation for now:  If the keys have not be pushed on to
+There is a Catch 22 situation for now:  If the keys have not been pushed on to
 the remote host then it will want a password and the interactive mechanism for
 doing that has not been installed.  Check paramiko examples for hints.
 
@@ -159,7 +159,7 @@ class RemoteDir:
         self.read_mountroot_cfg()
         if not os.path.exists(self.mountroot):
             os.mkdir(self.mountroot)
-            self.logger.debug(" Creating mountroot in %s", self.mountroot)
+            self.logger.debug("__init__: Creating mountroot in %s", self.mountroot)
         self.host = endpoint
         self.uid = os.getuid()
         self.mountpoint = None
@@ -171,7 +171,7 @@ class RemoteDir:
         except Exception, details:
             raise Exception, details
         existing_tunnels = check_for_tunnels()
-        self.logger.debug(" existing tunnels: %s", str(existing_tunnels))
+        self.logger.debug("__init__: existing tunnels: %s", str(existing_tunnels))
         # get or create the appropriate tunnel instance
         self.tunnel = Tunnel(endpoint)
         success = self.do_mount(self.tunnel, remoteMP=remoteMP)
@@ -454,19 +454,19 @@ class Tunnel(object):
         @return: Tunnel() instance
         """
         self.logger = logging.getLogger(module_logger.name + ".Tunnel")
-        self.logger.debug(" checking for tunnel to %s", host)
+        self.logger.debug("__init__: checking for tunnel to %s", host)
         response = self.check_for_tunnel(host)
         if response == 0:
-            self.logger.debug(" no tunnel found; create a new one")
+            self.logger.debug("__init__: no tunnel found; create a new one")
             # make a tunnel
             if username:
                 command = '/usr/local/scripts/ssh-tunnel {} {}'.format(host, username)
             else:
                 command = '/usr/local/scripts/ssh-tunnel {}'.format(host)
-            self.logger.debug(" doing: %s", command)
+            self.logger.debug("__init__: doing: %s", command)
             self.p = invoke(command)
             response = self.p.stdout.readline()
-            self.logger.debug(" got: %s", response)
+            self.logger.debug("__init__: got: %s", response)
             parts = response.split()
             if parts[-2] == "recognized":
                 # not recognized

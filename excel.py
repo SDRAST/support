@@ -180,8 +180,11 @@ def get_row_number(ws, column, value):
     else:
         highest_row = ws.get_highest_row()
     for row in range(highest_row):
-        cell_id = "%s%s" % (chr(column + 65), str(row + 1))
-        if ws.cell(cell_id).value == value:
+        # the code below is no longer valid in 2.5
+        #cell_id = "%s%s" % (chr(column + 65), str(row + 1))
+        #if ws.cell(cell_id).value == value:
+        #col_number, row_number = "%s" % chr(column + 65), "%s" % str(row + 1)
+        if ws.cell(row=row+1, column=column).value == value:
             return row
             break
     return None
