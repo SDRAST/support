@@ -26,6 +26,7 @@ value from a string to a Python variable type, e.g. float
 """
 import argparse
 import logging
+import numpy
 import sys
 
 if sys.version_info >= (3,5):

@@ -105,7 +105,7 @@ class Configuration(object):
 
     def __getattr__(self, attr):
         if attr in Configuration._protected:
-            return object.__getattr__(self, attr, val)
+            return object.__getattr__(self, attr)
         elif attr in self._emitter.__class__.__dict__:
             return getattr(self._emitter, attr)
         else:
@@ -135,5 +135,4 @@ class Configuration(object):
         today_dir = os.path.join(base_dir, year, doy)
         _check_and_create(today_dir)
         return today_dir
-        
 

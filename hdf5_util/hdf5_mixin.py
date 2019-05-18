@@ -40,7 +40,7 @@ class HDF5Mixin(object):
             data_dir = self.base_data_dir
         today_data_dir = os.path.join(data_dir, year, doy)
         if not os.path.exists(today_data_dir):
-            os.makedirs(today_data_dir, 0775)
+            os.makedirs(today_data_dir, mode=0o775)
         return today_data_dir
 
     def open_data_file(self):
@@ -59,7 +59,9 @@ class HDF5Mixin(object):
             self.data_file_obj.close()
         # use current date in file name and path
         now = datetime.datetime.utcnow()
-        self.data_file_name = self.name + now.strftime("-%Y-%j-%H%M%S.hdf5")
+        self.data_file_name = "{}.{}.hdf5".format(
+            self.name, now.strftime("%Y-%j-%H%M%S")
+        )
         module_logger.debug("open_data_file {}".format(
             self.data_file_name
         ))
