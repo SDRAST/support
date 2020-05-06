@@ -148,7 +148,7 @@ def install_dependencies():
     filename = direction+"dep.txt"
   try:
     fd = open(filename,"r")
-  except IOError, details:
+  except IOError as details:
     logger.warning(" IOError, "+str(details))
   deps = fd.readlines()
   fd.close()
@@ -158,9 +158,9 @@ def install_dependencies():
     subdir = os.path.basename(fullpath)
     # make sure the destination exists
     if os.path.exists(subdir) == False:
-      print "sudo mkdir -p",subdir
-    print "cd",path
-    print "git clone --jplra=jpl", url, subdir
+      print("sudo mkdir -p",subdir)
+    print("cd",path)
+    print("git clone --jplra=jpl", url, subdir)
 
 def get_git_dirs():
   """
@@ -229,6 +229,7 @@ def report_status(show_all=False):
   Prints the status report, if there is any, for each sandbox.
   There is a priority to what is reported, according to the severity of the
   status::
+  
     work      - changes need to be committed
     untracked - there are untracked files which might need to be added
     behind    - a pull is required to bring the repo up to date
@@ -290,12 +291,12 @@ def report_status(show_all=False):
           status = "clean"
       state[status].append("%40s  (%8s)  %8s" % (repo, branch, status))
     if show_all and (status != "clean"):
-      print "\n"+repo+40*"_"
+      print("\n"+repo+40*"_")
       for f in response:
-        print f.strip()
-  for status in state.keys():
+        print(f.strip())
+  for status in list(state.keys()):
     for report in state[status]:
-      print ("%9s: %57s" % (status,report[:52]))
+      print(("%9s: %57s" % (status,report[:52])))
 
 #------------------------ under development ------------------------------------
 
@@ -313,7 +314,7 @@ def add_new_files():
     stat,filename = line.strip().split()
     if stat == '?':
       exit_stat = os.system("git add "+filename)
-      print "Adding",filename,"exit status =",exit_stat
+      print("Adding",filename,"exit status =",exit_stat)
       found = True
   return found
 
@@ -363,8 +364,8 @@ def compare_to_remotes(remote):
           if report[-1] == 'up to date':
             pass
           else:
-            print os.path.basename(git_dir), report
+            print(os.path.basename(git_dir), report)
     if status:
       pass
     else:
-      print "Ignoring",git_dir
+      print("Ignoring",git_dir)

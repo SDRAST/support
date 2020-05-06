@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>NameServerTunnel &#8212; support 0.9 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Configuration" href="support.trifeni.trifeni.configuration.Configuration.html" />
+    <link rel="prev" title="DaemonTunnel" href="support.trifeni.trifeni.DaemonTunnel.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.trifeni.trifeni.configuration.Configuration.html" title="Configuration"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="support.trifeni.trifeni.DaemonTunnel.html" title="DaemonTunnel"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="support.trifeni.trifeni.DaemonTunnel.html"
+                        title="previous chapter">DaemonTunnel</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="support.trifeni.trifeni.configuration.Configuration.html"
+                        title="next chapter">Configuration</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/support.trifeni.trifeni.NameServerTunnel.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="nameservertunnel">
+<h1>NameServerTunnel<a class="headerlink" href="#nameservertunnel" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="support.trifeni.trifeni.NameServerTunnel">
+<em class="property">class </em><code class="sig-prename descclassname">support.trifeni.trifeni.</code><code class="sig-name descname">NameServerTunnel</code><span class="sig-paren">(</span><em class="sig-param">ns_host='localhost'</em>, <em class="sig-param">ns_port=9090</em>, <em class="sig-param">local_ns_port=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#support.trifeni.trifeni.NameServerTunnel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="support.trifeni.trifeni.pyro4tunnel.Pyro4Tunnel.html#support.trifeni.trifeni.pyro4tunnel.Pyro4Tunnel" title="support.trifeni.trifeni.pyro4tunnel.Pyro4Tunnel"><code class="xref py py-class docutils literal notranslate"><span class="pre">support.trifeni.trifeni.pyro4tunnel.Pyro4Tunnel</span></code></a></p>
+<p>Create a tunnel to the remote nameserver.</p>
+<p>Examples:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">NameServerTunnel</span><span class="p">(</span><span class="n">remote_server_name</span><span class="o">=</span><span class="s2">&quot;remote_alias&quot;</span><span class="p">,</span><span class="n">ns_port</span><span class="o">=</span><span class="mi">9090</span><span class="p">)</span> <span class="k">as</span> <span class="n">ns</span><span class="p">:</span>
+    <span class="n">obj_proxy</span> <span class="o">=</span> <span class="n">ns</span><span class="o">.</span><span class="n">get_remote_object</span><span class="p">(</span><span class="s2">&quot;SomeCoolObject&quot;</span><span class="p">)</span>
+    <span class="n">obj_proxy</span><span class="o">.</span><span class="n">some_cool_method</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.NameServerTunnel.ns_host">
+<code class="sig-name descname">ns_host</code><a class="headerlink" href="#support.trifeni.trifeni.NameServerTunnel.ns_host" title="Permalink to this definition">¶</a></dt>
+<dd><p>remote Pyro4 nameserver host</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.NameServerTunnel.ns_port">
+<code class="sig-name descname">ns_port</code><a class="headerlink" href="#support.trifeni.trifeni.NameServerTunnel.ns_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>remote Pyro4 nameserver port</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.NameServerTunnel.ns">
+<code class="sig-name descname">ns</code><a class="headerlink" href="#support.trifeni.trifeni.NameServerTunnel.ns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pyro4 nameserver instance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Pyro4.naming.NameServer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Methods Summary</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#support.trifeni.trifeni.NameServerTunnel.cleanup" title="support.trifeni.trifeni.NameServerTunnel.cleanup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cleanup</span></code></a>()</p></td>
+<td><p>Destroy all the tunnels associated with the manager.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#support.trifeni.trifeni.NameServerTunnel.find_nameserver" title="support.trifeni.trifeni.NameServerTunnel.find_nameserver"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_nameserver</span></code></a>([local_ns_port])</p></td>
+<td><p>Find the remote nameserver.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#support.trifeni.trifeni.NameServerTunnel.get_remote_object" title="support.trifeni.trifeni.NameServerTunnel.get_remote_object"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_remote_object</span></code></a>(remote_obj_name[, …])</p></td>
+<td><p>Grab an object registered on the remote nameserver.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Documentation</p>
+<dl class="method">
+<dt id="support.trifeni.trifeni.NameServerTunnel.cleanup">
+<code class="sig-name descname">cleanup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#support.trifeni.trifeni.NameServerTunnel.cleanup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Destroy all the tunnels associated with the manager. Note that this
+doesn’t actually delete the SSHTunnel objects from memory.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="support.trifeni.trifeni.NameServerTunnel.find_nameserver">
+<code class="sig-name descname">find_nameserver</code><span class="sig-paren">(</span><em class="sig-param">local_ns_port=None</em><span class="sig-paren">)</span><a class="headerlink" href="#support.trifeni.trifeni.NameServerTunnel.find_nameserver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the remote nameserver. This gets called by __init__.</p>
+<p>Examples:</p>
+<p>If I have a nameserver running locally on port 9090, and there is a
+nameserver on the remote running on 9090, I can’t forward port 9090 to the
+remote! Enter the <code class="docutils literal notranslate"><span class="pre">local_ns_port</span></code> keyword argument:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tunnel</span> <span class="o">=</span> <span class="n">NameServerTunnel</span><span class="p">(</span><span class="n">remote_server_name</span><span class="o">=</span><span class="s2">&quot;remote_alias&quot;</span><span class="p">,</span> <span class="n">ns_port</span><span class="o">=</span><span class="mi">9090</span><span class="p">)</span>
+<span class="n">ns</span> <span class="o">=</span> <span class="n">tunnel</span><span class="o">.</span><span class="n">find_nameserver</span><span class="p">(</span><span class="n">local_ns_port</span><span class="o">=</span><span class="mi">9091</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>local_ns_port</strong> (<em>int</em><em>, </em><em>optional</em>) – Use a local forwarding port that is different
+from self.ns_port.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pyro4.naming.NameServer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="support.trifeni.trifeni.NameServerTunnel.get_remote_object">
+<code class="sig-name descname">get_remote_object</code><span class="sig-paren">(</span><em class="sig-param">remote_obj_name</em>, <em class="sig-param">local_obj_port=None</em>, <em class="sig-param">proxy_class=None</em><span class="sig-paren">)</span><a class="headerlink" href="#support.trifeni.trifeni.NameServerTunnel.get_remote_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grab an object registered on the remote nameserver.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>remote_obj_name</strong> (<em>str</em>) – The name of the Pyro object registered on the
+nameserver.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>URI corresponding to requested pyro object, or</dt><dd><p>None if connections wasn’t successful.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Pyro4.core.URI</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.trifeni.trifeni.configuration.Configuration.html" title="Configuration"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="support.trifeni.trifeni.DaemonTunnel.html" title="DaemonTunnel"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Tom Kuiper and Dean Smith.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

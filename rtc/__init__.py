@@ -4,6 +4,7 @@ Module for using the computer's Real Time Clock device
 Provides class RTC
 
 The rtc time structure is::
+
   struct rtc_time {
     int tm_sec;
     int tm_min;
@@ -11,9 +12,9 @@ The rtc time structure is::
     int tm_mday;
     int tm_mon;
     int tm_year;
-    int tm_wday;     /* unused */
-    int tm_yday;     /* unused */
-    int tm_isdst;    /* unused */};
+    int tm_wday;     /\* unused \*/
+    int tm_yday;     /\* unused \*/
+    int tm_isdst;    /\* unused \*/};
 
 Compiled C program 'rtc_constants' returns the addresses of the RTC registers
 for the RTC.
@@ -174,7 +175,7 @@ class RTC(object):
         parts = tm.split()
         tm = list(next.timetuple()[:6])
         if parts[0].lower() != "next":
-          raise RuntimeError, "first time spec must be 'next'"
+          raise RuntimeError("first time spec must be 'next'")
         if parts[1][0].lower() == "s":
           tm[5] = next.second +1
         if parts[1][0].lower() == "m":
@@ -213,7 +214,7 @@ class Signaller(threading.Thread):
         signal.signal(signal.SIGALRM, signalHandler)
         sync_second()
       else:
-        raise RuntimeError, "Signaller object must have RTC or interval value"
+        raise RuntimeError("Signaller object must have RTC or interval value")
     # for debugging
 
   def start(self):

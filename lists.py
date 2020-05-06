@@ -66,6 +66,7 @@ def rotate(List, first_value, direction="l", last_value=None, other_lists=[]):
   The lists in 'other_lists' must have the same length as List.
   
   Examples::
+  
     In [2]: l = [1, 3, 2, 8, 6, 0, 7, 5, 4]
     In [3]: rotate(l,"l",8)
     Out[3]: [8, 6, 0, 7, 5, 4, 1, 3, 2]
@@ -129,6 +130,7 @@ def list_dictionary(dictionary):
    Print a dictionary, one line for each item, with the keys sorted
    
    Examples::
+   
      In [2]: print list_dictionary({'a':1, 'b':2, 'cc':{'x':8, 'y':9}})
      3 items
      a	1
@@ -136,6 +138,7 @@ def list_dictionary(dictionary):
      cc	{'y': 9, 'x': 8}
      In [3]: list_dictionary({'a':1, 'b':2, 'cc':{'x':8, 'y':9}})
      Out[3]: "3 items\na\t1\nb\t2\ncc\t{'y': 9, 'x': 8}\n"
+     
    """
    report = ""
    dck = dictionary.keys()

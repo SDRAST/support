@@ -1,7 +1,7 @@
 """
 Support for Python argparse (or optparse) module
 
-How to use this:
+How to use this::
 
     p = initiate_option_parser(description,examples)
     p.usage = usage
@@ -64,6 +64,7 @@ class ArgumentInterpreter(object):
 
   If a list is expected, a single value is embedded in a list.  A tuple is
   converted to a list. An nparray is flattened and converted to a list::
+  
     a = ArgumentInterpreter()
     l = a.as_list(thing)
 
@@ -141,6 +142,7 @@ def initiate_option_parser(description, examples):
 
   This creates a command line option parser with predefined options for using
   the Python logging module::
+  
     --console_loglevel: stdout/stderr handler logging level (default: WARNING)
     --file_loglevel:    file handler logging level (default: WARNING)
     --logfilepath:      path to the log file (default: /usr/local/Logs/`hostname`)

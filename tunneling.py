@@ -166,10 +166,10 @@ class RemoteDir:
         self.mp = None
         try:
             self.port = PORT[endpoint]
-        except IndexError, details:
-            raise IndexError, details
-        except Exception, details:
-            raise Exception, details
+        except IndexError as details:
+            raise IndexError(details)
+        except Exception as details:
+            raise Exception(details)
         existing_tunnels = check_for_tunnels()
         self.logger.debug("__init__: existing tunnels: %s", str(existing_tunnels))
         # get or create the appropriate tunnel instance
@@ -186,10 +186,10 @@ class RemoteDir:
         @return: None
         """
         if short:
-            print """%s [-u mountpoint] [-p port] [-m mountpoint] <-a|-l|-h|user@host:path>""" \
-                  % sys.name
+            print("""%s [-u mountpoint] [-p port] [-m mountpoint] <-a|-l|-h|user@host:path>""" \
+                  % sys.name)
         else:
-            print """%s [OPTIONS] SOURCE
+            print("""%s [OPTIONS] SOURCE
         OPTIONS
         -a                            Unmount all sshfs-mounts
         -u <mountpoint>               Unmount mount
@@ -209,7 +209,7 @@ class RemoteDir:
         [4] run tunneling.py -p 50091 kuiper@localhost
         [5] run tunneling.py -u my_mount_point
         [6] run tunneling.py -a
-        """ % sys.name
+        """ % sys.name)
 
     def _get_mounted_fs(self):
         """
@@ -349,7 +349,7 @@ class RemoteDir:
             self.logger.warning("do_mount: Mount failed")
             try:
                 os.rmdir(self.mp)
-            except OSError, details:
+            except OSError as details:
                 self.logger.error("do_mount: could not remove %s", self.mp,
                                   exc_info=True)
             return False
@@ -479,7 +479,7 @@ class Tunnel(object):
                 while self.check_for_tunnel(self.host) == 0 and time_left > 0.:
                     time.sleep(0.5)
                     time_left -= 0.5
-                    print "%6.1f\r" % time_left,
+                    print("%6.1f\r" % time_left, end=' ')
                 self.p.stdout.close()
                 self.p.stderr.close()
                 if time_left <= 0.:
@@ -541,9 +541,9 @@ class Tunnel(object):
         """
         self.logger.debug("check_for_tunnel: invoked")
         tunnels = check_for_tunnels()
-        if tunnels.has_key(host):
+        if host in tunnels:
             return int(tunnels[host])
-        elif tunnels.has_key('wbdc') and host == "mmfranco-0571605":
+        elif 'wbdc' in tunnels and host == "mmfranco-0571605":
             # This is REALLY UGLY
             return int(tunnels['wbdc'])
         else:
@@ -599,14 +599,14 @@ class Tunnel(object):
         push_command1 = "echo " + rsa_key + " >> " + remote_file
         try:
             self.remote_command(push_command1)
-        except Exception, details:
+        except Exception as details:
             raise TunnelingException("push_keys() remote_command() 1 failed:\n"
                                      + str(details))
             return False
         push_command2 = "echo " + dsa_key + " >> " + remote_file
         try:
             self.remote_command(push_command2)
-        except Exception, details:
+        except Exception as details:
             raise TunnelingException("push_keys() remote_command() 2 failed:\n"
                                      + str(details))
 
@@ -625,7 +625,7 @@ class Tunnel(object):
         p = invoke(command_line)
         err = p.stderr.read()
         if err != "":
-            print "Error:", err, "\nResult:"
+            print("Error:", err, "\nResult:")
         response = p.stdout.read()
         del p
         return response
@@ -706,7 +706,7 @@ def get_remote_names():
     @return: a dictionary of the form {port: [site, host], ...}.
     """
     name_data = {}
-    for (host, port) in PORT.items():
+    for (host, port) in list(PORT.items()):
         name_data[port] = host
     return name_data
 
@@ -755,7 +755,7 @@ def check_for_tunnels():
     # Get a list of current sockets
     try:
       p = invoke("netstat -vat")
-    except Exception, details:
+    except Exception as details:
       self.logger.warning("check_for_tunnels: failed because %s", details)
     try:
         err = p.stderr.read()
@@ -778,9 +778,9 @@ def check_for_tunnels():
                 if int(port) > 50010 and int(port) < 50100:
                     try:
                         remote_host = name_data[int(port)]
-                    except KeyError, details:
+                    except KeyError as details:
                         # Sometimes the OS uses a port in this range
-                        print "check_for_tunnels: active port", details, "not defined"
+                        print("check_for_tunnels: active port", details, "not defined")
                         break
                     else:
                         tunnels[remote_host] = int(port)
@@ -830,7 +830,7 @@ def do_list():
     @return: None
     """
     for src, mp, fs, opts, p1, p2 in self._get_mounted_fs():
-        print "%25s mounted on %s" % (src, mp)
+        print("%25s mounted on %s" % (src, mp))
 
 
 GATEWAY, IP, PORT = make_port_dict()

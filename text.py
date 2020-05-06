@@ -38,8 +38,8 @@ def distance(a,b):
     """
     Calculates the Levenshtein distance between a and b.
     
-    Reference
-    =========
+    References
+    ==========
     http://en.wikisource.org/wiki/Levenshtein_distance#Python
     """
     n, m = len(a), len(b)
@@ -48,7 +48,7 @@ def distance(a,b):
         a,b = b,a
         n,m = m,n
         
-    current = range(n+1)
+    current = list(range(n+1))
     for i in range(1,m+1):
         previous, current = current, [i]+[0]*m
         for j in range(1,n+1):
@@ -72,7 +72,7 @@ def user_input(prompt,default):
   """
   Like 'raw_input' except that a default value can be specified.
   """
-  response = raw_input(prompt+' ['+str(default)+']: ')
+  response = input(prompt+' ['+str(default)+']: ')
   if response == '':
     response = default
   return response
@@ -103,21 +103,21 @@ def select_files(pattern, text="Select file(s) by number"
     for f in files:
       if (ftype == "file" and isfile(f)) or (ftype == "dir" and isdir(f)) or \
         (ftype == None):
-        print index,'>',basename(files[index])
+        print(index,'>',basename(files[index]))
         index += 1
       else:
         files.remove(f)
         continue
     if files == []:
       return files
-    selections = raw_input(text)
+    selections = input(text)
     if not selections.isspace():
       indices = selections.split()
       selected = []
       for index in indices:
         try:
           selected.append(files[int(index)])
-        except IndexError,details:
+        except IndexError as details:
           logger.error("select_files: %s is not a valid index", index)
           raise IndexError
       logger.debug("select_files: %s has %d items(s)", selected,
@@ -126,7 +126,7 @@ def select_files(pattern, text="Select file(s) by number"
         return selected[0]
       else:
         if single:
-          raise AssertionError,"You can select only one file."
+          raise AssertionError("You can select only one file.")
         else:
           return selected
     else:
@@ -157,8 +157,8 @@ def remove_html_tags(data):
   """
   remove HTML tags from text
 
-  Reference
-  =========
+  References
+  ==========
   http://love-python.blogspot.com/2008/07/strip-html-tags-using-python.html
   """
   p = re.compile(r'<.*?>')
@@ -168,8 +168,8 @@ def remove_extra_spaces(data):
   """
   reduce multiple whitespaces to one
 
-  Reference
-  =========
+  References
+  ==========
   http://love-python.blogspot.com/2008/07/strip-html-tags-using-python.html
   """
   p = re.compile(r'\s+')

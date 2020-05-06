@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>iterativeRun &#8212; support 0.9 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Pause" href="support.threading_util.pausable_thread.Pause.html" />
+    <link rel="prev" title="PublisherThread" href="support.threading_util.PublisherThread.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.threading_util.pausable_thread.Pause.html" title="Pause"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="support.threading_util.PublisherThread.html" title="PublisherThread"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="support.threading_util.PublisherThread.html"
+                        title="previous chapter">PublisherThread</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="support.threading_util.pausable_thread.Pause.html"
+                        title="next chapter">Pause</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/support.threading_util.pausable_thread.iterativeRun.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="iterativerun">
+<h1>iterativeRun<a class="headerlink" href="#iterativerun" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="support.threading_util.pausable_thread.iterativeRun">
+<code class="sig-prename descclassname">support.threading_util.pausable_thread.</code><code class="sig-name descname">iterativeRun</code><span class="sig-paren">(</span><em class="sig-param">run_fn</em><span class="sig-paren">)</span><a class="headerlink" href="#support.threading_util.pausable_thread.iterativeRun" title="Permalink to this definition">¶</a></dt>
+<dd><p>A decorator for running functions repeatedly inside a PausableThread.
+Allows one to pause and stop the thread while its repeatedly calling
+the overriden run function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>run_fn</strong> – the overridden run function from PausableThread</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>callable</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.threading_util.pausable_thread.Pause.html" title="Pause"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="support.threading_util.PublisherThread.html" title="PublisherThread"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Tom Kuiper and Dean Smith.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

@@ -59,7 +59,7 @@ def get_column_names(sh):
         maxcol = sh.get_highest_column()
 
     column_names = {}
-    for col_num in xrange(maxcol):
+    for col_num in range(maxcol):
         # col = get_column_letter(col_num_LSTs)
         column_names[col_num] = sh.cell(column=col_num + OPENPYXL_INDEX, row=OPENPYXL_INDEX).value
     return column_names
@@ -78,7 +78,7 @@ def get_column_id(sh, col_name):
     sys.stdout.flush()
     col_names = get_column_names(sh)
     sys.stdout.flush()
-    for col_id in col_names.keys():
+    for col_id in list(col_names.keys()):
         sys.stdout.flush()
         if col_names[col_id] == col_name:
             return col_id
@@ -111,8 +111,8 @@ def get_column(ws, column_name):
     @return: list of data
     """
     column_id = get_column_id(ws, column_name)
-    logger.debug("get_column: column ID for %s is %s",
-                        column_name, column_id)
+    # logger.debug("get_column: column ID for %s is %s",
+    #                   column_name, column_id)
     if column_id != None:
         if openpyxl.__version__ >= '2.0':
             column = list(ws.columns)[column_id]
@@ -153,9 +153,9 @@ def insert_empty_row_after(ws, prior_row):
         highest_row = ws.get_highest_row()
         highest_col = ws.get_highest_column()
     max_col_letter = get_column_letter(highest_col)
-    print max_col_letter
+    print(max_col_letter)
     for row in range(highest_row, prior_row, -1):
-        logger.debug("insert_empty_row_after: processing row %d", row)
+        # logger.debug("insert_empty_row_after: processing row %d", row)
         for col in range(highest_col):
             ws.cell(row=row + 1, column=col).value = ws.cell(row=row, column=col).value
     for col in range(highest_col):
@@ -203,7 +203,7 @@ def column_id(index):
         col_letter = chr(65 + index)
     else:
         col_letter = chr(64 + (index / 26)) + chr(65 + (index % 26))
-    logger.debug("column_id: column %d has code %s", index, col_letter)
+    # logger.debug("column_id: column %d has code %s", index, col_letter)
     return col_letter
 
 
@@ -231,7 +231,7 @@ def set_column_dimensions(ws):
     for index in range(ws.get_highest_column()):
         width = max(len(str(ws.cell(row=0, column=index).value)),
                     len(str(ws.cell(row=1, column=index).value)))
-        logger.debug("set_column_dimensions: processing column %d", index)
+        # logger.debug("set_column_dimensions: processing column %d", index)
         sys.stdout.flush()
         col_letter = column_id(index)
         ws.column_dimensions[col_letter].width = width + 1
@@ -244,9 +244,9 @@ def column_ID_dict(worksheet):
     """
     column_names = get_column_names(worksheet)
     column_index = {}
-    logger.debug("column_ID_dict: %s has columns: %s",
-                        worksheet.title, str(column_names))
-    for col in column_names.keys():
+    # logger.debug("column_ID_dict: %s has columns: %s",
+    #                   worksheet.title, str(column_names))
+    for col in list(column_names.keys()):
         column_index[column_names[col]] = get_column_id(worksheet,
                                                         column_names[col])
     return column_names, column_index
@@ -310,7 +310,7 @@ def add_columns(sheet, names):
             col = sheet.get_highest_column()
         else:
             col = column_number(col_id)
-        bf_logger.debug("add_columns: %s is column %d", names[index], col)
+        # logger.debug("add_columns: %s is column %d", names[index], col)
         sys.stdout.flush()
         add_column(sheet, col, names[index])
 

@@ -16,17 +16,20 @@ class BasicProcess(object):
     Class representing a basic process, with name and pid.
     A BasicProcess object is used to represent an already running process.
     To spawn a new process, use subprocess.Popen.
-    Public Attributes:
+    Public Attributes::
+    
         name (str): The name of the process
         pid (int): The process ID
-    Public Members:
+        
+    Public Members::
         kill: kill the process
     """
 
     def __init__(self, name="", pid=0, ps_line=None, command_name='ssh'):
         """
         Create Process instance.
-        Keyword Args:
+        Keyword Args::
+        
             name (str): The name of the process
             pid (int): the process id
         """
@@ -62,6 +65,7 @@ def invoke(command):
 
     For a shell command line input that requires no additional data.
     Returns an open process whose stdout and stderr can be read::
+    
       In [6]: import process_tools
       In [7]: p = support.process.invoke("ls")
       In [8]: p.stdout.readlines()
@@ -97,6 +101,7 @@ def search_response(command_list1, command_list2):
     command_list2 is usually some form of 'grep'
 
     Example::
+    
       In [14]: process_tools.search_response(["ps", "-ef"],["grep", "python"])
       Out[14]:
         ['kuiper    3696  3669  0 09:57 pts/1    00:00:00 /usr/bin/python \

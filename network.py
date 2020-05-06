@@ -32,7 +32,7 @@ def LAN_hosts_status(port=22, private=False):
   
   This is too crude; very senstive to format changes
   """
-  print "If asked for a password, remember this host is",socket.gethostname()
+  print("If asked for a password, remember this host is",socket.gethostname())
   domain = get_local_network(private=private)
   response = invoke("sudo nmap -sP -PS"+str(port)+" "+domain+".*").stdout.readlines()
   up = []
@@ -95,7 +95,7 @@ def get_domain(netIP):
   Returns the networks key whose list contains netIP
   """
   domain = ""
-  for key in networks.keys():
+  for key in list(networks.keys()):
     for IP in networks[key]:
       if IP == netIP:
         domain = key
@@ -155,10 +155,10 @@ def encode_IP(intIP):
   
 if __name__ == "__main__":
   up, down, IP, MAC, ROACHlist = LAN_hosts_status()
-  print "Up:", up
-  print "Down:", down
-  print "ROACHes:", ROACHlist
-  print "IP:", IP
-  print "MAC addresses:", MAC
+  print("Up:", up)
+  print("Down:", down)
+  print("ROACHes:", ROACHlist)
+  print("IP:", IP)
+  print("MAC addresses:", MAC)
 
 

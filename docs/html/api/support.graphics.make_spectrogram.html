@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>make_spectrogram &#8212; support 0.9 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ticks" href="support.graphics.ticks.html" />
+    <link rel="prev" title="get_screen_resolution" href="support.graphics.get_screen_resolution.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.graphics.ticks.html" title="ticks"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="support.graphics.get_screen_resolution.html" title="get_screen_resolution"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="support.graphics.get_screen_resolution.html"
+                        title="previous chapter">get_screen_resolution</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="support.graphics.ticks.html"
+                        title="next chapter">ticks</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/support.graphics.make_spectrogram.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="make-spectrogram">
+<h1>make_spectrogram<a class="headerlink" href="#make-spectrogram" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="support.graphics.make_spectrogram">
+<code class="sig-prename descclassname">support.graphics.</code><code class="sig-name descname">make_spectrogram</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">num_spec</em>, <em class="sig-param">num_bins</em>, <em class="sig-param">log=False</em>, <em class="sig-param">normalizer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#support.graphics.make_spectrogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a sequence of complex samples into a spectrogram</p>
+<p>matplotlib specgram takes real data.  This takes complex data.</p>
+<p>:param data : complex time series data
+:type  data : numpy array of complex</p>
+<p>:param num_spec : number of spectra along the time axis
+:type  num_spec : int</p>
+<p>:param num_bins : number of spectral bins along the frequency axis
+:type  num_bins : int</p>
+<p>:param log : flag to plot logarithm of the power
+:type  log : bool</p>
+<p>:param normalizer : gain normalization reference for spectra
+:type  normalizer : numpy 1D array num_bins long</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>2D numpay array</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.graphics.ticks.html" title="ticks"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="support.graphics.get_screen_resolution.html" title="get_screen_resolution"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Tom Kuiper and Dean Smith.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Pyro4Tunnel &#8212; support 0.9 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="DaemonTunnel" href="support.trifeni.trifeni.DaemonTunnel.html" />
+    <link rel="prev" title="SSHTunnelManager" href="support.trifeni.trifeni.SSHTunnelManager.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.trifeni.trifeni.DaemonTunnel.html" title="DaemonTunnel"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="support.trifeni.trifeni.SSHTunnelManager.html" title="SSHTunnelManager"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="support.trifeni.trifeni.SSHTunnelManager.html"
+                        title="previous chapter">SSHTunnelManager</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="support.trifeni.trifeni.DaemonTunnel.html"
+                        title="next chapter">DaemonTunnel</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/support.trifeni.trifeni.Pyro4Tunnel.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pyro4tunnel">
+<h1>Pyro4Tunnel<a class="headerlink" href="#pyro4tunnel" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="support.trifeni.trifeni.Pyro4Tunnel">
+<em class="property">class </em><code class="sig-prename descclassname">support.trifeni.trifeni.</code><code class="sig-name descname">Pyro4Tunnel</code><span class="sig-paren">(</span><em class="sig-param">remote_server_name='localhost'</em>, <em class="sig-param">relay_ip='localhost'</em>, <em class="sig-param">remote_port=22</em>, <em class="sig-param">remote_username=None</em>, <em class="sig-param">local=False</em>, <em class="sig-param">create_tunnel_kwargs=None</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="headerlink" href="#support.trifeni.trifeni.Pyro4Tunnel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="support.trifeni.trifeni.util.tunnel_util.SSHTunnelManager.html#support.trifeni.trifeni.util.tunnel_util.SSHTunnelManager" title="support.trifeni.trifeni.util.tunnel_util.SSHTunnelManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">support.trifeni.trifeni.util.tunnel_util.SSHTunnelManager</span></code></a></p>
+<p>Base class for interacting with remote Pyro4 objects.</p>
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.Pyro4Tunnel.remote_server_name">
+<code class="sig-name descname">remote_server_name</code><a class="headerlink" href="#support.trifeni.trifeni.Pyro4Tunnel.remote_server_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>name of remote server, or alias to remote server
+(as defined in configuration)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.Pyro4Tunnel.relay_ip">
+<code class="sig-name descname">relay_ip</code><a class="headerlink" href="#support.trifeni.trifeni.Pyro4Tunnel.relay_ip" title="Permalink to this definition">¶</a></dt>
+<dd><p>the address through which the tunnel is routed. If we
+were creating the tunnel using the command line ssh, this would correspond
+to the address given to the -L option</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.Pyro4Tunnel.remote_port">
+<code class="sig-name descname">remote_port</code><a class="headerlink" href="#support.trifeni.trifeni.Pyro4Tunnel.remote_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>port on which to login to remote server (-p option in
+command line ssh client)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.Pyro4Tunnel.remote_username">
+<code class="sig-name descname">remote_username</code><a class="headerlink" href="#support.trifeni.trifeni.Pyro4Tunnel.remote_username" title="Permalink to this definition">¶</a></dt>
+<dd><p>username to login in remote server. (-l option in
+command line ssh client)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.Pyro4Tunnel.local">
+<code class="sig-name descname">local</code><a class="headerlink" href="#support.trifeni.trifeni.Pyro4Tunnel.local" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean indicating whether to create a tunnel or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.Pyro4Tunnel.create_tunnel_kwargs">
+<code class="sig-name descname">create_tunnel_kwargs</code><a class="headerlink" href="#support.trifeni.trifeni.Pyro4Tunnel.create_tunnel_kwargs" title="Permalink to this definition">¶</a></dt>
+<dd><p>dictionary options passed to the super class’s
+<code class="docutils literal notranslate"><span class="pre">create_tunnel</span></code> method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Methods Summary</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#support.trifeni.trifeni.Pyro4Tunnel.create_tunnel" title="support.trifeni.trifeni.Pyro4Tunnel.create_tunnel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_tunnel</span></code></a>(local_port, remote_port[, reverse])</p></td>
+<td><p>Overridden create tunnel method</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#support.trifeni.trifeni.Pyro4Tunnel.register_remote_daemon" title="support.trifeni.trifeni.Pyro4Tunnel.register_remote_daemon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_remote_daemon</span></code></a>(daemon[, reverse])</p></td>
+<td><p>Register a remote daemon with the remote Pyro4 nameserver.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Documentation</p>
+<dl class="method">
+<dt id="support.trifeni.trifeni.Pyro4Tunnel.create_tunnel">
+<code class="sig-name descname">create_tunnel</code><span class="sig-paren">(</span><em class="sig-param">local_port</em>, <em class="sig-param">remote_port</em>, <em class="sig-param">reverse=False</em><span class="sig-paren">)</span><a class="headerlink" href="#support.trifeni.trifeni.Pyro4Tunnel.create_tunnel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overridden create tunnel method</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="support.trifeni.trifeni.Pyro4Tunnel.register_remote_daemon">
+<code class="sig-name descname">register_remote_daemon</code><span class="sig-paren">(</span><em class="sig-param">daemon</em>, <em class="sig-param">reverse=True</em><span class="sig-paren">)</span><a class="headerlink" href="#support.trifeni.trifeni.Pyro4Tunnel.register_remote_daemon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a remote daemon with the remote Pyro4 nameserver.
+This creates a tunnel to the daemon object. Note that in “local” mode there
+is no reason to do this.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>daemon</strong> (<em>Pyro4.Daemon</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether or not the connection was already there.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.trifeni.trifeni.DaemonTunnel.html" title="DaemonTunnel"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="support.trifeni.trifeni.SSHTunnelManager.html" title="SSHTunnelManager"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Tom Kuiper and Dean Smith.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

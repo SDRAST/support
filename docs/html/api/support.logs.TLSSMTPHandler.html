@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>TLSSMTPHandler &#8212; support 0.9 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="MarkdownTable" href="support.markdown_util.MarkdownTable.html" />
+    <link rel="prev" title="remove_handlers" href="support.logs.remove_handlers.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.markdown_util.MarkdownTable.html" title="MarkdownTable"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="support.logs.remove_handlers.html" title="remove_handlers"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="support.logs.remove_handlers.html"
+                        title="previous chapter">remove_handlers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="support.markdown_util.MarkdownTable.html"
+                        title="next chapter">MarkdownTable</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/support.logs.TLSSMTPHandler.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="tlssmtphandler">
+<h1>TLSSMTPHandler<a class="headerlink" href="#tlssmtphandler" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="support.logs.TLSSMTPHandler">
+<em class="property">class </em><code class="sig-prename descclassname">support.logs.</code><code class="sig-name descname">TLSSMTPHandler</code><span class="sig-paren">(</span><em class="sig-param">mailhost</em>, <em class="sig-param">fromaddr</em>, <em class="sig-param">toaddrs</em>, <em class="sig-param">subject</em>, <em class="sig-param">credentials=None</em>, <em class="sig-param">secure=None</em>, <em class="sig-param">timeout=5.0</em><span class="sig-paren">)</span><a class="headerlink" href="#support.logs.TLSSMTPHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.handlers.SMTPHandler</span></code></p>
+<p>Custom handler for email logging using TLS encryption.</p>
+<p>Examples:</p>
+<p>Set up an instance to do gmail email logging.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cred</span> <span class="kn">import</span> <span class="n">my_address</span><span class="p">,</span> <span class="n">my_username</span><span class="p">,</span> <span class="n">my_password</span>
+
+<span class="n">to_address</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;someemail@somedomain&quot;</span><span class="p">]</span>
+
+<span class="n">eh</span> <span class="o">=</span> <span class="n">TLSSMTPHandler</span><span class="p">(</span><span class="n">mailhost</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;smtp.gmail.com&quot;</span><span class="p">,</span><span class="mi">587</span><span class="p">),</span>
+                        <span class="n">fromaddr</span><span class="o">=</span><span class="n">my_address</span><span class="p">,</span>
+                        <span class="n">toaddrs</span><span class="o">=</span><span class="n">to_address</span><span class="p">,</span>
+                        <span class="n">subject</span><span class="o">=</span><span class="s2">&quot;subject&quot;</span><span class="p">,</span><span class="n">Overriden</span> <span class="n">method</span><span class="o">.</span>
+                        <span class="n">credentials</span><span class="o">=</span><span class="p">(</span><span class="n">my_username</span><span class="p">,</span> <span class="n">my_password</span><span class="p">),</span>
+                        <span class="n">secure</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Methods Summary</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#support.logs.TLSSMTPHandler.emit" title="support.logs.TLSSMTPHandler.emit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emit</span></code></a>(record)</p></td>
+<td><p>Format a logging record and send it to the specified addresses.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Documentation</p>
+<dl class="method">
+<dt id="support.logs.TLSSMTPHandler.emit">
+<code class="sig-name descname">emit</code><span class="sig-paren">(</span><em class="sig-param">record</em><span class="sig-paren">)</span><a class="headerlink" href="#support.logs.TLSSMTPHandler.emit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format a logging record and send it to the specified addresses.
+This method is never called directly.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.markdown_util.MarkdownTable.html" title="MarkdownTable"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="support.logs.remove_handlers.html" title="remove_handlers"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Tom Kuiper and Dean Smith.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

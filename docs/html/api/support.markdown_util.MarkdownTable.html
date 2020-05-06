@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>MarkdownTable &#8212; support 0.9 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="MarkdownTable" href="support.markdown_util.table.MarkdownTable.html" />
+    <link rel="prev" title="TLSSMTPHandler" href="support.logs.TLSSMTPHandler.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.markdown_util.table.MarkdownTable.html" title="MarkdownTable"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="support.logs.TLSSMTPHandler.html" title="TLSSMTPHandler"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="support.logs.TLSSMTPHandler.html"
+                        title="previous chapter">TLSSMTPHandler</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="support.markdown_util.table.MarkdownTable.html"
+                        title="next chapter">MarkdownTable</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/support.markdown_util.MarkdownTable.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="markdowntable">
+<h1>MarkdownTable<a class="headerlink" href="#markdowntable" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="support.markdown_util.MarkdownTable">
+<em class="property">class </em><code class="sig-prename descclassname">support.markdown_util.</code><code class="sig-name descname">MarkdownTable</code><span class="sig-paren">(</span><em class="sig-param">header=None</em>, <em class="sig-param">data=None</em><span class="sig-paren">)</span><a class="headerlink" href="#support.markdown_util.MarkdownTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Create a formatted markdown table from some header and data.
+<code class="docutils literal notranslate"><span class="pre">header</span></code> and <code class="docutils literal notranslate"><span class="pre">data</span></code> should contains strings, as <code class="docutils literal notranslate"><span class="pre">MarkdownTable</span></code>
+makes no attempt to format strings.</p>
+<p>Examples:</p>
+<p>We can set data and header before initializing</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">header</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Column 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Column 2&quot;</span><span class="p">,</span> <span class="s2">&quot;Column 3&quot;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span><span class="s2">&quot;2&quot;</span><span class="p">,</span><span class="s2">&quot;3&quot;</span><span class="p">],[</span><span class="s2">&quot;a&quot;</span><span class="o">*</span><span class="mi">10</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">table</span> <span class="o">=</span> <span class="n">MarkdownTable</span><span class="p">(</span><span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">dump</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>… or after</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">table</span> <span class="o">=</span> <span class="n">MarkdownTable</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">table</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Column 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Column 2&quot;</span><span class="p">,</span> <span class="s2">&quot;Column 3&quot;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">table</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span><span class="s2">&quot;2&quot;</span><span class="p">,</span><span class="s2">&quot;3&quot;</span><span class="p">],[</span><span class="s2">&quot;a&quot;</span><span class="o">*</span><span class="mi">10</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">dump</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Both will produce the following output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>| Column 1   | Column 2 | Column 3 |
+| ========== | ======== | ======== |
+| 1          | 2        | 3        |
+| aaaaaaaaaa | b        | c        |
+</pre></div>
+</div>
+<p>We can get individual rows and columns from a MarkdownTable instance:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">table</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">[&quot;Column 1&quot;, &quot;Column 2&quot;, &quot;Column 3&quot;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">table</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">[&quot;Column 1&quot;, &quot;1&quot;]</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="support.markdown_util.MarkdownTable.header">
+<code class="sig-name descname">header</code><a class="headerlink" href="#support.markdown_util.MarkdownTable.header" title="Permalink to this definition">¶</a></dt>
+<dd><p>table header.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.markdown_util.MarkdownTable.data">
+<code class="sig-name descname">data</code><a class="headerlink" href="#support.markdown_util.MarkdownTable.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>table data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.markdown_util.MarkdownTable._max_column_size">
+<code class="sig-name descname">_max_column_size</code><a class="headerlink" href="#support.markdown_util.MarkdownTable._max_column_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>the maximum size of each column.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Attributes Summary</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#support.markdown_util.MarkdownTable.data" title="support.markdown_util.MarkdownTable.data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">data</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#support.markdown_util.MarkdownTable.header" title="support.markdown_util.MarkdownTable.header"><code class="xref py py-obj docutils literal notranslate"><span class="pre">header</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Summary</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#support.markdown_util.MarkdownTable.column" title="support.markdown_util.MarkdownTable.column"><code class="xref py py-obj docutils literal notranslate"><span class="pre">column</span></code></a>(i)</p></td>
+<td><p>Get a column, including the header</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#support.markdown_util.MarkdownTable.dump" title="support.markdown_util.MarkdownTable.dump"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dump</span></code></a>()</p></td>
+<td><p>Dump header and data into a formatted table string.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#support.markdown_util.MarkdownTable.row" title="support.markdown_util.MarkdownTable.row"><code class="xref py py-obj docutils literal notranslate"><span class="pre">row</span></code></a>(i)</p></td>
+<td><p>get a row, where the 0th row is the header.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes Documentation</p>
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">data</code></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">header</code></dt>
+<dd></dd></dl>
+
+<p class="rubric">Methods Documentation</p>
+<dl class="method">
+<dt id="support.markdown_util.MarkdownTable.column">
+<code class="sig-name descname">column</code><span class="sig-paren">(</span><em class="sig-param">i</em><span class="sig-paren">)</span><a class="headerlink" href="#support.markdown_util.MarkdownTable.column" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a column, including the header</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="support.markdown_util.MarkdownTable.dump">
+<code class="sig-name descname">dump</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#support.markdown_util.MarkdownTable.dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dump header and data into a formatted table string.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="support.markdown_util.MarkdownTable.row">
+<code class="sig-name descname">row</code><span class="sig-paren">(</span><em class="sig-param">i</em><span class="sig-paren">)</span><a class="headerlink" href="#support.markdown_util.MarkdownTable.row" title="Permalink to this definition">¶</a></dt>
+<dd><p>get a row, where the 0th row is the header.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.markdown_util.table.MarkdownTable.html" title="MarkdownTable"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="support.logs.TLSSMTPHandler.html" title="TLSSMTPHandler"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Tom Kuiper and Dean Smith.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

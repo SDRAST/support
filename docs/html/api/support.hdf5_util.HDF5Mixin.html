@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>HDF5Mixin &#8212; support 0.9 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Body" href="support.HTML.Body.html" />
+    <link rel="prev" title="dump_dict" href="support.hdf5_util.dump_dict.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.HTML.Body.html" title="Body"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="support.hdf5_util.dump_dict.html" title="dump_dict"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="support.hdf5_util.dump_dict.html"
+                        title="previous chapter">dump_dict</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="support.HTML.Body.html"
+                        title="next chapter">Body</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/support.hdf5_util.HDF5Mixin.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="hdf5mixin">
+<h1>HDF5Mixin<a class="headerlink" href="#hdf5mixin" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="support.hdf5_util.HDF5Mixin">
+<em class="property">class </em><code class="sig-prename descclassname">support.hdf5_util.</code><code class="sig-name descname">HDF5Mixin</code><a class="headerlink" href="#support.hdf5_util.HDF5Mixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Mixin class with methods for creating and writing to HDF5 files.
+This mixin assumes that the derived class implements the following
+.. attribute:: * name</p>
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">* base_data_dir</code></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">* data_dir</code></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">* data_file_obj</code></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">* date_file_name</code></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">* data_file_path</code></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">* file_attr_keys</code></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">* header</code></dt>
+<dd></dd></dl>
+
+<p>Moreover, the <code class="docutils literal notranslate"><span class="pre">create_scangroup</span></code> and <code class="docutils literal notranslate"><span class="pre">write_to_data_file</span></code> methods
+are to be reimplemented.</p>
+<p class="rubric">Methods Summary</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#support.hdf5_util.HDF5Mixin.create_data_directory" title="support.hdf5_util.HDF5Mixin.create_data_directory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_data_directory</span></code></a>()</p></td>
+<td><p>Create year and day of year (doy) subdirectories under the <code class="docutils literal notranslate"><span class="pre">data_dir</span></code> attribute</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#support.hdf5_util.HDF5Mixin.create_scangroup" title="support.hdf5_util.HDF5Mixin.create_scangroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_scangroup</span></code></a>()</p></td>
+<td><p>create a HDF5 group for a scan</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#support.hdf5_util.HDF5Mixin.initialize_data_file" title="support.hdf5_util.HDF5Mixin.initialize_data_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">initialize_data_file</span></code></a>()</p></td>
+<td><p>Put the highest level metadata in the datafile.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#support.hdf5_util.HDF5Mixin.open_data_file" title="support.hdf5_util.HDF5Mixin.open_data_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">open_data_file</span></code></a>()</p></td>
+<td><p>create, if necessary, subdirectories for today’s data directory, and then open up a <code class="docutils literal notranslate"><span class="pre">h5py.File</span></code> object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#support.hdf5_util.HDF5Mixin.write_to_data_file" title="support.hdf5_util.HDF5Mixin.write_to_data_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_to_data_file</span></code></a>()</p></td>
+<td><p>Write the data and metadata from the latest accumulation in the file</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Documentation</p>
+<dl class="method">
+<dt id="support.hdf5_util.HDF5Mixin.create_data_directory">
+<code class="sig-name descname">create_data_directory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#support.hdf5_util.HDF5Mixin.create_data_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create year and day of year (doy) subdirectories under the <code class="docutils literal notranslate"><span class="pre">data_dir</span></code>
+attribute</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="support.hdf5_util.HDF5Mixin.create_scangroup">
+<code class="sig-name descname">create_scangroup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#support.hdf5_util.HDF5Mixin.create_scangroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a HDF5 group for a scan</p>
+<p>Creates empty datasets for the data and metadata associated with each
+record of a scan.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="support.hdf5_util.HDF5Mixin.initialize_data_file">
+<code class="sig-name descname">initialize_data_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#support.hdf5_util.HDF5Mixin.initialize_data_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Put the highest level metadata in the datafile.</p>
+<p>The registers that never change in a ROACH are put in top-level attributes</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="support.hdf5_util.HDF5Mixin.open_data_file">
+<code class="sig-name descname">open_data_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#support.hdf5_util.HDF5Mixin.open_data_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>create, if necessary, subdirectories for today’s data directory, and
+then open up a <code class="docutils literal notranslate"><span class="pre">h5py.File</span></code> object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>h5py.File</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="support.hdf5_util.HDF5Mixin.write_to_data_file">
+<code class="sig-name descname">write_to_data_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#support.hdf5_util.HDF5Mixin.write_to_data_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the data and metadata from the latest accumulation in the file</p>
+<p>After writing a new empty record is created if more records are expected for
+this scan.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.HTML.Body.html" title="Body"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="support.hdf5_util.dump_dict.html" title="dump_dict"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Tom Kuiper and Dean Smith.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>SSHTunnelManager &#8212; support 0.9 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="invoke_cmd" href="support.trifeni.trifeni.util.shell_util.invoke_cmd.html" />
+    <link rel="prev" title="SSHTunnel" href="support.trifeni.trifeni.util.SSHTunnel.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.trifeni.trifeni.util.shell_util.invoke_cmd.html" title="invoke_cmd"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="support.trifeni.trifeni.util.SSHTunnel.html" title="SSHTunnel"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="support.trifeni.trifeni.util.SSHTunnel.html"
+                        title="previous chapter">SSHTunnel</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="support.trifeni.trifeni.util.shell_util.invoke_cmd.html"
+                        title="next chapter">invoke_cmd</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/support.trifeni.trifeni.util.SSHTunnelManager.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="sshtunnelmanager">
+<h1>SSHTunnelManager<a class="headerlink" href="#sshtunnelmanager" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="support.trifeni.trifeni.util.SSHTunnelManager">
+<em class="property">class </em><code class="sig-prename descclassname">support.trifeni.trifeni.util.</code><code class="sig-name descname">SSHTunnelManager</code><span class="sig-paren">(</span><em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnelManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Create and manage SSH tunnel connections.</p>
+<p>Like individual SSHTunnel instances, this can, and should be used as a
+context manager.</p>
+<p>Examples:</p>
+<p>Automatically clean up any tunnels created.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">SSHTunnelManager</span><span class="p">()</span> <span class="k">as</span> <span class="n">manager</span><span class="p">:</span>
+    <span class="n">tunnel0</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">create_tunnel</span><span class="p">(</span><span class="s2">&quot;remote_alias&quot;</span><span class="p">,</span> <span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="mi">9090</span><span class="p">,</span> <span class="mi">9090</span><span class="p">)</span>
+    <span class="n">tunnel1</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">create_tunnel</span><span class="p">(</span><span class="s2">&quot;remote_alias&quot;</span><span class="p">,</span> <span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="mi">9091</span><span class="p">,</span> <span class="mi">9091</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.util.SSHTunnelManager.tunnels">
+<code class="sig-name descname">tunnels</code><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnelManager.tunnels" title="Permalink to this definition">¶</a></dt>
+<dd><p>dictionary of tunnels managed by this instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.util.SSHTunnelManager.logger">
+<code class="sig-name descname">logger</code><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnelManager.logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>logging instance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>logging.getLogger</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Methods Summary</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#support.trifeni.trifeni.util.SSHTunnelManager.cleanup" title="support.trifeni.trifeni.util.SSHTunnelManager.cleanup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cleanup</span></code></a>()</p></td>
+<td><p>Destroy all the tunnels associated with the manager.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#support.trifeni.trifeni.util.SSHTunnelManager.create_tunnel" title="support.trifeni.trifeni.util.SSHTunnelManager.create_tunnel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_tunnel</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Create an instance of SSHTunnel and add it to the tunnels attribute and attempt to detect whether there will be collisions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#support.trifeni.trifeni.util.SSHTunnelManager.destroy_tunnel" title="support.trifeni.trifeni.util.SSHTunnelManager.destroy_tunnel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">destroy_tunnel</span></code></a>(_id)</p></td>
+<td><p>Destroy a tunnel by id</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#support.trifeni.trifeni.util.SSHTunnelManager.tunnel_status" title="support.trifeni.trifeni.util.SSHTunnelManager.tunnel_status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tunnel_status</span></code></a>()</p></td>
+<td><p>Return a dict with tunnel ids as keys, and with each tunnel’s open attribute</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Documentation</p>
+<dl class="method">
+<dt id="support.trifeni.trifeni.util.SSHTunnelManager.cleanup">
+<code class="sig-name descname">cleanup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnelManager.cleanup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Destroy all the tunnels associated with the manager. Note that this
+doesn’t actually delete the SSHTunnel objects from memory.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="support.trifeni.trifeni.util.SSHTunnelManager.create_tunnel">
+<code class="sig-name descname">create_tunnel</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnelManager.create_tunnel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an instance of SSHTunnel and add it to the tunnels attribute
+and attempt to detect whether there will be collisions.</p>
+<p>All arguments get passed to SSHTunnel.__init__, such that this method
+can be thought of as factory function for SSHTunnel instances. Indeed,</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*args</strong> – Passed to SSHTunnel.__init__</p></li>
+<li><p><strong>**kwargs</strong> – Passed to SSHTunnel.__init__</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>SSHTunnel</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="support.trifeni.trifeni.util.SSHTunnelManager.destroy_tunnel">
+<code class="sig-name descname">destroy_tunnel</code><span class="sig-paren">(</span><em class="sig-param">_id</em><span class="sig-paren">)</span><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnelManager.destroy_tunnel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Destroy a tunnel by id</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>_id</strong> (<em>str</em>) – The id of the tunnel to destroy</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="support.trifeni.trifeni.util.SSHTunnelManager.tunnel_status">
+<code class="sig-name descname">tunnel_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnelManager.tunnel_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dict with tunnel ids as keys, and with each tunnel’s
+open attribute</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.trifeni.trifeni.util.shell_util.invoke_cmd.html" title="invoke_cmd"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="support.trifeni.trifeni.util.SSHTunnel.html" title="SSHTunnel"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Tom Kuiper and Dean Smith.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

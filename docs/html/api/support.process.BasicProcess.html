@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>BasicProcess &#8212; support 0.9 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="RTC" href="support.rtc.RTC.html" />
+    <link rel="prev" title="search_response" href="support.process.search_response.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.rtc.RTC.html" title="RTC"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="support.process.search_response.html" title="search_response"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="support.process.search_response.html"
+                        title="previous chapter">search_response</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="support.rtc.RTC.html"
+                        title="next chapter">RTC</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/support.process.BasicProcess.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="basicprocess">
+<h1>BasicProcess<a class="headerlink" href="#basicprocess" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="support.process.BasicProcess">
+<em class="property">class </em><code class="sig-prename descclassname">support.process.</code><code class="sig-name descname">BasicProcess</code><span class="sig-paren">(</span><em class="sig-param">name=''</em>, <em class="sig-param">pid=0</em>, <em class="sig-param">ps_line=None</em>, <em class="sig-param">command_name='ssh'</em><span class="sig-paren">)</span><a class="headerlink" href="#support.process.BasicProcess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class representing a basic process, with name and pid.
+A BasicProcess object is used to represent an already running process.
+To spawn a new process, use subprocess.Popen.
+Public Attributes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">name</span> <span class="p">(</span><span class="nb">str</span><span class="p">):</span> <span class="n">The</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">process</span>
+<span class="n">pid</span> <span class="p">(</span><span class="nb">int</span><span class="p">):</span> <span class="n">The</span> <span class="n">process</span> <span class="n">ID</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Public Members::</dt><dd><p>kill: kill the process</p>
+</dd>
+</dl>
+<p class="rubric">Methods Summary</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#support.process.BasicProcess.kill" title="support.process.BasicProcess.kill"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kill</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#support.process.BasicProcess.process_ps_line" title="support.process.BasicProcess.process_ps_line"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_ps_line</span></code></a>(ps_line, command_name)</p></td>
+<td><p>Given a line from the output of <cite>ps x</cite>, get the name and pid of the process.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Documentation</p>
+<dl class="method">
+<dt id="support.process.BasicProcess.kill">
+<code class="sig-name descname">kill</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#support.process.BasicProcess.kill" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="support.process.BasicProcess.process_ps_line">
+<code class="sig-name descname">process_ps_line</code><span class="sig-paren">(</span><em class="sig-param">ps_line</em>, <em class="sig-param">command_name</em><span class="sig-paren">)</span><a class="headerlink" href="#support.process.BasicProcess.process_ps_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a line from the output of <cite>ps x</cite>, get the name and pid of the process.
+Returns:</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.rtc.RTC.html" title="RTC"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="support.process.search_response.html" title="search_response"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Tom Kuiper and Dean Smith.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

@@ -1,4 +1,4 @@
-from pausable_thread import PausableThread
+from .pausable_thread import PausableThread
 
 class PublisherThread(PausableThread):
     """

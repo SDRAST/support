@@ -4,6 +4,7 @@
 
 # No backup copies
 *~
+*.bak
 
 # No .svn files
 .svn

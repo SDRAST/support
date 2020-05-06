@@ -50,7 +50,7 @@ class Pause(object):
             self.thread = {'thread': self.thread}
 
         self.init_pause_status = {}
-        for name in self.thread.keys():
+        for name in list(self.thread.keys()):
             if self.thread[name]:
                 self.init_pause_status[name] = self.thread[name].paused()
             else:
@@ -62,7 +62,7 @@ class Pause(object):
         Pause the thread in question, and make sure that whatever
         functionality is being performing is actually stopped.
         """
-        for name in self.thread.keys():
+        for name in list(self.thread.keys()):
             t = self.thread[name]
             if t:
                 if not self.init_pause_status[name]:
@@ -70,7 +70,7 @@ class Pause(object):
             else:
                 pass
         # now make sure that they're actually paused.
-        for name in self.thread.keys():
+        for name in list(self.thread.keys()):
             t = self.thread[name]
             if t:
                 while self.thread[name].running():
@@ -79,7 +79,7 @@ class Pause(object):
                 pass
 
     def __exit__(self, *args):
-        for name in self.thread.keys():
+        for name in list(self.thread.keys()):
             t = self.thread[name]
             if t:
                 if not self.init_pause_status[name]:

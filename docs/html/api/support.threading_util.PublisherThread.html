@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>PublisherThread &#8212; support 0.9 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="iterativeRun" href="support.threading_util.pausable_thread.iterativeRun.html" />
+    <link rel="prev" title="Pause" href="support.threading_util.Pause.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.threading_util.pausable_thread.iterativeRun.html" title="iterativeRun"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="support.threading_util.Pause.html" title="Pause"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="support.threading_util.Pause.html"
+                        title="previous chapter">Pause</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="support.threading_util.pausable_thread.iterativeRun.html"
+                        title="next chapter">iterativeRun</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/support.threading_util.PublisherThread.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="publisherthread">
+<h1>PublisherThread<a class="headerlink" href="#publisherthread" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="support.threading_util.PublisherThread">
+<em class="property">class </em><code class="sig-prename descclassname">support.threading_util.</code><code class="sig-name descname">PublisherThread</code><span class="sig-paren">(</span><em class="sig-param">server</em>, <em class="sig-param">thread_name=None</em>, <em class="sig-param">bus=None</em><span class="sig-paren">)</span><a class="headerlink" href="#support.threading_util.PublisherThread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="support.threading_util.pausable_thread.PausableThread.html#support.threading_util.pausable_thread.PausableThread" title="support.threading_util.pausable_thread.PausableThread"><code class="xref py py-class docutils literal notranslate"><span class="pre">support.threading_util.pausable_thread.PausableThread</span></code></a></p>
+<p>A barebones publisher thread.</p>
+<p>Meant to be subclassed.</p>
+<p>The run method needs to be reimplemented in the subclass.</p>
+<p class="rubric">Methods Summary</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#support.threading_util.PublisherThread.run" title="support.threading_util.PublisherThread.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code></a>()</p></td>
+<td><p>Method representing the thread’s activity.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Documentation</p>
+<dl class="method">
+<dt id="support.threading_util.PublisherThread.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#support.threading_util.PublisherThread.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method representing the thread’s activity.</p>
+<p>You may override this method in a subclass. The standard run() method
+invokes the callable object passed to the object’s constructor as the
+target argument, if any, with sequential and keyword arguments taken
+from the args and kwargs arguments, respectively.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.threading_util.pausable_thread.iterativeRun.html" title="iterativeRun"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="support.threading_util.Pause.html" title="Pause"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Tom Kuiper and Dean Smith.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

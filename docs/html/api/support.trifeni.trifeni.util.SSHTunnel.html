@@ -1,0 +1,355 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>SSHTunnel &#8212; support 0.9 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="SSHTunnelManager" href="support.trifeni.trifeni.util.SSHTunnelManager.html" />
+    <link rel="prev" title="Process" href="support.trifeni.trifeni.util.Process.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.trifeni.trifeni.util.SSHTunnelManager.html" title="SSHTunnelManager"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="support.trifeni.trifeni.util.Process.html" title="Process"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="support.trifeni.trifeni.util.Process.html"
+                        title="previous chapter">Process</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="support.trifeni.trifeni.util.SSHTunnelManager.html"
+                        title="next chapter">SSHTunnelManager</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/support.trifeni.trifeni.util.SSHTunnel.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="sshtunnel">
+<h1>SSHTunnel<a class="headerlink" href="#sshtunnel" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="support.trifeni.trifeni.util.SSHTunnel">
+<em class="property">class </em><code class="sig-prename descclassname">support.trifeni.trifeni.util.</code><code class="sig-name descname">SSHTunnel</code><span class="sig-paren">(</span><em class="sig-param">remote_ip</em>, <em class="sig-param">relay_ip</em>, <em class="sig-param">local_port</em>, <em class="sig-param">remote_port</em>, <em class="sig-param">port=22</em>, <em class="sig-param">username=None</em>, <em class="sig-param">keyfile=None</em>, <em class="sig-param">look_for_keys=False</em>, <em class="sig-param">wait_for_password=False</em>, <em class="sig-param">reverse=False</em>, <em class="sig-param">tunnel_id=None</em>, <em class="sig-param">logger=None</em><span class="sig-paren">)</span><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Create either forward or reverse SSH tunnels using paramiko and
+socket servers.</p>
+<p>This can and should be used as a context manager.</p>
+<p>Examples:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">SSHTunnel</span><span class="p">(</span><span class="s2">&quot;some_alias&quot;</span><span class="p">,</span> <span class="s2">&quot;localhost&quot;</span><span class="p">,</span><span class="mi">9090</span><span class="p">,</span> <span class="mi">9090</span><span class="p">)</span> <span class="k">as</span> <span class="n">tunnel</span><span class="p">:</span>
+    <span class="n">tunnel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+    <span class="c1"># do something with tunnel</span>
+</pre></div>
+</div>
+<p>Or, explicitly calling destroy:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tunnel</span> <span class="o">=</span> <span class="n">SSHTunnel</span><span class="p">(</span><span class="s2">&quot;some_alias&quot;</span><span class="p">,</span> <span class="s2">&quot;localhost&quot;</span><span class="p">,</span><span class="mi">9090</span><span class="p">,</span> <span class="mi">9090</span><span class="p">)</span>
+<span class="n">tunnel</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="c1"># do something with tunnel</span>
+<span class="n">tunnel</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.util.SSHTunnel.remote_alias">
+<code class="sig-name descname">remote_alias</code><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnel.remote_alias" title="Permalink to this definition">¶</a></dt>
+<dd><p>an alias corresponding to some username port and
+remote address. This is the SSH alias defined in trifeni.config,
+which normally come from a SSH config file in “~/.ssh/config”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.util.SSHTunnel.remote_ip">
+<code class="sig-name descname">remote_ip</code><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnel.remote_ip" title="Permalink to this definition">¶</a></dt>
+<dd><p>host address of the server to which we are trying to
+connect.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.util.SSHTunnel.relay_ip">
+<code class="sig-name descname">relay_ip</code><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnel.relay_ip" title="Permalink to this definition">¶</a></dt>
+<dd><p>host address of relay server. This is the address in
+supplied to the <code class="docutils literal notranslate"><span class="pre">-L</span></code> parameter of the command SSH client</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.util.SSHTunnel.local_port">
+<code class="sig-name descname">local_port</code><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnel.local_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>The local forwarding port. This is the port before
+the address in the <code class="docutils literal notranslate"><span class="pre">-L</span></code> command line SSH client paramter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.util.SSHTunnel.remote_port">
+<code class="sig-name descname">remote_port</code><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnel.remote_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>The remote forwarding port. This is the port after
+the address in the <code class="docutils literal notranslate"><span class="pre">-L</span></code> command line SSH client parameter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.util.SSHTunnel.port">
+<code class="sig-name descname">port</code><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnel.port" title="Permalink to this definition">¶</a></dt>
+<dd><p>The port associated with remote_ip, ie a port on which
+remote_ip is listening. This corresponds to the <code class="docutils literal notranslate"><span class="pre">-p</span></code> option in
+the command line SSH client.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.util.SSHTunnel.username">
+<code class="sig-name descname">username</code><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnel.username" title="Permalink to this definition">¶</a></dt>
+<dd><p>The username to use for connecting to remote_ip. This
+corresponds to the <code class="docutils literal notranslate"><span class="pre">-l</span></code> command line SSH client option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.util.SSHTunnel.tunnel_id">
+<code class="sig-name descname">tunnel_id</code><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnel.tunnel_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A UUID for this tunnel</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.util.SSHTunnel.tunnel_thread">
+<code class="sig-name descname">tunnel_thread</code><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnel.tunnel_thread" title="Permalink to this definition">¶</a></dt>
+<dd><p>a thread on which the socket server
+runs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>threading.Thread</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.util.SSHTunnel.client">
+<code class="sig-name descname">client</code><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnel.client" title="Permalink to this definition">¶</a></dt>
+<dd><p>The paramiko SSH client</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>paramiko.SSHClient</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.util.SSHTunnel.server">
+<code class="sig-name descname">server</code><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnel.server" title="Permalink to this definition">¶</a></dt>
+<dd><p>socket server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>server instance</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.util.SSHTunnel.reverse">
+<code class="sig-name descname">reverse</code><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnel.reverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether or not this is a reverse tunnel</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.util.SSHTunnel.open">
+<code class="sig-name descname">open</code><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnel.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether or not the tunnel is active</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.util.SSHTunnel.logger">
+<code class="sig-name descname">logger</code><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnel.logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>logging instance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>logging.getLogger</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="support.trifeni.trifeni.util.SSHTunnel.keyfile">
+<code class="sig-name descname">keyfile</code><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnel.keyfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>path to SSH key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>In terms of the ssh cli, some of these attributes can be thought of as follows:</p>
+<blockquote>
+<div><p>ssh -l <code class="docutils literal notranslate"><span class="pre">username</span></code> -p <code class="docutils literal notranslate"><span class="pre">port</span></code> -L <code class="docutils literal notranslate"><span class="pre">local_port</span></code>:<code class="docutils literal notranslate"><span class="pre">relay_ip</span></code>:<code class="docutils literal notranslate"><span class="pre">remote_port</span></code> <code class="docutils literal notranslate"><span class="pre">remote_ip</span></code></p>
+</div></blockquote>
+<p class="rubric">Methods Summary</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#support.trifeni.trifeni.util.SSHTunnel.check_conflict" title="support.trifeni.trifeni.util.SSHTunnel.check_conflict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_conflict</span></code></a>()</p></td>
+<td><p>Returns True if there is a conflict, False if there isn’t one.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#support.trifeni.trifeni.util.SSHTunnel.connect" title="support.trifeni.trifeni.util.SSHTunnel.connect"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connect</span></code></a>([look_for_keys, wait_for_password])</p></td>
+<td><p>Establish the tunnel connection.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#support.trifeni.trifeni.util.SSHTunnel.destroy" title="support.trifeni.trifeni.util.SSHTunnel.destroy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">destroy</span></code></a>([timeout])</p></td>
+<td><p>Destroy the tunnel.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Documentation</p>
+<dl class="method">
+<dt id="support.trifeni.trifeni.util.SSHTunnel.check_conflict">
+<code class="sig-name descname">check_conflict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnel.check_conflict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if there is a conflict, False if there isn’t one.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="support.trifeni.trifeni.util.SSHTunnel.connect">
+<code class="sig-name descname">connect</code><span class="sig-paren">(</span><em class="sig-param">look_for_keys=False</em>, <em class="sig-param">wait_for_password=False</em><span class="sig-paren">)</span><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnel.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Establish the tunnel connection. This will not check to see if this tunnel
+will conflict with any existing tunnels, instead it will likely throw
+an error when either trying to 1) bind the paramiko SSH client, or 2)
+bind the socket server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>look_for_keys</strong> (<em>bool</em><em>, </em><em>optional</em>) – Automatically look for SSH keys.</p></li>
+<li><p><strong>wait_for_password</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true, program execution will hang until
+user inputs password</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="support.trifeni.trifeni.util.SSHTunnel.destroy">
+<code class="sig-name descname">destroy</code><span class="sig-paren">(</span><em class="sig-param">timeout=0.1</em><span class="sig-paren">)</span><a class="headerlink" href="#support.trifeni.trifeni.util.SSHTunnel.destroy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Destroy the tunnel.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.trifeni.trifeni.util.SSHTunnelManager.html" title="SSHTunnelManager"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="support.trifeni.trifeni.util.Process.html" title="Process"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Tom Kuiper and Dean Smith.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

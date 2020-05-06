@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>ControlFlowMixin &#8212; support 0.9 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="coroutine" href="support.coroutine.coroutine.html" />
+    <link rel="prev" title="PlainHelpFormatter" href="support.arguments.PlainHelpFormatter.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.coroutine.coroutine.html" title="coroutine"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="support.arguments.PlainHelpFormatter.html" title="PlainHelpFormatter"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="support.arguments.PlainHelpFormatter.html"
+                        title="previous chapter">PlainHelpFormatter</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="support.coroutine.coroutine.html"
+                        title="next chapter">coroutine</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/support.control_flow.ControlFlowMixin.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="controlflowmixin">
+<h1>ControlFlowMixin<a class="headerlink" href="#controlflowmixin" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="support.control_flow.ControlFlowMixin">
+<em class="property">class </em><code class="sig-prename descclassname">support.control_flow.</code><code class="sig-name descname">ControlFlowMixin</code><a class="headerlink" href="#support.control_flow.ControlFlowMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Mixin class for controlling when and until when functions are called.
+Examples assume this class has been mixed into some child class:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MixedIn</span><span class="p">(</span><span class="n">ControlFlowMixin</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="n">mixed_in</span> <span class="o">=</span> <span class="n">MixedIn</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="support.control_flow.ControlFlowMixin.tz">
+<code class="sig-name descname">tz</code><a class="headerlink" href="#support.control_flow.ControlFlowMixin.tz" title="Permalink to this definition">¶</a></dt>
+<dd><p>timezone. Defaults to UTC</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>pytz.timezone</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Attributes Summary</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#support.control_flow.ControlFlowMixin.tz" title="support.control_flow.ControlFlowMixin.tz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tz</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods Summary</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#support.control_flow.ControlFlowMixin.at" title="support.control_flow.ControlFlowMixin.at"><code class="xref py py-obj docutils literal notranslate"><span class="pre">at</span></code></a>(when)</p></td>
+<td><p>Created a _DelayedCall instance that will run or loop at a specified time.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#support.control_flow.ControlFlowMixin.next_up" title="support.control_flow.ControlFlowMixin.next_up"><code class="xref py py-obj docutils literal notranslate"><span class="pre">next_up</span></code></a>()</p></td>
+<td><p>Return an empty _DelayedCall instance.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#support.control_flow.ControlFlowMixin.now" title="support.control_flow.ControlFlowMixin.now"><code class="xref py py-obj docutils literal notranslate"><span class="pre">now</span></code></a>()</p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><p>timezone aware datetime object</p>
+</dd>
+</dl>
+</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#support.control_flow.ControlFlowMixin.until" title="support.control_flow.ControlFlowMixin.until"><code class="xref py py-obj docutils literal notranslate"><span class="pre">until</span></code></a>([cond])</p></td>
+<td><p>Run some generator until some condition, or list of conditions is met.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes Documentation</p>
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">tz</code><em class="property"> = &lt;UTC&gt;</em></dt>
+<dd></dd></dl>
+
+<p class="rubric">Methods Documentation</p>
+<dl class="method">
+<dt id="support.control_flow.ControlFlowMixin.at">
+<code class="sig-name descname">at</code><span class="sig-paren">(</span><em class="sig-param">when</em><span class="sig-paren">)</span><a class="headerlink" href="#support.control_flow.ControlFlowMixin.at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Created a _DelayedCall instance that will run or loop at a
+specified time.</p>
+<p>Examples:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">runner</span><span class="p">():</span>
+    <span class="k">yield</span>
+
+<span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">mixed_in</span><span class="o">.</span><span class="n">at</span><span class="p">(</span>
+    <span class="n">MixedIn</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="mi">5</span><span class="p">))</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">runner</span><span class="p">):</span>
+    <span class="k">yield</span> <span class="n">e</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>when</strong> (<em>datetime.datetime</em>) – timezone aware datetime object indicating
+when to _DelayedCall methods.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>_DelayedCall</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="support.control_flow.ControlFlowMixin.next_up">
+<code class="sig-name descname">next_up</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#support.control_flow.ControlFlowMixin.next_up" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an empty _DelayedCall instance.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="support.control_flow.ControlFlowMixin.now">
+<em class="property">classmethod </em><code class="sig-name descname">now</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#support.control_flow.ControlFlowMixin.now" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>timezone aware datetime object</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>datetime.datetime</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="support.control_flow.ControlFlowMixin.until">
+<code class="sig-name descname">until</code><span class="sig-paren">(</span><em class="sig-param">cond=None</em><span class="sig-paren">)</span><a class="headerlink" href="#support.control_flow.ControlFlowMixin.until" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run some generator until some condition, or list of conditions is met.</p>
+<p>Examples:</p>
+<p>Say we have some function <code class="docutils literal notranslate"><span class="pre">runner</span></code> defined as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">runner</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;runner called&quot;</span><span class="p">)</span>
+    <span class="k">yield</span>
+</pre></div>
+</div>
+<p>We can use until in a variety of ways:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="c1"># run until runner is complete, or for next 5 seconds,</span>
+<span class="c1"># which ever comes first</span>
+<span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">mixed_in</span><span class="o">.</span><span class="n">until</span><span class="p">(</span>
+    <span class="n">MixedIn</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="mi">5</span><span class="p">))</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">runner</span><span class="p">):</span>
+    <span class="k">yield</span> <span class="n">e</span>
+
+<span class="c1"># run until the following function evaluates to True</span>
+
+<span class="k">def</span> <span class="nf">condition_factory</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">condition</span><span class="p">():</span>
+        <span class="n">rand</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">rand</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">return</span> <span class="n">condition</span>
+
+<span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">mixed_in</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="n">condition_factory</span><span class="p">())</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">runner</span><span class="p">):</span>
+    <span class="k">yield</span> <span class="n">e</span>
+
+<span class="c1"># we can pass a list of conditions if we want:</span>
+
+<span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">mixed_in</span><span class="o">.</span><span class="n">until</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">condition_factory</span><span class="p">(),</span> <span class="n">condition_factory</span><span class="p">()])</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">runner</span><span class="p">):</span>
+    <span class="k">yield</span> <span class="n">e</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cond</strong> (<em>list/callable/datetime.datetime</em>) – List of callables that
+return booleans, a single boolean-returning callable, or
+a datetime.datetime object. If the latter is passed, the
+resulting _DelayedCall object will run, loop, or wait until
+the specified time.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>_DelayedCall</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="support.coroutine.coroutine.html" title="coroutine"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="support.arguments.PlainHelpFormatter.html" title="PlainHelpFormatter"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Tom Kuiper and Dean Smith.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

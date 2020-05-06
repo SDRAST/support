@@ -4,7 +4,7 @@ paths to local packages and data
 import os
 from socket import gethostname
 
-local_packages = "/usr/local/lib/python2.7/DSN-Sci-packages/"
+local_packages = "/usr/local/RATools/"
 
 auto_pkg_dir = local_packages+"Automation/"
 auto_apps_path = auto_pkg_dir + "apps/"
