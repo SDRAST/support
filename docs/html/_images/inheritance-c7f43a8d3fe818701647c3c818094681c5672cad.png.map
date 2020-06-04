@@ -1,0 +1,6 @@
+<map id="inheritanced00aea9f97" name="inheritanced00aea9f97">
+<area shape="rect" id="node1" title="A base class for loggers and handlers which allows them to share" alt="" coords="5,5,77,31"/>
+<area shape="rect" id="node2" title="Handler instances dispatch logging events to specific destinations." alt="" coords="125,5,199,31"/>
+<area shape="rect" id="node3" title="A handler class which sends an SMTP email for each logging event." alt="" coords="247,5,355,31"/>
+<area shape="rect" id="node4" href="api/support.logs.TLSSMTPHandler.html#support.logs.TLSSMTPHandler" target="_top" title="Custom handler for email logging using TLS encryption." alt="" coords="403,5,533,31"/>
+</map>

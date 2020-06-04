@@ -1,0 +1,9 @@
+<map id="inheritance4097e1013e" name="inheritance4097e1013e">
+<area shape="rect" id="node1" href="api/support.options.ArgumentInterpreter.html#support.options.ArgumentInterpreter" target="_top" title="Interprets the argument provided as the specied type of iterable" alt="" coords="5,153,160,179"/>
+<area shape="rect" id="node2" title="Object for parsing command line strings into Python objects." alt="" coords="219,80,345,105"/>
+<area shape="rect" id="node6" href="api/support.options.OptParser.html#support.options.OptParser" target="_top" title="Subclass of OptionParser which does not mess up examples formatting" alt="" coords="414,55,499,80"/>
+<area shape="rect" id="node7" href="api/support.options.OptionParser.html#support.options.OptionParser" target="_top" title="front end for ArgumentParser for older programs from &#39;optparse&#39; days" alt="" coords="404,104,509,129"/>
+<area shape="rect" id="node3" title="Abstract base class that provides __repr__." alt="" coords="18,55,147,80"/>
+<area shape="rect" id="node5" title="Formatter for generating usage messages and argument help strings." alt="" coords="25,5,141,31"/>
+<area shape="rect" id="node8" href="api/support.options.PlainHelpFormatter.html#support.options.PlainHelpFormatter" target="_top" title="Formatter which does not remove newline codes" alt="" coords="208,5,356,31"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="inheritance15bcbba167" name="inheritance15bcbba167">
+<area shape="rect" id="node1" href="api/support.threading_util.pausable_thread.PausableThread.html#support.threading_util.pausable_thread.PausableThread" target="_top" title="A pausable stoppable thread." alt="" coords="153,29,279,55"/>
+<area shape="rect" id="node2" title="A class that represents a thread of control." alt="" coords="5,55,77,80"/>
+<area shape="rect" id="node3" href="api/support.threading_util.pausable_thread.PausableThreadCallback.html#support.threading_util.pausable_thread.PausableThreadCallback" target="_top" title="A thread that runs the same callback over an over again, with some" alt="" coords="125,79,307,104"/>
+<area shape="rect" id="node4" href="api/support.threading_util.pausable_thread.Pause.html#support.threading_util.pausable_thread.Pause" target="_top" title="A context manager for pausing threads." alt="" coords="5,5,77,31"/>
+</map>

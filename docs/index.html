@@ -1,0 +1,1442 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Single Dish Radio Astronomy Software Tools &#8212; support 0.9 documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="check_permission" href="api/support.check_permission.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api/support.check_permission.html" title="check_permission"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Single Dish Radio Astronomy Software Tools</a><ul>
+<li><a class="reference internal" href="#module-support">support Package</a><ul>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#class-inheritance-diagram">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.arguments">support.arguments Module</a><ul>
+<li><a class="reference internal" href="#converting-from-optparse-to-argparse">Converting from optparse to argparse</a></li>
+<li><a class="reference internal" href="#id1">Functions</a></li>
+<li><a class="reference internal" href="#id2">Classes</a></li>
+<li><a class="reference internal" href="#id3">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.control_flow">support.control_flow Package</a><ul>
+<li><a class="reference internal" href="#id4">Classes</a></li>
+<li><a class="reference internal" href="#id5">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.coroutine">support.coroutine Module</a><ul>
+<li><a class="reference internal" href="#id6">Functions</a></li>
+<li><a class="reference internal" href="#id7">Classes</a></li>
+<li><a class="reference internal" href="#id8">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.dicts">support.dicts Module</a><ul>
+<li><a class="reference internal" href="#id9">Functions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.doc_util">support.doc_util Package</a><ul>
+<li><a class="reference internal" href="#id10">Functions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.excel">support.excel Module</a><ul>
+<li><a class="reference internal" href="#id11">Functions</a></li>
+<li><a class="reference internal" href="#id12">Classes</a></li>
+<li><a class="reference internal" href="#id13">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.git">support.git Package</a><ul>
+<li><a class="reference internal" href="#id14">Functions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.git.pull_submodule_branches">support.git.pull_submodule_branches Module</a><ul>
+<li><a class="reference internal" href="#id15">Functions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.graphics">support.graphics Package</a><ul>
+<li><a class="reference internal" href="#id16">Functions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.graphics.colormap">support.graphics.colormap Module</a><ul>
+<li><a class="reference internal" href="#id17">Functions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.graphics.northpolar">support.graphics.northpolar Module</a><ul>
+<li><a class="reference internal" href="#id18">Classes</a></li>
+<li><a class="reference internal" href="#id19">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.hdf5_util">support.hdf5_util Package</a><ul>
+<li><a class="reference internal" href="#id20">Functions</a></li>
+<li><a class="reference internal" href="#id21">Classes</a></li>
+<li><a class="reference internal" href="#id22">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.HTML">support.HTML Module</a><ul>
+<li><a class="reference internal" href="#id23">Classes</a></li>
+<li><a class="reference internal" href="#id24">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.lists">support.lists Module</a><ul>
+<li><a class="reference internal" href="#id25">Functions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.local_dirs">support.local_dirs Module</a></li>
+<li><a class="reference internal" href="#module-support.logs">support.logs Module</a><ul>
+<li><a class="reference internal" href="#id26">Functions</a></li>
+<li><a class="reference internal" href="#id27">Classes</a></li>
+<li><a class="reference internal" href="#id28">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.markdown_util">support.markdown_util Package</a><ul>
+<li><a class="reference internal" href="#id29">Classes</a></li>
+<li><a class="reference internal" href="#id30">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.markdown_util.table">support.markdown_util.table Module</a><ul>
+<li><a class="reference internal" href="#id31">Classes</a></li>
+<li><a class="reference internal" href="#id32">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.network">support.network Module</a><ul>
+<li><a class="reference internal" href="#id33">Functions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.options">support.options Module</a><ul>
+<li><a class="reference internal" href="#id34">Converting from optparse to argparse</a></li>
+<li><a class="reference internal" href="#id35">Functions</a></li>
+<li><a class="reference internal" href="#id36">Classes</a></li>
+<li><a class="reference internal" href="#id37">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.process">support.process Module</a><ul>
+<li><a class="reference internal" href="#id38">Functions</a></li>
+<li><a class="reference internal" href="#id39">Classes</a></li>
+<li><a class="reference internal" href="#id40">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.rtc">support.rtc Package</a><ul>
+<li><a class="reference internal" href="#id41">Classes</a></li>
+<li><a class="reference internal" href="#id42">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.text">support.text Module</a><ul>
+<li><a class="reference internal" href="#id43">Functions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.threading_util">support.threading_util Package</a><ul>
+<li><a class="reference internal" href="#id44">Functions</a></li>
+<li><a class="reference internal" href="#id45">Classes</a></li>
+<li><a class="reference internal" href="#id46">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.threading_util.pausable_thread">support.threading_util.pausable_thread Module</a><ul>
+<li><a class="reference internal" href="#id47">Functions</a></li>
+<li><a class="reference internal" href="#id48">Classes</a></li>
+<li><a class="reference internal" href="#id49">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.threading_util.publisher_thread">support.threading_util.publisher_thread Module</a><ul>
+<li><a class="reference internal" href="#id50">Classes</a></li>
+<li><a class="reference internal" href="#id51">Class Inheritance Diagram</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-support.weather">support.weather Module</a><ul>
+<li><a class="reference internal" href="#id52">Functions</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api/support.check_permission.html"
+                        title="next chapter">check_permission</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="single-dish-radio-astronomy-software-tools">
+<h1>Single Dish Radio Astronomy Software Tools<a class="headerlink" href="#single-dish-radio-astronomy-software-tools" title="Permalink to this headline">¶</a></h1>
+<p>For an overview of SDRAST and the current status please visit <a class="reference external" href="https://sdrast.github.io/">https://sdrast.github.io/</a>.</p>
+<p>Please note that the modules <cite>configuration</cite>, <cite>messagebus</cite>, <cite>pyro</cite>, <cite>trifeni</cite>
+and <cite>tunneling</cite> are not yet working under Python 3.</p>
+<div class="section" id="module-support">
+<span id="support-package"></span><h2>support Package<a class="headerlink" href="#module-support" title="Permalink to this headline">¶</a></h2>
+<p>Package to provide support for various objects and modules</p>
+<p>This module contains functions that don’t have an obvious home in a
+submodule.</p>
+<div class="section" id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code>(object[, dtype, copy, order, subok, ndmin])</p></td>
+<td><p>Create an array.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.check_permission.html#support.check_permission" title="support.check_permission"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_permission</span></code></a>(group)</p></td>
+<td><p>Verify that the user has the necessary permissions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.cpu_arch.html#support.cpu_arch" title="support.cpu_arch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cpu_arch</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">exists</span></code>(path)</p></td>
+<td><p>Test whether a path exists.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.get_user.html#support.get_user" title="support.get_user"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_user</span></code></a>()</p></td>
+<td><p>Returns the user running this session</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">makedirs</span></code>(name [[, mode, exist_ok])</p></td>
+<td><p>Super-mkdir; create a leaf directory and all intermediate ones.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.mkdir_if_needed.html#support.mkdir_if_needed" title="support.mkdir_if_needed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mkdir_if_needed</span></code></a>(path)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.nearest_index.html#support.nearest_index" title="support.nearest_index"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nearest_index</span></code></a>(np_array, value)</p></td>
+<td><p>Return the index of the element of the array with the nearest value</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.python_version.html#support.python_version" title="support.python_version"><code class="xref py py-obj docutils literal notranslate"><span class="pre">python_version</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">sleep</span></code>(seconds)</p></td>
+<td><p>Delay execution for a given number of seconds.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.sync_second.html#support.sync_second" title="support.sync_second"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sync_second</span></code></a>()</p></td>
+<td><p>Wait until the second changes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">time</span></code>()</p></td>
+<td><p>Return the current time in seconds since the Epoch.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.NamedClass.html#support.NamedClass" title="support.NamedClass"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NamedClass</span></code></a>(name)</p></td>
+<td><p>A base class enhanced with methods for reporting self.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.PropertiedClass.html#support.PropertiedClass" title="support.PropertiedClass"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PropertiedClass</span></code></a>()</p></td>
+<td><p>A subclass of MCobject enhanced with properties.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="class-inheritance-diagram">
+<h3>Class Inheritance Diagram<a class="headerlink" href="#class-inheritance-diagram" title="Permalink to this headline">¶</a></h3>
+<div class="graphviz"><img src="_images/inheritance-1586aa1a514c2ee14d79c461f7edf8e7e91b24ee.png" alt="Inheritance diagram of support.NamedClass, support.PropertiedClass" usemap="#inheritancec7f1b67884" class="inheritance graphviz" /></div>
+<map id="inheritancec7f1b67884" name="inheritancec7f1b67884">
+<area shape="rect" id="node1" href="api/support.NamedClass.html#support.NamedClass" target="_top" title="A base class enhanced with methods for reporting self." alt="" coords="5,5,109,31"/>
+<area shape="rect" id="node2" href="api/support.PropertiedClass.html#support.PropertiedClass" target="_top" title="A subclass of MCobject enhanced with properties." alt="" coords="157,5,281,31"/>
+</map></div>
+</div>
+<div class="section" id="module-support.arguments">
+<span id="support-arguments-module"></span><h2>support.arguments Module<a class="headerlink" href="#module-support.arguments" title="Permalink to this headline">¶</a></h2>
+<p>Support for Python argparse (or optparse) module</p>
+<p>How to use this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">initiate_option_parser</span><span class="p">(</span><span class="n">description</span><span class="p">,</span><span class="n">examples</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">usage</span> <span class="o">=</span> <span class="n">usage</span>
+<span class="c1"># Add other options here</span>
+
+<span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+
+<span class="c1"># This cannot be delegated to another module or class</span>
+<span class="n">mylogger</span> <span class="o">=</span> <span class="n">init_logging</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(),</span>
+                        <span class="n">loglevel</span>   <span class="o">=</span> <span class="n">get_loglevel</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">file_loglevel</span><span class="p">),</span>
+                        <span class="n">consolevel</span> <span class="o">=</span> <span class="n">get_loglevel</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">stderr_loglevel</span><span class="p">),</span>
+                        <span class="n">logname</span>    <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">logpath</span><span class="o">+</span><span class="vm">__name__</span><span class="o">+</span><span class="s2">&quot;.log&quot;</span><span class="p">)</span>
+<span class="n">loggers</span> <span class="o">=</span> <span class="n">set_module_loggers</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">modloglevels</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>In either case, the parser object will be a argparse.ArgumentParser object</p>
+<div class="section" id="converting-from-optparse-to-argparse">
+<h3>Converting from optparse to argparse<a class="headerlink" href="#converting-from-optparse-to-argparse" title="Permalink to this headline">¶</a></h3>
+<p>The package ‘optparse’ has been made obsolescent. In converting from ‘optparse’
+to ‘argparse’, replace ‘add_option’ with ‘add_argument’ and change the ‘type’
+value from a string to a Python variable type, e.g. float</p>
+</div>
+<div class="section" id="id1">
+<h3>Functions<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.arguments.initiate_option_parser.html#support.arguments.initiate_option_parser" title="support.arguments.initiate_option_parser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">initiate_option_parser</span></code></a>(description, examples)</p></td>
+<td><p>Initiate an option parser with default logging options</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.arguments.simple_parse_args.html#support.arguments.simple_parse_args" title="support.arguments.simple_parse_args"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simple_parse_args</span></code></a>(init_description)</p></td>
+<td><p>Grab arguments relevant to the Pyro nameserver that have APC and Spectrometer servers registered.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id2">
+<h3>Classes<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.arguments.ArgumentInterpreter.html#support.arguments.ArgumentInterpreter" title="support.arguments.ArgumentInterpreter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArgumentInterpreter</span></code></a>()</p></td>
+<td><p>Interprets the argument provided as the specied type of iterable</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.arguments.OptParser.html#support.arguments.OptParser" title="support.arguments.OptParser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OptParser</span></code></a>([prog, usage, description, …])</p></td>
+<td><p>Subclass of OptionParser which does not mess up examples formatting</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.arguments.OptionParser.html#support.arguments.OptionParser" title="support.arguments.OptionParser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OptionParser</span></code></a>([description, usage, examples])</p></td>
+<td><p>front end for ArgumentParser for older programs from ‘optparse’ days</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.arguments.PlainHelpFormatter.html#support.arguments.PlainHelpFormatter" title="support.arguments.PlainHelpFormatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PlainHelpFormatter</span></code></a>(prog[, indent_increment, …])</p></td>
+<td><p>Formatter which does not remove newline codes</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id3">
+<h3>Class Inheritance Diagram<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="graphviz"><img src="_images/inheritance-c3aafe08e0104eb8f198b6d2e1f2b204729299e4.png" alt="Inheritance diagram of support.arguments.ArgumentInterpreter, support.arguments.OptParser, support.arguments.OptionParser, support.arguments.PlainHelpFormatter" usemap="#inheritance80a423a499" class="inheritance graphviz" /></div>
+<map id="inheritance80a423a499" name="inheritance80a423a499">
+<area shape="rect" id="node1" href="api/support.arguments.ArgumentInterpreter.html#support.arguments.ArgumentInterpreter" target="_top" title="Interprets the argument provided as the specied type of iterable" alt="" coords="5,153,160,179"/>
+<area shape="rect" id="node6" href="api/support.arguments.OptParser.html#support.arguments.OptParser" target="_top" title="Subclass of OptionParser which does not mess up examples formatting" alt="" coords="414,55,499,80"/>
+<area shape="rect" id="node7" href="api/support.arguments.OptionParser.html#support.arguments.OptionParser" target="_top" title="front end for ArgumentParser for older programs from &#39;optparse&#39; days" alt="" coords="404,104,509,129"/>
+<area shape="rect" id="node8" href="api/support.arguments.PlainHelpFormatter.html#support.arguments.PlainHelpFormatter" target="_top" title="Formatter which does not remove newline codes" alt="" coords="208,5,356,31"/>
+</map></div>
+</div>
+<div class="section" id="module-support.control_flow">
+<span id="support-control-flow-package"></span><h2>support.control_flow Package<a class="headerlink" href="#module-support.control_flow" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id4">
+<h3>Classes<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.control_flow.ControlFlowMixin.html#support.control_flow.ControlFlowMixin" title="support.control_flow.ControlFlowMixin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ControlFlowMixin</span></code></a></p></td>
+<td><p>Mixin class for controlling when and until when functions are called.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id5">
+<h3>Class Inheritance Diagram<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="graphviz"><img src="_images/inheritance-17f85377a750a3271e39db28c8eed0aecb71b4e1.png" alt="Inheritance diagram of support.control_flow.ControlFlowMixin" usemap="#inheritance12d870e760" class="inheritance graphviz" /></div>
+<map id="inheritance12d870e760" name="inheritance12d870e760">
+<area shape="rect" id="node1" href="api/support.control_flow.ControlFlowMixin.html#support.control_flow.ControlFlowMixin" target="_top" title="Mixin class for controlling when and until when functions are called." alt="" coords="5,5,140,31"/>
+</map></div>
+</div>
+<div class="section" id="module-support.coroutine">
+<span id="support-coroutine-module"></span><h2>support.coroutine Module<a class="headerlink" href="#module-support.coroutine" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id6">
+<h3>Functions<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.coroutine.coroutine.html#support.coroutine.coroutine" title="support.coroutine.coroutine"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coroutine</span></code></a>(func)</p></td>
+<td><p>Simple decorator to “prime” a coroutine</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id7">
+<h3>Classes<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.coroutine.CoroutineMixin.html#support.coroutine.CoroutineMixin" title="support.coroutine.CoroutineMixin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CoroutineMixin</span></code></a></p></td>
+<td><p>This provides a subclass with a <code class="docutils literal notranslate"><span class="pre">_coro</span></code> attribute which provides the class with the new generator features defined in Python 2.5.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id8">
+<h3>Class Inheritance Diagram<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<div class="graphviz"><img src="_images/inheritance-b4b3e545cda97f956ed575732355ce4449e0ca48.png" alt="Inheritance diagram of support.coroutine.CoroutineMixin" usemap="#inheritancebb0cd9facb" class="inheritance graphviz" /></div>
+<map id="inheritancebb0cd9facb" name="inheritancebb0cd9facb">
+<area shape="rect" id="node1" href="api/support.coroutine.CoroutineMixin.html#support.coroutine.CoroutineMixin" target="_top" title="This provides a subclass with a ``_coro`` attribute which provides the" alt="" coords="5,5,125,31"/>
+</map></div>
+</div>
+<div class="section" id="module-support.dicts">
+<span id="support-dicts-module"></span><h2>support.dicts Module<a class="headerlink" href="#module-support.dicts" title="Permalink to this headline">¶</a></h2>
+<p>support for dict objects</p>
+<div class="section" id="id9">
+<h3>Functions<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.dicts.flattenDict.html#support.dicts.flattenDict" title="support.dicts.flattenDict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flattenDict</span></code></a>(dictionary[, init])</p></td>
+<td><p>Converts nested dicts with numeric or str keys to flat dict with tuple keys.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.dicts.get_from_deep_dict.html#support.dicts.get_from_deep_dict" title="support.dicts.get_from_deep_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_from_deep_dict</span></code></a>(values, keys)</p></td>
+<td><p>Extract values from a multi-depth dictionary</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.dicts.make_key_if_needed.html#support.dicts.make_key_if_needed" title="support.dicts.make_key_if_needed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_key_if_needed</span></code></a>(thisdict, key[, value])</p></td>
+<td><p>Creates a key in an existing dictionary if it does not exist</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.dicts.tuple_keys_to_str.html#support.dicts.tuple_keys_to_str" title="support.dicts.tuple_keys_to_str"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple_keys_to_str</span></code></a>(dictionary)</p></td>
+<td><p>Converts tuple keys to str keys</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="module-support.doc_util">
+<span id="support-doc-util-package"></span><h2>support.doc_util Package<a class="headerlink" href="#module-support.doc_util" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id10">
+<h3>Functions<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.doc_util.get_help.html#support.doc_util.get_help" title="support.doc_util.get_help"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_help</span></code></a>(cls)</p></td>
+<td><p>generate help text from a class.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="module-support.excel">
+<span id="support-excel-module"></span><h2>support.excel Module<a class="headerlink" href="#module-support.excel" title="Permalink to this headline">¶</a></h2>
+<p>Support for openpyxl</p>
+<p>Use of module functions is not elegant.  I should try to subclass
+openpyxl.workbook.Workbook</p>
+<p>This works for open-pyxl 1.x.  Starting with 2.0, the row and column indexing
+starts with 1 instead of 0.</p>
+<div class="section" id="id11">
+<h3>Functions<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.excel.add_column.html#support.excel.add_column" title="support.excel.add_column"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_column</span></code></a>(sheet, meta_column, col, colname)</p></td>
+<td><p>Add one empty column to a sheet</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.excel.add_columns.html#support.excel.add_columns" title="support.excel.add_columns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_columns</span></code></a>(sheet, names)</p></td>
+<td><p>Add a list of empty columns to a sheet</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.excel.column_ID_dict.html#support.excel.column_ID_dict" title="support.excel.column_ID_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">column_ID_dict</span></code></a>(worksheet)</p></td>
+<td><p>Create a dictionary of column number indexed by column name</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.excel.column_id.html#support.excel.column_id" title="support.excel.column_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">column_id</span></code></a>(index)</p></td>
+<td><p>Return the column label given its numerical index</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.excel.column_number.html#support.excel.column_number" title="support.excel.column_number"><code class="xref py py-obj docutils literal notranslate"><span class="pre">column_number</span></code></a>(code)</p></td>
+<td><p>Return column number, with left column being 0.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.excel.find_column.html#support.excel.find_column" title="support.excel.find_column"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_column</span></code></a>(sh, name)</p></td>
+<td><p>Find or create a column</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.excel.getValueWithMergeLookup.html#support.excel.getValueWithMergeLookup" title="support.excel.getValueWithMergeLookup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getValueWithMergeLookup</span></code></a>(sheet, col, row)</p></td>
+<td><p>from <a class="reference external" href="http://stackoverflow.com/questions/23562366/">http://stackoverflow.com/questions/23562366/</a>                                      how-do-i-get-value-present-in-a-merged-cell does not work in this version of openpyxl</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.excel.get_column.html#support.excel.get_column" title="support.excel.get_column"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_column</span></code></a>(ws, column_name)</p></td>
+<td><p>Get the data as a list from a column identified by its name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.excel.get_column_id.html#support.excel.get_column_id" title="support.excel.get_column_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_column_id</span></code></a>(sh, col_name)</p></td>
+<td><p>Returns column letter of the first column with that name</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_column_letter</span></code>(idx)</p></td>
+<td><p>Convert a column index into a column letter (3 -&gt; ‘C’)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.excel.get_column_names.html#support.excel.get_column_names" title="support.excel.get_column_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_column_names</span></code></a>(sh)</p></td>
+<td><p>Dictionary of column names indexed by column letter</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.excel.get_row_number.html#support.excel.get_row_number" title="support.excel.get_row_number"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_row_number</span></code></a>(ws, column, value)</p></td>
+<td><p>Get the first row which has the specified value in the designated column</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.excel.get_row_numbers.html#support.excel.get_row_numbers" title="support.excel.get_row_numbers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_row_numbers</span></code></a>(sh, colname, value)</p></td>
+<td><p>Get the row  numbers for rows with a given value in a column</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.excel.get_rows.html#support.excel.get_rows" title="support.excel.get_rows"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_rows</span></code></a>(sh, colname, value)</p></td>
+<td><p>Get a list of rows (each a list of cells) with a given value in a column</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.excel.insert_empty_row_after.html#support.excel.insert_empty_row_after" title="support.excel.insert_empty_row_after"><code class="xref py py-obj docutils literal notranslate"><span class="pre">insert_empty_row_after</span></code></a>(ws, prior_row)</p></td>
+<td><p>Move all the rows above ‘prior_row’ down one and ‘prior_row’+1 emptied.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_workbook</span></code>(filename[, read_only, …])</p></td>
+<td><p>Open the given filename and return the workbook</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.excel.set_column_dimensions.html#support.excel.set_column_dimensions" title="support.excel.set_column_dimensions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_column_dimensions</span></code></a>(ws)</p></td>
+<td><p>Set the width of the columns to fit the data in the top two rows</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id12">
+<h3>Classes<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.excel.Workbookclass.html#support.excel.Workbookclass" title="support.excel.Workbookclass"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Workbookclass</span></code></a>([path, file])</p></td>
+<td><p>incomplete</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id13">
+<h3>Class Inheritance Diagram<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<div class="graphviz"><img src="_images/inheritance-287472c196b7fcabb90fae6a6181cde1fc9337fc.png" alt="Inheritance diagram of support.excel.Workbookclass" usemap="#inheritanceb0fe456e75" class="inheritance graphviz" /></div>
+<map id="inheritanceb0fe456e75" name="inheritanceb0fe456e75">
+<area shape="rect" id="node2" href="api/support.excel.Workbookclass.html#support.excel.Workbookclass" target="_top" title="incomplete" alt="" coords="140,5,260,31"/>
+</map></div>
+</div>
+<div class="section" id="module-support.git">
+<span id="support-git-package"></span><h2>support.git Package<a class="headerlink" href="#module-support.git" title="Permalink to this headline">¶</a></h2>
+<p>support.git - creates superdep.txt and subdep.txt files</p>
+<p>subdep.txt lists repositories below the current repository in the filesystem.</p>
+<p>superdep.txt lists repositories above the current one to the top of tree.</p>
+<p>TO DO::
+* Handle the case of multiple remotes.  Use only ‘jpl’ and ‘jplra’.
+* Take care of the intermediate repositories
+* Look at the imports in __init__.py to see what other repos are needed</p>
+<div class="section" id="id14">
+<h3>Functions<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.git.add_new_files.html#support.git.add_new_files" title="support.git.add_new_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_new_files</span></code></a>()</p></td>
+<td><p>Finds new files in the current directory as does ‘git add’ for them.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.git.check_repo.html#support.git.check_repo" title="support.git.check_repo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_repo</span></code></a>(path)</p></td>
+<td><p>Convenience so this test hast to be done only once</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.git.compare_to_remote.html#support.git.compare_to_remote" title="support.git.compare_to_remote"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compare_to_remote</span></code></a>(remote)</p></td>
+<td><p>Compares status of local and remote repo</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.git.compare_to_remotes.html#support.git.compare_to_remotes" title="support.git.compare_to_remotes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compare_to_remotes</span></code></a>(remote)</p></td>
+<td><p>Compares status of all local and remote repos</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.git.find_sub_repos.html#support.git.find_sub_repos" title="support.git.find_sub_repos"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_sub_repos</span></code></a>([path, fileobj])</p></td>
+<td><p>Find the repo trunk(s) in the specified directory</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.git.get_git_dirs.html#support.git.get_git_dirs" title="support.git.get_git_dirs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_git_dirs</span></code></a>()</p></td>
+<td><p>Finds all the sub-directories on the system which are git sandboxes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_loglevel</span></code>(level)</p></td>
+<td><p>Get the level value from text</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_logging</span></code>(extlogger[, loglevel, …])</p></td>
+<td><p>Create a logger that displays to the console and writes a log file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.git.install_dependencies.html#support.git.install_dependencies" title="support.git.install_dependencies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">install_dependencies</span></code></a>()</p></td>
+<td><p>Clones the repos needed by this repo.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.git.make_subdep_entry.html#support.git.make_subdep_entry" title="support.git.make_subdep_entry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_subdep_entry</span></code></a>(path[, fileobj])</p></td>
+<td><p>Add submodule (separate repo in this directory) to subdep.txt</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.git.make_superdeps.html#support.git.make_superdeps" title="support.git.make_superdeps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_superdeps</span></code></a>(top_repos)</p></td>
+<td><p>Create list of repos in the directory tree above this repo</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.git.report_status.html#support.git.report_status" title="support.git.report_status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">report_status</span></code></a>([show_all])</p></td>
+<td><p>Does ‘git status’ for all the sandboxes.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="module-support.git.pull_submodule_branches">
+<span id="support-git-pull-submodule-branches-module"></span><h2>support.git.pull_submodule_branches Module<a class="headerlink" href="#module-support.git.pull_submodule_branches" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id15">
+<h3>Functions<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.git.pull_submodule_branches.pull_submodule_branches.html#support.git.pull_submodule_branches.pull_submodule_branches" title="support.git.pull_submodule_branches.pull_submodule_branches"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pull_submodule_branches</span></code></a>()</p></td>
+<td><p>Even after calling git submodule update –init –recursive submodule will be on a detached branch.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="module-support.graphics">
+<span id="support-graphics-package"></span><h2>support.graphics Package<a class="headerlink" href="#module-support.graphics" title="Permalink to this headline">¶</a></h2>
+<p>Various routines to support matplotlib graphics</p>
+<div class="section" id="id16">
+<h3>Functions<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.graphics.X_axis_label_format.html#support.graphics.X_axis_label_format" title="support.graphics.X_axis_label_format"><code class="xref py py-obj docutils literal notranslate"><span class="pre">X_axis_label_format</span></code></a>(format)</p></td>
+<td><p>Define the X-axis label format</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.graphics.auto_ticks.html#support.graphics.auto_ticks" title="support.graphics.auto_ticks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">auto_ticks</span></code></a>(vmin, vmax)</p></td>
+<td><p>Optional over-ride for matplotlib tick placement.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">empty</span></code>(shape[, dtype, order])</p></td>
+<td><p>Return a new array of given shape and type, without initializing entries.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fft</span></code>(a[, n, axis, norm])</p></td>
+<td><p>Compute the one-dimensional discrete Fourier Transform.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fftshift</span></code>(x[, axes])</p></td>
+<td><p>Shift the zero-frequency component to the center of the spectrum.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.graphics.get_screen_resolution.html#support.graphics.get_screen_resolution" title="support.graphics.get_screen_resolution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_screen_resolution</span></code></a>()</p></td>
+<td><p>from <a class="reference external" href="https://stackoverflow.com/questions/3597965/">https://stackoverflow.com/questions/3597965/</a>                                getting-monitor-resolution-in-python-on-ubuntu</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.graphics.make_spectrogram.html#support.graphics.make_spectrogram" title="support.graphics.make_spectrogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_spectrogram</span></code></a>(data, num_spec, num_bins[, …])</p></td>
+<td><p>Converts a sequence of complex samples into a spectrogram</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.graphics.ticks.html#support.graphics.ticks" title="support.graphics.ticks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ticks</span></code></a>(axis, axis_limits, new_limits, …)</p></td>
+<td><p>Label an axis with different units from the data</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.graphics.twiny.html#support.graphics.twiny" title="support.graphics.twiny"><code class="xref py py-obj docutils literal notranslate"><span class="pre">twiny</span></code></a>([ax])</p></td>
+<td><p>Make a second axes overlay ax (or the current axes if ax is None) sharing the xaxis.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="module-support.graphics.colormap">
+<span id="support-graphics-colormap-module"></span><h2>support.graphics.colormap Module<a class="headerlink" href="#module-support.graphics.colormap" title="Permalink to this headline">¶</a></h2>
+<p>These functions, when given a magnitude mag between cmin and cmax, return
+a colour tuple (red, green, blue). Light blue is cold (low magnitude)
+and yellow is hot (high magnitude).
+From <a class="reference external" href="http://code.activestate.com/recipes/52273/">http://code.activestate.com/recipes/52273/</a></p>
+<div class="section" id="id17">
+<h3>Functions<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.graphics.colormap.colorbar.html#support.graphics.colormap.colorbar" title="support.graphics.colormap.colorbar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">colorbar</span></code></a>(cmin, cmax)</p></td>
+<td><p>Create a color bar using the RGB mapping of this module</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.graphics.colormap.floatRgb.html#support.graphics.colormap.floatRgb" title="support.graphics.colormap.floatRgb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">floatRgb</span></code></a>(mag, cmin, cmax)</p></td>
+<td><p>Return a tuple of floats between 0 and 1 for the red, green and blue amplitudes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.graphics.colormap.htmlRgb.html#support.graphics.colormap.htmlRgb" title="support.graphics.colormap.htmlRgb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">htmlRgb</span></code></a>(mag, cmin, cmax)</p></td>
+<td><p>Return a tuple of strings to be used in HTML documents.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.graphics.colormap.indexed_color.html#support.graphics.colormap.indexed_color" title="support.graphics.colormap.indexed_color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">indexed_color</span></code></a>(index)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.graphics.colormap.rgb.html#support.graphics.colormap.rgb" title="support.graphics.colormap.rgb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rgb</span></code></a>(mag, cmin, cmax)</p></td>
+<td><p>Return a tuple of integers to be used in AWT/Java plots.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.graphics.colormap.strRgb.html#support.graphics.colormap.strRgb" title="support.graphics.colormap.strRgb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">strRgb</span></code></a>(mag, cmin, cmax)</p></td>
+<td><p>Return a tuple of strings to be used in Tk plots.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="module-support.graphics.northpolar">
+<span id="support-graphics-northpolar-module"></span><h2>support.graphics.northpolar Module<a class="headerlink" href="#module-support.graphics.northpolar" title="Permalink to this headline">¶</a></h2>
+<p>from <a class="reference external" href="http://stackoverflow.com/questions/2417794/how-to-make-the-angles-in-a-matplotlib-polar-plot-go-clockwise-with-0-at-the-top">http://stackoverflow.com/questions/2417794/how-to-make-the-angles-in-a-matplotlib-polar-plot-go-clockwise-with-0-at-the-top</a></p>
+<div class="section" id="id18">
+<h3>Classes<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Affine2D</span></code>([matrix])</p></td>
+<td><p>A mutable 2D affine transformation.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bbox</span></code>(points, **kwargs)</p></td>
+<td><p>A mutable bounding box.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">IdentityTransform</span></code>(*args, **kwargs)</p></td>
+<td><p>A special class that does one thing, the identity transform, in a fast way.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.graphics.northpolar.NorthPolarAxes.html#support.graphics.northpolar.NorthPolarAxes" title="support.graphics.northpolar.NorthPolarAxes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NorthPolarAxes</span></code></a>(*args[, theta_offset, …])</p></td>
+<td><p>A variant of PolarAxes where theta starts pointing north and goes clockwise.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PolarAxes</span></code>(*args[, theta_offset, …])</p></td>
+<td><p>A polar graph projection, where the input dimensions are <em>theta</em>, <em>r</em>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id19">
+<h3>Class Inheritance Diagram<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
+<div class="graphviz"><img src="_images/inheritance-046f6e267801787d1aca8fb0c2f0f906f0ec1467.png" alt="Inheritance diagram of support.graphics.northpolar.NorthPolarAxes" usemap="#inheritance17c2849b8b" class="inheritance graphviz" /></div>
+<map id="inheritance17c2849b8b" name="inheritance17c2849b8b">
+<area shape="rect" id="node4" href="api/support.graphics.northpolar.NorthPolarAxes.html#support.graphics.northpolar.NorthPolarAxes" target="_top" title="A variant of PolarAxes where theta starts pointing north and goes" alt="" coords="521,5,644,31"/>
+</map></div>
+</div>
+<div class="section" id="module-support.hdf5_util">
+<span id="support-hdf5-util-package"></span><h2>support.hdf5_util Package<a class="headerlink" href="#module-support.hdf5_util" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id20">
+<h3>Functions<a class="headerlink" href="#id20" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.hdf5_util.inspect_file_attrs.html#support.hdf5_util.inspect_file_attrs" title="support.hdf5_util.inspect_file_attrs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inspect_file_attrs</span></code></a>(f_path_or_f_obj)</p></td>
+<td><p>List out the attributes of some HDF5 file object.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.hdf5_util.inspect_file_structure.html#support.hdf5_util.inspect_file_structure" title="support.hdf5_util.inspect_file_structure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inspect_file_structure</span></code></a>(f_path_or_f_obj)</p></td>
+<td><p>Get a dictionary that reports the structure of some HDF5 file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.hdf5_util.dump_dict.html#support.hdf5_util.dump_dict" title="support.hdf5_util.dump_dict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dump_dict</span></code></a>(f_obj_or_group, data_dict)</p></td>
+<td><p>Dump the contents of a data dictionary into some file object or group.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id21">
+<h3>Classes<a class="headerlink" href="#id21" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.hdf5_util.HDF5Mixin.html#support.hdf5_util.HDF5Mixin" title="support.hdf5_util.HDF5Mixin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HDF5Mixin</span></code></a></p></td>
+<td><p>Mixin class with methods for creating and writing to HDF5 files.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id22">
+<h3>Class Inheritance Diagram<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h3>
+<div class="graphviz"><img src="_images/inheritance-724256ac1ded7e4bf34220d0268c91398f747fdb.png" alt="Inheritance diagram of support.hdf5_util.hdf5_mixin.HDF5Mixin" usemap="#inheritance9dcdbc674a" class="inheritance graphviz" /></div>
+<map id="inheritance9dcdbc674a" name="inheritance9dcdbc674a">
+<area shape="rect" id="node1" href="api/support.hdf5_util.HDF5Mixin.html#support.hdf5_util.HDF5Mixin" target="_top" title="Mixin class with methods for creating and writing to HDF5 files." alt="" coords="5,5,97,31"/>
+</map></div>
+</div>
+<div class="section" id="module-support.HTML">
+<span id="support-html-module"></span><h2>support.HTML Module<a class="headerlink" href="#module-support.HTML" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id23">
+<h3>Classes<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.HTML.Body.html#support.HTML.Body" title="support.HTML.Body"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Body</span></code></a>(*args, **kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.HTML.Centering.html#support.HTML.Centering" title="support.HTML.Centering"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Centering</span></code></a>(*args, **kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.HTML.H1.html#support.HTML.H1" title="support.HTML.H1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">H1</span></code></a>(*args, **kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.HTML.HTMLpage.html#support.HTML.HTMLpage" title="support.HTML.HTMLpage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HTMLpage</span></code></a>(*args, **kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.HTML.Head.html#support.HTML.Head" title="support.HTML.Head"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Head</span></code></a>(*args, **kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.HTML.Link.html#support.HTML.Link" title="support.HTML.Link"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Link</span></code></a>(*args, **kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.HTML.Table.html#support.HTML.Table" title="support.HTML.Table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Table</span></code></a>(*args, **kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.HTML.TableData.html#support.HTML.TableData" title="support.HTML.TableData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TableData</span></code></a>(*args, **kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.HTML.TableHeader.html#support.HTML.TableHeader" title="support.HTML.TableHeader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TableHeader</span></code></a>(*args, **kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.HTML.TableRow.html#support.HTML.TableRow" title="support.HTML.TableRow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TableRow</span></code></a>(*args, **kwargs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.HTML.TagBody.html#support.HTML.TagBody" title="support.HTML.TagBody"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TagBody</span></code></a>(*args, **kwargs)</p></td>
+<td><p>superclass for HTML tag classes</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.HTML.Title.html#support.HTML.Title" title="support.HTML.Title"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Title</span></code></a>(text, **kwargs)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id24">
+<h3>Class Inheritance Diagram<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h3>
+<div class="graphviz"><img src="_images/inheritance-1662b24d96d34b99f5ce9a959a6b9ddbcec79984.png" alt="Inheritance diagram of support.HTML.Body, support.HTML.Centering, support.HTML.H1, support.HTML.HTMLpage, support.HTML.Head, support.HTML.Link, support.HTML.Table, support.HTML.TableData, support.HTML.TableHeader, support.HTML.TableRow, support.HTML.TagBody, support.HTML.Title" usemap="#inheritancec1d923aec9" class="inheritance graphviz" /></div>
+<map id="inheritancec1d923aec9" name="inheritancec1d923aec9">
+<area shape="rect" id="node1" href="api/support.HTML.Body.html#support.HTML.Body" target="_top" title="Body" alt="" coords="146,5,218,31"/>
+<area shape="rect" id="node2" href="api/support.HTML.TagBody.html#support.HTML.TagBody" target="_top" title="superclass for HTML tag classes" alt="" coords="5,252,83,277"/>
+<area shape="rect" id="node3" href="api/support.HTML.Centering.html#support.HTML.Centering" target="_top" title="Centering" alt="" coords="139,55,225,80"/>
+<area shape="rect" id="node4" href="api/support.HTML.H1.html#support.HTML.H1" target="_top" title="H1" alt="" coords="146,104,218,129"/>
+<area shape="rect" id="node5" href="api/support.HTML.HTMLpage.html#support.HTML.HTMLpage" target="_top" title="HTMLpage" alt="" coords="137,153,227,179"/>
+<area shape="rect" id="node6" href="api/support.HTML.Head.html#support.HTML.Head" target="_top" title="Head" alt="" coords="146,203,218,228"/>
+<area shape="rect" id="node7" href="api/support.HTML.Link.html#support.HTML.Link" target="_top" title="Link" alt="" coords="146,252,218,277"/>
+<area shape="rect" id="node8" href="api/support.HTML.Table.html#support.HTML.Table" target="_top" title="Table" alt="" coords="146,301,218,327"/>
+<area shape="rect" id="node9" href="api/support.HTML.TableData.html#support.HTML.TableData" target="_top" title="TableData" alt="" coords="139,351,225,376"/>
+<area shape="rect" id="node10" href="api/support.HTML.TableHeader.html#support.HTML.TableHeader" target="_top" title="TableHeader" alt="" coords="131,400,233,425"/>
+<area shape="rect" id="node11" href="api/support.HTML.TableRow.html#support.HTML.TableRow" target="_top" title="TableRow" alt="" coords="141,449,223,475"/>
+<area shape="rect" id="node12" href="api/support.HTML.Title.html#support.HTML.Title" target="_top" title="Title" alt="" coords="146,499,218,524"/>
+</map></div>
+</div>
+<div class="section" id="module-support.lists">
+<span id="support-lists-module"></span><h2>support.lists Module<a class="headerlink" href="#module-support.lists" title="Permalink to this headline">¶</a></h2>
+<p>Methods to support lists</p>
+<div class="section" id="id25">
+<h3>Functions<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.lists.contains.html#support.lists.contains" title="support.lists.contains"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contains</span></code></a>(List, value)</p></td>
+<td><p>Reports whether ‘value’ is in ‘List’</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.lists.flatten.html#support.lists.flatten" title="support.lists.flatten"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flatten</span></code></a>(List)</p></td>
+<td><p>Make a list of nested lists a simple list</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.lists.list_dictionary.html#support.lists.list_dictionary" title="support.lists.list_dictionary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_dictionary</span></code></a>(dictionary)</p></td>
+<td><p>Print a dictionary, one line for each item, with the keys sorted</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.lists.remove_item.html#support.lists.remove_item" title="support.lists.remove_item"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_item</span></code></a>(thislist, item)</p></td>
+<td><p>Remove item from list without complaining if absent</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.lists.rotate.html#support.lists.rotate" title="support.lists.rotate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rotate</span></code></a>(List, first_value[, direction, …])</p></td>
+<td><p>Rotate one or more lists subject to constraints on the first list</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.lists.unique.html#support.lists.unique" title="support.lists.unique"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unique</span></code></a>(hasDupes)</p></td>
+<td><p>Removes duplicate elements from a list</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="module-support.local_dirs">
+<span id="support-local-dirs-module"></span><h2>support.local_dirs Module<a class="headerlink" href="#module-support.local_dirs" title="Permalink to this headline">¶</a></h2>
+<p>paths to local packages and data</p>
+</div>
+<div class="section" id="module-support.logs">
+<span id="support-logs-module"></span><h2>support.logs Module<a class="headerlink" href="#module-support.logs" title="Permalink to this headline">¶</a></h2>
+<p>module with enhancements to the Python logging</p>
+<div class="section" id="id26">
+<h3>Functions<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.logs.setup_logging.html#support.logs.setup_logging" title="support.logs.setup_logging"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_logging</span></code></a>([logger, logfile, logLevel, …])</p></td>
+<td><p>setup up some logging.getLogger instance with console logging and file logging handlers (StreamHandler and FileHandler handlers, respectively.)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.logs.set_loglevel.html#support.logs.set_loglevel" title="support.logs.set_loglevel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_loglevel</span></code></a>(logger, level)</p></td>
+<td><p>Set the level of a logger</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.logs.get_loglevel.html#support.logs.get_loglevel" title="support.logs.get_loglevel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_loglevel</span></code></a>(level)</p></td>
+<td><p>Get the level value from text</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.logs.init_logging.html#support.logs.init_logging" title="support.logs.init_logging"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_logging</span></code></a>(extlogger[, loglevel, …])</p></td>
+<td><p>Create a logger that displays to the console and writes a log file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.logs.setup_email_handler.html#support.logs.setup_email_handler" title="support.logs.setup_email_handler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_email_handler</span></code></a>(toaddr[, logLevel])</p></td>
+<td><p>Setup an instance of TLSSMTPHandler</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.logs.remove_handlers.html#support.logs.remove_handlers" title="support.logs.remove_handlers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_handlers</span></code></a>(logger)</p></td>
+<td><p>remove any handlers associated with a logger.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id27">
+<h3>Classes<a class="headerlink" href="#id27" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.logs.TLSSMTPHandler.html#support.logs.TLSSMTPHandler" title="support.logs.TLSSMTPHandler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TLSSMTPHandler</span></code></a>(mailhost, fromaddr, toaddrs, …)</p></td>
+<td><p>Custom handler for email logging using TLS encryption.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id28">
+<h3>Class Inheritance Diagram<a class="headerlink" href="#id28" title="Permalink to this headline">¶</a></h3>
+<div class="graphviz"><img src="_images/inheritance-c7f43a8d3fe818701647c3c818094681c5672cad.png" alt="Inheritance diagram of support.logs.TLSSMTPHandler" usemap="#inheritanced00aea9f97" class="inheritance graphviz" /></div>
+<map id="inheritanced00aea9f97" name="inheritanced00aea9f97">
+<area shape="rect" id="node4" href="api/support.logs.TLSSMTPHandler.html#support.logs.TLSSMTPHandler" target="_top" title="Custom handler for email logging using TLS encryption." alt="" coords="403,5,533,31"/>
+</map></div>
+</div>
+<div class="section" id="module-support.markdown_util">
+<span id="support-markdown-util-package"></span><h2>support.markdown_util Package<a class="headerlink" href="#module-support.markdown_util" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id29">
+<h3>Classes<a class="headerlink" href="#id29" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.markdown_util.MarkdownTable.html#support.markdown_util.MarkdownTable" title="support.markdown_util.MarkdownTable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MarkdownTable</span></code></a>([header, data])</p></td>
+<td><p>Create a formatted markdown table from some header and data.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id30">
+<h3>Class Inheritance Diagram<a class="headerlink" href="#id30" title="Permalink to this headline">¶</a></h3>
+<div class="graphviz"><img src="_images/inheritance-b02465212cd7228f819f647a3f107bc0e4ea374e.png" alt="Inheritance diagram of support.markdown_util.table.MarkdownTable" usemap="#inheritance38089bc6ee" class="inheritance graphviz" /></div>
+<map id="inheritance38089bc6ee" name="inheritance38089bc6ee">
+<area shape="rect" id="node1" href="api/support.markdown_util.table.MarkdownTable.html#support.markdown_util.table.MarkdownTable" target="_top" title="Create a formatted markdown table from some header and data." alt="" coords="5,5,128,31"/>
+</map></div>
+</div>
+<div class="section" id="module-support.markdown_util.table">
+<span id="support-markdown-util-table-module"></span><h2>support.markdown_util.table Module<a class="headerlink" href="#module-support.markdown_util.table" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id31">
+<h3>Classes<a class="headerlink" href="#id31" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.markdown_util.table.MarkdownTable.html#support.markdown_util.table.MarkdownTable" title="support.markdown_util.table.MarkdownTable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MarkdownTable</span></code></a>([header, data])</p></td>
+<td><p>Create a formatted markdown table from some header and data.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id32">
+<h3>Class Inheritance Diagram<a class="headerlink" href="#id32" title="Permalink to this headline">¶</a></h3>
+<div class="graphviz"><img src="_images/inheritance-b02465212cd7228f819f647a3f107bc0e4ea374e.png" alt="Inheritance diagram of support.markdown_util.table.MarkdownTable" usemap="#inheritance38089bc6ee" class="inheritance graphviz" /></div>
+<map id="inheritance38089bc6ee" name="inheritance38089bc6ee">
+<area shape="rect" id="node1" href="api/support.markdown_util.table.MarkdownTable.html#support.markdown_util.table.MarkdownTable" target="_top" title="Create a formatted markdown table from some header and data." alt="" coords="5,5,128,31"/>
+</map></div>
+</div>
+<div class="section" id="module-support.network">
+<span id="support-network-module"></span><h2>support.network Module<a class="headerlink" href="#module-support.network" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id33">
+<h3>Functions<a class="headerlink" href="#id33" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.network.LAN_hosts_status.html#support.network.LAN_hosts_status" title="support.network.LAN_hosts_status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LAN_hosts_status</span></code></a>([port, private])</p></td>
+<td><p>Get information about and status of local network hosts with port open</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.network.decode_IP.html#support.network.decode_IP" title="support.network.decode_IP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">decode_IP</span></code></a>(IP_address)</p></td>
+<td><p>Returns a long int for an IPv4 or IPv6 address.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.network.decode_MAC.html#support.network.decode_MAC" title="support.network.decode_MAC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">decode_MAC</span></code></a>(MAC_address)</p></td>
+<td><p>Returns a long int for a MAC address</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.network.encode_IP.html#support.network.encode_IP" title="support.network.encode_IP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">encode_IP</span></code></a>(intIP)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.network.get_domain.html#support.network.get_domain" title="support.network.get_domain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_domain</span></code></a>(netIP)</p></td>
+<td><p>Returns the networks key whose list contains netIP</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.network.get_local_network.html#support.network.get_local_network" title="support.network.get_local_network"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_local_network</span></code></a>([private, subnet])</p></td>
+<td><p>Returns the IP address of the local network</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">invoke</span></code>(command)</p></td>
+<td><p>Convenient alternate for a command without stdin.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.network.report_LAN_hosts_status.html#support.network.report_LAN_hosts_status" title="support.network.report_LAN_hosts_status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">report_LAN_hosts_status</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="module-support.options">
+<span id="support-options-module"></span><h2>support.options Module<a class="headerlink" href="#module-support.options" title="Permalink to this headline">¶</a></h2>
+<p>Support for Python argparse (or optparse) module</p>
+<p>How to use this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">initiate_option_parser</span><span class="p">(</span><span class="n">description</span><span class="p">,</span><span class="n">examples</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">usage</span> <span class="o">=</span> <span class="n">usage</span>
+<span class="c1"># Add other options here</span>
+
+<span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+
+<span class="c1"># This cannot be delegated to another module or class</span>
+<span class="n">mylogger</span> <span class="o">=</span> <span class="n">init_logging</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(),</span>
+                        <span class="n">loglevel</span>   <span class="o">=</span> <span class="n">get_loglevel</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">file_loglevel</span><span class="p">),</span>
+                        <span class="n">consolevel</span> <span class="o">=</span> <span class="n">get_loglevel</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">stderr_loglevel</span><span class="p">),</span>
+                        <span class="n">logname</span>    <span class="o">=</span> <span class="n">opts</span><span class="o">.</span><span class="n">logpath</span><span class="o">+</span><span class="vm">__name__</span><span class="o">+</span><span class="s2">&quot;.log&quot;</span><span class="p">)</span>
+<span class="n">loggers</span> <span class="o">=</span> <span class="n">set_module_loggers</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">modloglevels</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>In either case, the parser object will be a argparse.ArgumentParser object</p>
+<div class="section" id="id34">
+<h3>Converting from optparse to argparse<a class="headerlink" href="#id34" title="Permalink to this headline">¶</a></h3>
+<p>The package ‘optparse’ has been made obsolescent. In converting from ‘optparse’
+to ‘argparse’, replace ‘add_option’ with ‘add_argument’ and change the ‘type’
+value from a string to a Python variable type, e.g. float</p>
+</div>
+<div class="section" id="id35">
+<h3>Functions<a class="headerlink" href="#id35" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.options.initiate_option_parser.html#support.options.initiate_option_parser" title="support.options.initiate_option_parser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">initiate_option_parser</span></code></a>(description, examples)</p></td>
+<td><p>Initiate an option parser with default logging options</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.options.simple_parse_args.html#support.options.simple_parse_args" title="support.options.simple_parse_args"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simple_parse_args</span></code></a>(init_description)</p></td>
+<td><p>Grab arguments relevant to the Pyro nameserver that have APC and Spectrometer servers registered.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id36">
+<h3>Classes<a class="headerlink" href="#id36" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.options.ArgumentInterpreter.html#support.options.ArgumentInterpreter" title="support.options.ArgumentInterpreter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ArgumentInterpreter</span></code></a>()</p></td>
+<td><p>Interprets the argument provided as the specied type of iterable</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.options.OptParser.html#support.options.OptParser" title="support.options.OptParser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OptParser</span></code></a>([prog, usage, description, …])</p></td>
+<td><p>Subclass of OptionParser which does not mess up examples formatting</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.options.OptionParser.html#support.options.OptionParser" title="support.options.OptionParser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OptionParser</span></code></a>([description, usage, examples])</p></td>
+<td><p>front end for ArgumentParser for older programs from ‘optparse’ days</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.options.PlainHelpFormatter.html#support.options.PlainHelpFormatter" title="support.options.PlainHelpFormatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PlainHelpFormatter</span></code></a>(prog[, indent_increment, …])</p></td>
+<td><p>Formatter which does not remove newline codes</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id37">
+<h3>Class Inheritance Diagram<a class="headerlink" href="#id37" title="Permalink to this headline">¶</a></h3>
+<div class="graphviz"><img src="_images/inheritance-06e3fb717f631ac1ffb5a8d5fdc5649c6583be26.png" alt="Inheritance diagram of support.options.ArgumentInterpreter, support.options.OptParser, support.options.OptionParser, support.options.PlainHelpFormatter" usemap="#inheritance4097e1013e" class="inheritance graphviz" /></div>
+<map id="inheritance4097e1013e" name="inheritance4097e1013e">
+<area shape="rect" id="node1" href="api/support.options.ArgumentInterpreter.html#support.options.ArgumentInterpreter" target="_top" title="Interprets the argument provided as the specied type of iterable" alt="" coords="5,153,160,179"/>
+<area shape="rect" id="node6" href="api/support.options.OptParser.html#support.options.OptParser" target="_top" title="Subclass of OptionParser which does not mess up examples formatting" alt="" coords="414,55,499,80"/>
+<area shape="rect" id="node7" href="api/support.options.OptionParser.html#support.options.OptionParser" target="_top" title="front end for ArgumentParser for older programs from &#39;optparse&#39; days" alt="" coords="404,104,509,129"/>
+<area shape="rect" id="node8" href="api/support.options.PlainHelpFormatter.html#support.options.PlainHelpFormatter" target="_top" title="Formatter which does not remove newline codes" alt="" coords="208,5,356,31"/>
+</map></div>
+</div>
+<div class="section" id="module-support.process">
+<span id="support-process-module"></span><h2>support.process Module<a class="headerlink" href="#module-support.process" title="Permalink to this headline">¶</a></h2>
+<p>process - support for executing shell commands</p>
+<div class="section" id="id38">
+<h3>Functions<a class="headerlink" href="#id38" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.process.invoke.html#support.process.invoke" title="support.process.invoke"><code class="xref py py-obj docutils literal notranslate"><span class="pre">invoke</span></code></a>(command)</p></td>
+<td><p>Convenient alternate for a command without stdin.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.process.is_running.html#support.process.is_running" title="support.process.is_running"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_running</span></code></a>(task)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.process.search_response.html#support.process.search_response" title="support.process.search_response"><code class="xref py py-obj docutils literal notranslate"><span class="pre">search_response</span></code></a>(command_list1, command_list2)</p></td>
+<td><p>Search a local command response.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id39">
+<h3>Classes<a class="headerlink" href="#id39" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.process.BasicProcess.html#support.process.BasicProcess" title="support.process.BasicProcess"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BasicProcess</span></code></a>([name, pid, ps_line, command_name])</p></td>
+<td><p>Class representing a basic process, with name and pid.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Popen</span></code>(args[, bufsize, executable, stdin, …])</p></td>
+<td><p>Execute a child program in a new process.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id40">
+<h3>Class Inheritance Diagram<a class="headerlink" href="#id40" title="Permalink to this headline">¶</a></h3>
+<div class="graphviz"><img src="_images/inheritance-9e470393f9f785423e3425e2ef7805de65f4a8bd.png" alt="Inheritance diagram of support.process.BasicProcess" usemap="#inheritance86e1f35908" class="inheritance graphviz" /></div>
+<map id="inheritance86e1f35908" name="inheritance86e1f35908">
+<area shape="rect" id="node1" href="api/support.process.BasicProcess.html#support.process.BasicProcess" target="_top" title="Class representing a basic process, with name and pid." alt="" coords="5,5,112,31"/>
+</map></div>
+</div>
+<div class="section" id="module-support.rtc">
+<span id="support-rtc-package"></span><h2>support.rtc Package<a class="headerlink" href="#module-support.rtc" title="Permalink to this headline">¶</a></h2>
+<p>Module for using the computer’s Real Time Clock device</p>
+<p>Provides class RTC</p>
+<p>The rtc time structure is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">struct</span> <span class="n">rtc_time</span> <span class="p">{</span>
+  <span class="nb">int</span> <span class="n">tm_sec</span><span class="p">;</span>
+  <span class="nb">int</span> <span class="n">tm_min</span><span class="p">;</span>
+  <span class="nb">int</span> <span class="n">tm_hour</span><span class="p">;</span>
+  <span class="nb">int</span> <span class="n">tm_mday</span><span class="p">;</span>
+  <span class="nb">int</span> <span class="n">tm_mon</span><span class="p">;</span>
+  <span class="nb">int</span> <span class="n">tm_year</span><span class="p">;</span>
+  <span class="nb">int</span> <span class="n">tm_wday</span><span class="p">;</span>     <span class="o">/</span>\<span class="o">*</span> <span class="n">unused</span> \<span class="o">*/</span>
+  <span class="nb">int</span> <span class="n">tm_yday</span><span class="p">;</span>     <span class="o">/</span>\<span class="o">*</span> <span class="n">unused</span> \<span class="o">*/</span>
+  <span class="nb">int</span> <span class="n">tm_isdst</span><span class="p">;</span>    <span class="o">/</span>\<span class="o">*</span> <span class="n">unused</span> \<span class="o">*/</span><span class="p">};</span>
+</pre></div>
+</div>
+<p>Compiled C program ‘rtc_constants’ returns the addresses of the RTC registers
+for the RTC.</p>
+<p>See ‘man rtc’ for documentation</p>
+<p>From <a class="reference external" href="http://www.larsen-b.com/Article/221.html">http://www.larsen-b.com/Article/221.html</a></p>
+<div class="section" id="id41">
+<h3>Classes<a class="headerlink" href="#id41" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.rtc.RTC.html#support.rtc.RTC" title="support.rtc.RTC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RTC</span></code></a>([signalHandler])</p></td>
+<td><p>Class for the Real Time Clock device</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.rtc.Signaller.html#support.rtc.Signaller" title="support.rtc.Signaller"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Signaller</span></code></a>([rtc, signalHandler, interval])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id42">
+<h3>Class Inheritance Diagram<a class="headerlink" href="#id42" title="Permalink to this headline">¶</a></h3>
+<div class="graphviz"><img src="_images/inheritance-10cd8778dbfdd8203dc490dcc865bc71c3677ce7.png" alt="Inheritance diagram of support.rtc.RTC, support.rtc.Signaller" usemap="#inheritance31861b0f13" class="inheritance graphviz" /></div>
+<map id="inheritance31861b0f13" name="inheritance31861b0f13">
+<area shape="rect" id="node1" href="api/support.rtc.RTC.html#support.rtc.RTC" target="_top" title="Class for the Real Time Clock device" alt="" coords="5,55,77,80"/>
+<area shape="rect" id="node2" href="api/support.rtc.Signaller.html#support.rtc.Signaller" target="_top" title="Signaller" alt="" coords="125,5,204,31"/>
+</map></div>
+</div>
+<div class="section" id="module-support.text">
+<span id="support-text-module"></span><h2>support.text Module<a class="headerlink" href="#module-support.text" title="Permalink to this headline">¶</a></h2>
+<p>text - functions for handling text</p>
+<div class="section" id="id43">
+<h3>Functions<a class="headerlink" href="#id43" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">basename</span></code>(p)</p></td>
+<td><p>Returns the final component of a pathname</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.text.clean_TeX.html#support.text.clean_TeX" title="support.text.clean_TeX"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clean_TeX</span></code></a>(string)</p></td>
+<td><p>Remove or replace math mode symbols like underscore</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.text.distance.html#support.text.distance" title="support.text.distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distance</span></code></a>(a, b)</p></td>
+<td><p>Calculates the Levenshtein distance between a and b.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.text.get_version.html#support.text.get_version" title="support.text.get_version"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_version</span></code></a>(fileroot, filetype)</p></td>
+<td><p>Append an updated version number to a file</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">glob</span></code>(pathname, *[, recursive])</p></td>
+<td><p>Return a list of paths matching a pathname pattern.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">isdir</span></code>(s)</p></td>
+<td><p>Return true if the pathname refers to an existing directory.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">isfile</span></code>(path)</p></td>
+<td><p>Test whether a path is a regular file</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.text.longest_text.html#support.text.longest_text" title="support.text.longest_text"><code class="xref py py-obj docutils literal notranslate"><span class="pre">longest_text</span></code></a>(textlist)</p></td>
+<td><p>Find the length of the longest string in a list</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.text.make_title.html#support.text.make_title" title="support.text.make_title"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_title</span></code></a>(text)</p></td>
+<td><p>turn a text string of words into a title by capitalizing each word</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.text.nocase_distance.html#support.text.nocase_distance" title="support.text.nocase_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nocase_distance</span></code></a>(aa, bb)</p></td>
+<td><p>same as distance() but ignores case</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.text.remove_extra_spaces.html#support.text.remove_extra_spaces" title="support.text.remove_extra_spaces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_extra_spaces</span></code></a>(data)</p></td>
+<td><p>reduce multiple whitespaces to one</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.text.remove_html_tags.html#support.text.remove_html_tags" title="support.text.remove_html_tags"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_html_tags</span></code></a>(data)</p></td>
+<td><p>remove HTML tags from text</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.text.select_files.html#support.text.select_files" title="support.text.select_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select_files</span></code></a>(pattern[, text, ftype, single])</p></td>
+<td><p>Select files by glob pattern</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.text.send_email.html#support.text.send_email" title="support.text.send_email"><code class="xref py py-obj docutils literal notranslate"><span class="pre">send_email</span></code></a>(msg_text, to[, Subject, From, …])</p></td>
+<td><p>Send an e-mail message</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">splitext</span></code>(p)</p></td>
+<td><p>Split the extension from a pathname.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.text.user_input.html#support.text.user_input" title="support.text.user_input"><code class="xref py py-obj docutils literal notranslate"><span class="pre">user_input</span></code></a>(prompt, default)</p></td>
+<td><p>Like ‘raw_input’ except that a default value can be specified.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="module-support.threading_util">
+<span id="support-threading-util-package"></span><h2>support.threading_util Package<a class="headerlink" href="#module-support.threading_util" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id44">
+<h3>Functions<a class="headerlink" href="#id44" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.threading_util.iterativeRun.html#support.threading_util.iterativeRun" title="support.threading_util.iterativeRun"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iterativeRun</span></code></a>(run_fn)</p></td>
+<td><p>A decorator for running functions repeatedly inside a PausableThread.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id45">
+<h3>Classes<a class="headerlink" href="#id45" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.threading_util.PausableThread.html#support.threading_util.PausableThread" title="support.threading_util.PausableThread"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PausableThread</span></code></a>([name])</p></td>
+<td><p>A pausable stoppable thread.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.threading_util.Pause.html#support.threading_util.Pause" title="support.threading_util.Pause"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pause</span></code></a>(pausable_thread)</p></td>
+<td><p>A context manager for pausing threads.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.threading_util.PublisherThread.html#support.threading_util.PublisherThread" title="support.threading_util.PublisherThread"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PublisherThread</span></code></a>(server[, thread_name, bus])</p></td>
+<td><p>A barebones publisher thread.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id46">
+<h3>Class Inheritance Diagram<a class="headerlink" href="#id46" title="Permalink to this headline">¶</a></h3>
+<div class="graphviz"><img src="_images/inheritance-75c3e1ba464b5b40f36db216a6f9e72b297f111c.png" alt="Inheritance diagram of support.threading_util.pausable_thread.PausableThread, support.threading_util.pausable_thread.Pause, support.threading_util.publisher_thread.PublisherThread" usemap="#inheritance96aca69f5c" class="inheritance graphviz" /></div>
+<map id="inheritance96aca69f5c" name="inheritance96aca69f5c">
+<area shape="rect" id="node1" href="api/support.threading_util.pausable_thread.PausableThread.html#support.threading_util.pausable_thread.PausableThread" target="_top" title="A pausable stoppable thread." alt="" coords="125,55,251,80"/>
+<area shape="rect" id="node4" href="api/support.threading_util.publisher_thread.PublisherThread.html#support.threading_util.publisher_thread.PublisherThread" target="_top" title="A barebones publisher thread." alt="" coords="299,55,425,80"/>
+<area shape="rect" id="node3" href="api/support.threading_util.pausable_thread.Pause.html#support.threading_util.pausable_thread.Pause" target="_top" title="A context manager for pausing threads." alt="" coords="5,5,77,31"/>
+</map></div>
+</div>
+<div class="section" id="module-support.threading_util.pausable_thread">
+<span id="support-threading-util-pausable-thread-module"></span><h2>support.threading_util.pausable_thread Module<a class="headerlink" href="#module-support.threading_util.pausable_thread" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id47">
+<h3>Functions<a class="headerlink" href="#id47" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.threading_util.pausable_thread.iterativeRun.html#support.threading_util.pausable_thread.iterativeRun" title="support.threading_util.pausable_thread.iterativeRun"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iterativeRun</span></code></a>(run_fn)</p></td>
+<td><p>A decorator for running functions repeatedly inside a PausableThread.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id48">
+<h3>Classes<a class="headerlink" href="#id48" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.threading_util.pausable_thread.Pause.html#support.threading_util.pausable_thread.Pause" title="support.threading_util.pausable_thread.Pause"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pause</span></code></a>(pausable_thread)</p></td>
+<td><p>A context manager for pausing threads.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.threading_util.pausable_thread.PausableThread.html#support.threading_util.pausable_thread.PausableThread" title="support.threading_util.pausable_thread.PausableThread"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PausableThread</span></code></a>([name])</p></td>
+<td><p>A pausable stoppable thread.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.threading_util.pausable_thread.PausableThreadCallback.html#support.threading_util.pausable_thread.PausableThreadCallback" title="support.threading_util.pausable_thread.PausableThreadCallback"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PausableThreadCallback</span></code></a>(callback[, name])</p></td>
+<td><p>A thread that runs the same callback over an over again, with some predetermined wait time.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id49">
+<h3>Class Inheritance Diagram<a class="headerlink" href="#id49" title="Permalink to this headline">¶</a></h3>
+<div class="graphviz"><img src="_images/inheritance-05389d70bfaddc345b107924ab9e80d8338d11c8.png" alt="Inheritance diagram of support.threading_util.pausable_thread.Pause, support.threading_util.pausable_thread.PausableThread, support.threading_util.pausable_thread.PausableThreadCallback" usemap="#inheritance15bcbba167" class="inheritance graphviz" /></div>
+<map id="inheritance15bcbba167" name="inheritance15bcbba167">
+<area shape="rect" id="node1" href="api/support.threading_util.pausable_thread.PausableThread.html#support.threading_util.pausable_thread.PausableThread" target="_top" title="A pausable stoppable thread." alt="" coords="153,29,279,55"/>
+<area shape="rect" id="node3" href="api/support.threading_util.pausable_thread.PausableThreadCallback.html#support.threading_util.pausable_thread.PausableThreadCallback" target="_top" title="A thread that runs the same callback over an over again, with some" alt="" coords="125,79,307,104"/>
+<area shape="rect" id="node4" href="api/support.threading_util.pausable_thread.Pause.html#support.threading_util.pausable_thread.Pause" target="_top" title="A context manager for pausing threads." alt="" coords="5,5,77,31"/>
+</map></div>
+</div>
+<div class="section" id="module-support.threading_util.publisher_thread">
+<span id="support-threading-util-publisher-thread-module"></span><h2>support.threading_util.publisher_thread Module<a class="headerlink" href="#module-support.threading_util.publisher_thread" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id50">
+<h3>Classes<a class="headerlink" href="#id50" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PausableThread</span></code>([name])</p></td>
+<td><p>A pausable stoppable thread.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.threading_util.publisher_thread.PublisherThread.html#support.threading_util.publisher_thread.PublisherThread" title="support.threading_util.publisher_thread.PublisherThread"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PublisherThread</span></code></a>(server[, thread_name, bus])</p></td>
+<td><p>A barebones publisher thread.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id51">
+<h3>Class Inheritance Diagram<a class="headerlink" href="#id51" title="Permalink to this headline">¶</a></h3>
+<div class="graphviz"><img src="_images/inheritance-01b572ec6fc3caad0623864dc2933cc1b1a31f7c.png" alt="Inheritance diagram of support.threading_util.publisher_thread.PublisherThread" usemap="#inheritancec1e6adc9ec" class="inheritance graphviz" /></div>
+<map id="inheritancec1e6adc9ec" name="inheritancec1e6adc9ec">
+<area shape="rect" id="node1" href="api/support.threading_util.pausable_thread.PausableThread.html#support.threading_util.pausable_thread.PausableThread" target="_top" title="A pausable stoppable thread." alt="" coords="125,5,251,31"/>
+<area shape="rect" id="node3" href="api/support.threading_util.publisher_thread.PublisherThread.html#support.threading_util.publisher_thread.PublisherThread" target="_top" title="A barebones publisher thread." alt="" coords="299,5,425,31"/>
+</map></div>
+</div>
+<div class="section" id="module-support.weather">
+<span id="support-weather-module"></span><h2>support.weather Module<a class="headerlink" href="#module-support.weather" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id52">
+<h3>Functions<a class="headerlink" href="#id52" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/support.weather.get_lat_lon.html#support.weather.get_lat_lon" title="support.weather.get_lat_lon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_lat_lon</span></code></a>(address, **kwargs)</p></td>
+<td><p>Format response object from _make_geocoding_api_request.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api/support.weather.get_current_weather.html#support.weather.get_current_weather" title="support.weather.get_current_weather"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_current_weather</span></code></a>(lat, lon[, mode])</p></td>
+<td><p>Get the weather at a certain latitude and longitude</p></td>
+</tr>
+</tbody>
+</table>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api/support.check_permission.html" title="check_permission"
+             >next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">support 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Tom Kuiper and Dean Smith.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+    </div>
+  </body>
+</html>

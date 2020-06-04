@@ -69,9 +69,10 @@ def invoke(command):
       In [6]: import process_tools
       In [7]: p = support.process.invoke("ls")
       In [8]: p.stdout.readlines()
-      Out[8]: ['client.log\n', 'manager.log\n', 'manager.py\n',
-               'manager.py~\n', 'MMS.log\n']
-
+      Out[8]: ['client.log\\n', 'manager.log\\n', 'manager.py\\n',
+               'manager.py~\\n', 'MMS.log\\n']
+               
+               
     @param command : command to be executed by the OS
     @type  command : list or str
 
@@ -105,8 +106,9 @@ def search_response(command_list1, command_list2):
       In [14]: process_tools.search_response(["ps", "-ef"],["grep", "python"])
       Out[14]:
         ['kuiper    3696  3669  0 09:57 pts/1    00:00:00 /usr/bin/python \
-                                                          /usr/bin/ipython\n',
-         'kuiper    3785  3696  0 10:17 pts/1    00:00:00 grep python\n']
+                                                          /usr/bin/ipython\\n',
+         'kuiper    3785  3696  0 10:17 pts/1    00:00:00 grep python\\n']
+
 
     @param command_list1 : the command which generates the initial output
     @type  command_list1 : list of str
