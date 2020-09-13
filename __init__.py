@@ -16,30 +16,14 @@ from time import sleep, time
 
 from numpy import array
 
-# from process import BasicProcess, invoke
-# from arguments import simple_parse_args
-
 logger = logging.getLogger(__name__)
 
-#try:
-#    import .pyro
-#except ImportError as err:
-#    logger.error("Couldn't import pyro_support package: {}".format(err))
-#    try:
-#      import pyro_support as pyro4_support
-#    except ImportError:
-#      pass
-
-#try:
-#    import test.tests_support as test
-#except ImportError as err:
-#    logger.error("Couldn't import tests_support package: {}".format(err))
-#    try:
-#      import tests_support as test
-#    except ImportError:
-#      pass
-
 __version__ = "1.2.0"
+
+def python_version():
+    return sys.version.split()[0]
+
+######################### Classes with extra features #####################
 
 class NamedClass(object):
     """
@@ -85,10 +69,7 @@ class PropertiedClass(NamedClass):
         else:
             return False
 
-
-def python_version():
-    return sys.version.split()[0]
-
+########################## functions for numpy arrays ########################
 
 def nearest_index(np_array, value):
     """
@@ -125,6 +106,77 @@ def nearest_index(np_array, value):
         return -1
     else:
         return index
+  
+def trim_extremes(data):
+  """
+  Remove extreme values from a data array.
+
+  Extreme values are those greater than 10x the standard deviation
+  and are 'skinny'.: numpy array
+
+  @param data : numpy array
+  """
+  data_array = array(data)
+  amean   = mean(data_array)
+  avar    = var(data_array)
+  astdev  = sqrt(avar)
+  amax = data_array.max()
+  amin = data_array.min()
+  # Check the maximum
+  if abs(amax-amean) > 10*astdev:
+    index = argmax(data_array)
+    if is_skinny(data_array,index):
+      data_array = clobber(data_array,index)
+  # check the minimum
+  if abs(amin-amean) > 10*astdev:
+    index = argmin(data_array)
+    if is_skinny(data_array,index):
+      data_array = clobber(data_array,index)
+  return data_array
+
+def is_skinny(data_array,index):
+  """
+  Test whether a data value is an isolated outlier
+
+  Returns True if the data values adjacent to the test value are
+  less that 1/10 of the test value, i.e., the data point is a spike
+
+  @param data_array : numpy array
+
+  @param index : int
+
+  @return: boolean
+  """
+  amean   = mean(data_array)
+  test_value = abs(data_array[index]-amean)
+  if index == 0:
+    ref_value = abs(data_array[index+1] - amean)
+  elif index == len(data_array)-1:
+    ref_value = abs(data_array[index-1] - amean)
+  else:
+    ref_value = (data_array[index-1] + data_array[index+1])/2. - amean
+  if test_value > 10 * ref_value:
+    return True
+  else:
+    return False
+
+def clobber(data_array,index):
+  """
+  Replace a data array value with the adjacent value(s)
+
+  @param data_array : numpy array
+
+  @param index : int
+  """
+  if index == 0:
+    data_array[index] = data_array[index+1]
+  elif index == len(data_array)-1:
+    data_array[index] = data_array[index-1]
+  else:
+    data_array[index] = (data_array[index-1] + data_array[index+1])/2.
+  return data_array
+
+########################## Users and Permissions ############################
 
 def get_user():
   """
@@ -204,10 +256,8 @@ def cpu_arch():
 
 def mkdir_if_needed(path):
     """
+    python3 only
     """
     if exists(path) == False:
         logger.warning(" Creating %s", path)
-        # if PYVERSION[0] == 2:
-        #     makedirs(path, mode=0775)
-        # elif PYVERSION[0] == 3:
         makedirs(path, mode=0o775)

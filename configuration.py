@@ -7,7 +7,7 @@ be used only by software configuration generators.
 import os
 import datetime
 
-from support.pyro import async
+#from support.pyro import async
 
 # ----- general classes and functions for managing software configurations ----
 
@@ -97,17 +97,17 @@ class Configuration(object):
         @type  kwargs : dict
         """
         # create the event emitter
-        self._emitter = async.EventEmitter(
-            threaded=kwargs.pop("threaded", False)
-        )
+        #self._emitter = async.EventEmitter(
+        #    threaded=kwargs.pop("threaded", False)
+        #)
         # create the configuration
         self._config = cls(*args, **kwargs)
 
     def __getattr__(self, attr):
         if attr in Configuration._protected:
-            return object.__getattr__(self, attr)
-        elif attr in self._emitter.__class__.__dict__:
-            return getattr(self._emitter, attr)
+            return object.__getattribute__(self, attr)
+        #elif attr in self._emitter.__class__.__dict__:
+        #    return getattr(self._emitter, attr)
         else:
             # self._emitter.emit(attr)
             return getattr(self._config, attr)

@@ -13,9 +13,9 @@ def iterativeRun(run_fn):
     the overriden run function.
 
     Args:
-        run_fn: the overridden run function from PausableThread
+        run_fn (callable): the overridden run function from PausableThread
     Returns:
-        callable
+        callable: wrapped function
     """
     def wrapper(self):
         while True:
@@ -34,12 +34,21 @@ def iterativeRun(run_fn):
 class Pause(object):
     """
 	A context manager for pausing threads.
+	
+    This starts by pausing an input thread or threads and unpausing them when
+    code inside block has been called.
+
 	This makes sure that when we unpause the thread when we're done
 	doing whatever task we needed.
+
+    Attributes:
+        thread (dict): A collection of threads to pause and unpause.
+        init_pause_status (dict): The initial state of the threads in
+            the thread attribute.
 	"""
 
     def __init__(self, pausable_thread):
-        """
+        """		    
         Args:
             pausable_thread (list, PausableThread): An instance, or list of
                 instances of PausableThread. If we pass ``None``, then this gets
@@ -47,6 +56,7 @@ class Pause(object):
         """
         self.thread = pausable_thread
         if not isinstance(self.thread, dict):
+            # if the argument is not a dict, make it one
             self.thread = {'thread': self.thread}
 
         self.init_pause_status = {}
@@ -65,7 +75,9 @@ class Pause(object):
         for name in list(self.thread.keys()):
             t = self.thread[name]
             if t:
+                # if there really is a thread
                 if not self.init_pause_status[name]:
+                    # and it is not already paused
                     t.pause()
             else:
                 pass
@@ -73,34 +85,48 @@ class Pause(object):
         for name in list(self.thread.keys()):
             t = self.thread[name]
             if t:
+                # if there really is a thread
                 while self.thread[name].running():
+                    # wait until it is no longer running
                     time.sleep(0.001)
             else:
                 pass
 
     def __exit__(self, *args):
+        """
+        Unpause the thread
+        """
         for name in list(self.thread.keys()):
             t = self.thread[name]
             if t:
+                # if there really is a thread
                 if not self.init_pause_status[name]:
                     self.thread[name].unpause()
             else:
                 pass
 
 class PausableThread(threading.Thread):
-    """A pausable stoppable thread.
-	It also has a running flag that can be used to determine if the process is still running.
+    """
+    A pausable stoppable thread.
+    
+	It also has a running flag that can be used to determine if the process is 
+	still running.
 
     Attributes:
-        name ():
-        logger ():
-        _lock ():
-        _pause ():
-        _stop ():
         _running ():
+        name (str):                 name of thread, if any
+        logger (logging.getLogger): logging instance.
+        _lock (threading.Lock):     thread's internal lock
+        _pause (threading.Event):   setting and clearing this indicates to
+            pause or unpause thread.
+        _stop (threading.Event):    setting this stops thread.
+        _running (threading.Event): setting this indicates thread is
+            currently executing "run" method.
 	"""
     def __init__(self, name=None, **kwargs):
         """
+        create a pausable thread
+        
         Args:
             name (str): name of thread.
 			**kwargs: To be passed to
@@ -110,6 +136,7 @@ class PausableThread(threading.Thread):
         self.name = name
         self.logger = logging.getLogger(__name__)
         self._lock = threading.Lock()
+        # create events for the thread states
         self._pause = threading.Event()
         self._stop = threading.Event()
         self._running = threading.Event()

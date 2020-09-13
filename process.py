@@ -145,3 +145,29 @@ def is_running(task):
         else:
             continue
     return found
+
+def send_ssh_command(local_cmd,remote_cmd):
+  """
+  Sends an ssh comand to a remote host.
+  
+  @param local_cmd : Something like 'ssh -l kuiper dsnra'
+  @type  local_cmd : string
+    
+  @param remote_cmd : What is to be executed on the remote host, like 'date'
+  @type  remote_cmd : string
+   
+  """
+  # proc_in,proc_out,proc_err = os.popen3(local_cmd+' '+remote_cmd)
+  p = subprocess.Popen(local_cmd+' '+remote_cmd,
+            shell=True,
+          stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+  (proc_in,
+   proc_out,
+   proc_err) = (p.stdin, p.stdout, p.stderr)
+  STDOUT = proc_out.readlines()
+  proc_out.close()
+  STDERR = proc_err.readlines()
+  proc_err.close()
+  proc_in.close()
+  return STDOUT,STDERR
+

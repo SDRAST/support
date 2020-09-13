@@ -48,6 +48,8 @@ def get_column_names(sh):
 
     @param sh : worksheet
     @type  sh : Worksheet object
+    
+    @return: dict number:name
     """
     size = sh.calculate_dimension()
     if openpyxl.__version__ >= '2.4':
@@ -61,7 +63,8 @@ def get_column_names(sh):
     column_names = {}
     for col_num in range(maxcol):
         # col = get_column_letter(col_num_LSTs)
-        column_names[col_num] = sh.cell(column=col_num + OPENPYXL_INDEX, row=OPENPYXL_INDEX).value
+        column_names[col_num] = sh.cell(column=col_num + OPENPYXL_INDEX,
+                                        row=OPENPYXL_INDEX).value
     return column_names
 
 
@@ -81,7 +84,7 @@ def get_column_id(sh, col_name):
     for col_id in list(col_names.keys()):
         sys.stdout.flush()
         if col_names[col_id] == col_name:
-            return col_id
+            return OPENPYXL_INDEX + col_id
     # not found
     # logger.error("get_column_id: %s not found", col_name)
     return None
@@ -110,15 +113,14 @@ def get_column(ws, column_name):
 
     @return: list of data
     """
-    column_id = get_column_id(ws, column_name)
-    # logger.debug("get_column: column ID for %s is %s",
-    #                   column_name, column_id)
+    column_id = get_column_id(ws, column_name)-OPENPYXL_INDEX
+    logger.debug("get_column: column ID for %s is %s", column_name, column_id)
     if column_id != None:
         if openpyxl.__version__ >= '2.0':
             column = list(ws.columns)[column_id]
         else:
             column = ws.columns[column_id]
-        # logger.debug("get_column: column label is %s", column[0])
+        logger.debug("get_column: column label is %s", column[0])
         column_data = []
         # The first cell always has the label
         for cell in column[1:]:
@@ -175,6 +177,8 @@ def get_row_number(ws, column, value):
 
     @param value : value to be matched by contents
     """
+    logger.debug("get_row_number: for ws=%s column=%s, looking for=%s",
+                      ws, column, value)
     if openpyxl.__version__ >= '2.4':
         highest_row = ws.max_row
     else:
@@ -184,9 +188,9 @@ def get_row_number(ws, column, value):
         #cell_id = "%s%s" % (chr(column + 65), str(row + 1))
         #if ws.cell(cell_id).value == value:
         #col_number, row_number = "%s" % chr(column + 65), "%s" % str(row + 1)
-        if ws.cell(row=row+1, column=column).value == value:
-            return row
-            break
+        if ws.cell(row   = row + OPENPYXL_INDEX, 
+                   column=column-OPENPYXL_INDEX).value == value:
+            return row+OPENPYXL_INDEX
     return None
 
 

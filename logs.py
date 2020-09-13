@@ -187,7 +187,8 @@ def setup_logging(logger=None,
     sh = logging.StreamHandler()
     sh.setLevel(logLevel)
     sh.setFormatter(formatter)
-    logger.addHandler(sh)
+    # Python3 has a stream handler by default
+    #logger.addHandler(sh)
 
     if handlers is not None:
         if not isinstance(handlers, list):
