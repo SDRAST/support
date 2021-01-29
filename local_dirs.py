@@ -11,6 +11,9 @@ local_packages = "/usr/local/RATools/"
 data_dir = "/usr/local/RA_data/"
 fits_dir = data_dir+"FITS/"
 hdf5_dir = data_dir+"HDF5/"
+# for saving and loading program current state
+status_dir = data_dir+"status/"
+
 project_data_dir = "/usr/local/project_data/"
 
 # project working directories

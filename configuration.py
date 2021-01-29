@@ -82,9 +82,13 @@ class Configuration(object):
         """
         Initialize a configuration
         
+        An example of ``cls`` would be ``TAMSConfiguration`` (in ``support.\``
+        ``configuration``). ``args`` and ``kwargs`` are the arguments used by 
+        ``clss`` to make the actual configuration, which is a ``dict``.
+        
         The configuration may have an associated event emitter to which
         callbacks (functions to invoke when something changes) can be
-        registered.  If the keyword argument "threaded" is not provided then
+        registered.  If the keyword argument ``threaded`` is not provided then
         there will be no event emitter.
         
         @param cls : class from which a configuration object will be created
